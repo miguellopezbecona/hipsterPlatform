@@ -1,0 +1,28 @@
+.node circle{
+   fill: steelblue;
+   stroke-width: 1px;
+   stroke: steelblue;
+}
+
+.link {
+   fill: none;
+   stroke: #ccc;
+   stroke-width: 4px;
+}
+
+text {
+   font: 12px serif;
+   opacity: 0.6;
+   pointer-events: none;
+}
+
+#rightPanel {
+   float: right;
+   font: 12px serif;
+   background-color: #ffcc33;
+   width: 400px;
+}
+
+#text {
+   font: 12px serif;
+}
