@@ -21,8 +21,9 @@ const height = 350;
 const r = 8;
 const defaultNodeColor = "#3182bd";
 const defaultPathColor = "black";
-const highlightPathColor = "red";
-const highlightNodeColor = "red";
+const highlightPathColor = "green";
+const highlightNodeColor = "green";
+const possibleNodeColor = "red";
 const nextNodeColor = "yellow";
 const linkDistance = 70;
 
@@ -37,4 +38,4 @@ var container;
 var showWeights = true;
 var initialNode = null;
 var goalNode = null;
-var previousNode = null; // To be used in resolving search problems step by step
+var forceOS = false;
