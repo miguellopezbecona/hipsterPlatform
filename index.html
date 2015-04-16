@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>D3</title>
-    <link href="style.css" rel="stylesheet" />
+	<link href="style.css" rel="stylesheet">
+    <link href="bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="bootstrap/bootstrap-theme.css" rel="stylesheet">
+    <link href="bootstrap/theme.css" rel="stylesheet">
 
     <script src="d3.js"></script>
     <script src="jquery.js"></script>
@@ -11,42 +14,59 @@
     <script src="ws.js"></script>
 </head>
 <body>
-    <div id="rightPanel"></div>
-
-    <div id="begin">
-    <p>You can load your own graph:
-      <input type="file" id="graphToLoadP">
-      <button id="loadGraphP">Load your graph</button>
-    </p>
-    <p>Though you can select a server-stored graph as well:
-      <select id="graphToLoad">
-      </select>
-      <button id="loadGraph">Load graph</button>
-    </p>
+    <div id="feedback" class="alert alert-info">This is an example information message.</div>
+	
+	<div id="rightPanel" class="panel panel-info">
+		<div class="panel-heading">
+		  <h3 class="panel-title">Node info</h3>
+		</div>
+		<div id="rightPanelContent" class="panel-body">
+		  Some random info
+		</div>
     </div>
 
-    <div id="operations">
-    <p>
-      <button id="zoomIn">Zoom in</button>
-      <button id="zoomOut">Zoom out</button>
-    </p>
-    <p>You can select a different layout to distribute the nodes:
-      <select id="layout">
-      </select>
-      <button id="changeLayout">Change layout</button>
-    </p>
-    <p>Select an algorithm to show the path that solves the problem:
-      <select id="algorithm">
-      </select>
-      <button id="showPath">Show minimum path</button>
-      <input type="checkbox" id="oneStep">Resolve in one step
-    </p>
-    <p>
-      <input type="checkbox" id="showWeights">Show weights
-    </p>
-    </div>
+    <div id="leftPanel" class="panel panel-info">
+		<div class="panel-heading">
+		  <h3 class="panel-title">General menu</h3>
+		</div>
+		<div class="panel-body">
+          <div id="begin">
+			<p>You can load your own graph:
+			  <input type="file" id="graphToLoadP">
+			  <button id="loadGraphP" class="btn btn-primary">Load your graph</button>
+			</p>
+			<p>Though you can select a server-stored graph as well:</p>
+			<p>
+			  <select id="graphToLoad">
+			  </select>
+			  <button id="loadGraph" class="btn btn-primary">Load graph</button>
+			</p>
+          </div>
 
-    <div id="text"></div>
+          <div id="operations">
+			<p>You can select a different layout to distribute the nodes:</p>
+			<p>
+			  <select id="layout"></select>
+			  <button id="changeLayout" class="btn btn-primary">Change layout</button>
+			</p>
+			<p>Select an algorithm to show the path that solves the problem:</p>
+			<p><select id="algorithm">
+			  </select>
+			  <button id="showPath" class="btn btn-primary">Show minimum path</button>
+			  <input type="checkbox" id="oneStep">Resolve in one step
+			</p>
+			<p>
+			  <input type="checkbox" id="showWeights">Show weights
+			</p>
+          </div>
+        </div>
+    </div>
+    
+	
+	<p id="zoomButtons">
+	  <button id="zoomIn" class="btn btn-success">Zoom in</button>
+	  <button id="zoomOut" class="btn btn-danger">Zoom out</button>
+	</p>
 
     <script src="force.js"></script>
     <script src="zoom.js"></script>
