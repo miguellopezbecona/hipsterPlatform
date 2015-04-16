@@ -6,6 +6,7 @@ import java.util.List;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.File;
 
 public class Utils implements Constants{
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
@@ -19,18 +20,9 @@ public class Utils implements Constants{
     public static List<String> obtainAvailableGraphs(){
         List<String> list = new ArrayList<>();
 
-        String file = null;
-
-        try {
-            // Does a system call in order to know what files are in the graph folder
-            Process p = Runtime.getRuntime().exec("ls " + GRAPH_BASE_PATH);
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((file = stdInput.readLine()) != null)
-                list.add(file);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        File folder = new File(GRAPH_BASE_PATH);
+        for (File file : folder.listFiles())
+            list.add(file.getName());
 
         return list;
     }
