@@ -1,8 +1,7 @@
 #ant specific
 dist/
 build/
-target
-
+ 
 #netbeans specific
 core
 nbproject/*

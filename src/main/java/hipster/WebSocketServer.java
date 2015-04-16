@@ -2,7 +2,6 @@ package hipster;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +22,10 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private List<Node> nodes;
     private static Map<Integer, List<Integer>> linkMap;
     private HashBasedHipsterDirectedGraph g;
+    private List<String> auxiliarPath;
 
     public WebSocketServer(){
+        auxiliarPath = null;
     }
 
     private void initializeGraph(String filename, String content){
@@ -118,7 +119,8 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 }
                 break;
             case F_PATH:
-		List<String> path = handleAlgorithm(content, true);
+                auxiliarPath = null;
+		List<String> path = handleAlgorithm(content);
 
                 response = buildMessage(F_PATH, gson.toJson(path));
                 try {
@@ -128,9 +130,21 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 }
                 break;
             case P_PATH:
-		List<String> nextNodes = handleAlgorithm(content, false);
+		int toSend = 2;
 
-                response = buildMessage(P_PATH, gson.toJson(nextNodes));
+                // Builds path if it is not already generated
+		if(auxiliarPath==null || auxiliarPath.isEmpty())
+                    auxiliarPath = handleAlgorithm(content);
+
+                // It doesn't send the next node to be expanded if there is only left the end of the path
+                else if(auxiliarPath.size()==1)
+                    toSend = 1;
+
+                // Returns the first two positions and removes the first from the original list
+                List<String> sublist = new ArrayList(auxiliarPath.subList(0,toSend));
+                auxiliarPath.remove(0);
+
+                response = buildMessage(P_PATH, gson.toJson(sublist));
                 try {
                     getSession().getRemote().sendString(response);
 		} catch (IOException ex) {
@@ -155,7 +169,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private void onStart() {    
     }
 
-    private List<String> handleAlgorithm(String content, boolean oneStep){
+    private List<String> handleAlgorithm(String content){
         List<String> path = null;
 
         // Parses the content: algorithm, initial node and goal node
@@ -165,22 +179,12 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         String goal = fieldsP[2];
 
         // Works different for each algorithm
-        if(oneStep){
-            switch(algorithm){
-                case DIJKSTRA: path = HipsterFachade.dijkstraOS(g, origin, goal); break;
-                case DEPTH: path = HipsterFachade.depthOS(g, origin, goal); break;
-                case BREADTH: path = HipsterFachade.breadthOS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFachade.bellmanFordOS(g, origin, goal); break;
-                default: path = new ArrayList<>(); break;
-            }
-        } else {
-            switch(algorithm){
-                case DIJKSTRA: path = HipsterFachade.dijkstraSbS(g, origin, goal); break;
-                case DEPTH: path = HipsterFachade.depthSbS(g, origin, goal); break;
-                case BREADTH: path = HipsterFachade.breadthSbS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFachade.bellmanFordSbS(g, origin, goal); break;
-                default: path = new ArrayList<>(); break;
-           }
+        switch(algorithm){
+            case DIJKSTRA: path = HipsterFachade.dijkstra(g, origin, goal); break;
+            case DEPTH: path = HipsterFachade.depth(g, origin, goal); break;
+            case BREADTH: path = HipsterFachade.breadth(g, origin, goal); break;
+            case BELLMAN_FORD: path = HipsterFachade.bellmanFord(g, origin, goal); break;
+            default: path = new ArrayList<>(); break;
         }
         return path;
     }

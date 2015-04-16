@@ -38,7 +38,7 @@ $(document).ready(function() {
         // Makes begin section invisible, and does the inverse with the operations and zoom ones
         $("#begin").hide();
         $("#operations").show();
-        $("#zoomButtons").show();
+		$("#zoomButtons").show();
         break;
       case NODE:
         showNodeInfo(message.content);
@@ -54,6 +54,7 @@ $(document).ready(function() {
         if(!startedSbS){
           d3.selectAll(".node").select("circle").style("fill", defaultNodeColor);
     	  d3.selectAll("line").style("stroke", defaultPathColor);
+          previousNode = initialNode;
           startedSbS = true;
         }
 
@@ -79,13 +80,10 @@ function showNodeInfo(nodeInfo){
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
     $("#rightPanelContent").html(info);
-    $("#rightPanel").show();
+	$("#rightPanel").show();
 }
 
 function showFullPath(data){
-    startedSbS = false;
-    $("#algorithm").prop("disabled", false);
-
     /* To avoid duplicated data, instead of receiving every pair of source-target,
      * all the numbers are the target, except for the first one, that is the initial source
      */
@@ -99,20 +97,20 @@ function showFullPath(data){
 }
 
 function showPartialPath(data){
-    // Prevents non-sense change. If you are running an algorithm step by step, you should not change it during the proccess
-    $("#algorithm").prop("disabled", true);
+    /* In every step, the server will send back the next node (so, the target of the next link)
+     * to be painted and the following one to be expanded
+     */ 
+    d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", highlightNodeColor);
+    d3.selectAll("[source='"+previousNode+"']").filter("[target='"+data[0]+"']").style("stroke", highlightPathColor);
 
-    // In every step, the server will send back the next node and the following ones to be expanded
-    d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", possibleNodeColor);
-
-    // If the next goal is the goal one, the search is completed, so it forces a full path call
-    if(data[0].localeCompare(goalNode)==0){
-      forceOS = true;
+    /* The node to be expanded is only highlighted when it exists (the server sends two nodes)
+     * If not, it's the end of the path
+     */
+    if(data.length > 1){
+      d3.select("[nodeId='" + data[1] + "']").select("circle").style("fill", nextNodeColor);
+      previousNode = data[0];
+    } else {
       startedSbS = false;
-      return;
+      previousNode = null;
     }
-
-    var i;
-    for(i=1;i<data.length;i++)
-      d3.select("[nodeId='" + data[i] + "']").select("circle").style("fill", nextNodeColor);      
 }
