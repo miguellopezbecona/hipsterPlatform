@@ -1,6 +1,9 @@
 function activateComponents(){
-  // This section is initially invisible
+  // These sections are initially invisible
   $("#operations").hide();
+  $("#rightPanel").hide();
+  $("#feedback").hide();
+  $("#zoomButtons").hide();
 
   // Gives functionality to the buttons
   $("#loadGraphP").on("click", function(){

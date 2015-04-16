@@ -35,9 +35,10 @@ $(document).ready(function() {
         else
           buildTree();
 
-        // Makes begin section invisible, and does the inverse with the operations one
+        // Makes begin section invisible, and does the inverse with the operations and zoom ones
         $("#begin").hide();
         $("#operations").show();
+		$("#zoomButtons").show();
         break;
       case NODE:
         showNodeInfo(message.content);
@@ -78,7 +79,8 @@ function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.nodeId+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
-    $("#rightPanel").html(info);
+    $("#rightPanelContent").html(info);
+	$("#rightPanel").show();
 }
 
 function showFullPath(data){

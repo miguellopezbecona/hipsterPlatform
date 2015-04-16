@@ -36,7 +36,7 @@ function startForce(){
     .on("drag", dragged)
     .on("dragend", dragended);
 
-    svg = d3.select("body").append("svg")
+    svg = d3.select("#canvas").append("svg")
     .attr("width", width)
     .attr("height", height)
     .call(zoom);
@@ -136,6 +136,7 @@ function mouseout() {
     d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", 12).style("font", "12px serif");
     d3.select("[nodeId='" + selected + "']").select("circle").transition().attr("r", r).style("fill", defaultNodeColor);
     selected = null;
+	$("#rightPanel").hide();
   }
 }
 
