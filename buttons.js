@@ -48,10 +48,11 @@ function activateComponents(){
     var message;
 
     // Different if the algorithm is done step by step or not
-    if($("#oneStep").is(":checked"))
+    if($("#oneStep").is(":checked") || forceOS)
       message = buildMessage(F_PATH, "'" + $("#algorithm").val() + " " + initialNode + " " + goalNode + "'");
     else
       message = buildMessage(P_PATH, "'" + $("#algorithm").val() + " " + initialNode + " " + goalNode + "'");
+    forceOS = false;
     ws.send(message);
   });
 
