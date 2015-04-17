@@ -10,6 +10,10 @@
    stroke-width: 4px;
 }
 
+#canvas {
+   height: 350px;
+}
+
 #feedback{
    text-align: center;
    margin-left: auto;
@@ -25,8 +29,6 @@
 #leftPanel {
    float: left;
    width: 450px;
-   position: fixed;
-   top: 350px;
 }
 
 #zoomButtons {
@@ -36,3 +38,4 @@
    text-align: center;
    position: relative;
    top: 50px;
+}

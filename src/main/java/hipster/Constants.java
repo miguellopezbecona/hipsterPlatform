@@ -32,4 +32,7 @@ public interface Constants {
     public final Random random = new Random(System.currentTimeMillis());
     public final Gson gson = new Gson();
     public final String GRAPH_BASE_PATH = "graphs/";
+    public final String GRAPH_EXAMPLES_FOLDER = "examples/";
+    public final String HASH_ALGORITHM = "SHA-1";
+    public final short HASH_LENGTH = 40;
 }

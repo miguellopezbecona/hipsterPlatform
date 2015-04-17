@@ -27,7 +27,9 @@ const possibleNodeColor = "red";
 const nextNodeColor = "yellow";
 const linkDistance = 70;
 
-// Util constants
+// Other util constants
+const HASH_LENGTH = 40;
+const EXT_SUPPORTED = ["gexf", "json"];
 const debug = 0;
 const reader = new FileReader();
 

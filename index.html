@@ -14,60 +14,58 @@
     <script src="ws.js"></script>
 </head>
 <body>
-    <div id="canvas"></div>
     <div id="feedback" class="alert alert-info"></div>
-	
-	<div id="rightPanel" class="panel panel-info">
-		<div class="panel-heading">
-		  <h3 class="panel-title">Node info</h3>
-		</div>
-		<div id="rightPanelContent" class="panel-body">
-		  
-		</div>
+    <div id="canvas"></div>
+
+    <div id="rightPanel" class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Node info</h3>
+        </div>
+        <div id="rightPanelContent" class="panel-body"></div>
     </div>
 
     <div id="leftPanel" class="panel panel-info">
-		<div class="panel-heading">
-		  <h3 class="panel-title">General menu</h3>
-		</div>
-		<div class="panel-body">
+        <div class="panel-heading">
+            <h3 class="panel-title">General menu</h3>
+        </div>
+        <div class="panel-body">
           <div id="begin">
-			<p>You can load your own graph:
-			  <input type="file" id="graphToLoadP">
-			  <button id="loadGraphP" class="btn btn-primary">Load your graph</button>
-			</p>
-			<p>Though you can select a server-stored graph as well:</p>
-			<p>
-			  <select id="graphToLoad">
-			  </select>
-			  <button id="loadGraph" class="btn btn-primary">Load graph</button>
-			</p>
+            <p>You can load your own graph:
+                <input type="file" id="graphToLoadP">
+                <button id="loadGraphP" class="btn btn-primary">Load your graph</button>
+            </p>
+            <p>Though you can select a server-stored graph as well. You can choose one of the examples or input the hash of some graph you have already uploaded:</p>
+            <p>
+                <input type="text" id="hash">
+                <select id="graphToLoad"></select>
+                <button id="loadGraph" class="btn btn-primary">Load graph</button>
+            </p>
           </div>
 
           <div id="operations">
-			<p>You can select a different layout to distribute the nodes:</p>
-			<p>
-			  <select id="layout"></select>
-			  <button id="changeLayout" class="btn btn-primary">Change layout</button>
-			</p>
-			<p>Select an algorithm to show the path that solves the problem:</p>
-			<p><select id="algorithm">
-			  </select>
-			  <button id="showPath" class="btn btn-primary">Show minimum path</button>
-			  <input type="checkbox" id="oneStep">Resolve in one step
-			</p>
-			<p>
-			  <input type="checkbox" id="showWeights">Show weights
-			</p>
+            <p>You can select a different layout to distribute the nodes:</p>
+            <p>
+                <select id="layout"></select>
+                <button id="changeLayout" class="btn btn-primary">Change layout</button>
+            </p>
+            <p>Select an algorithm to show the path that solves the problem:</p>
+            <p>
+                <select id="algorithm"></select>
+                <button id="showPath" class="btn btn-primary">Show minimum path</button>
+                <input type="checkbox" id="oneStep">Resolve in one step
+            </p>
+            <p>
+                <input type="checkbox" id="showWeights">Show weights
+            </p>
           </div>
         </div>
     </div>
     
 	
-	<p id="zoomButtons">
-	  <button id="zoomIn" class="btn btn-success">Zoom in</button>
-	  <button id="zoomOut" class="btn btn-danger">Zoom out</button>
-	</p>
+    <p id="zoomButtons">
+        <button id="zoomIn" class="btn btn-success">Zoom in</button>
+        <button id="zoomOut" class="btn btn-danger">Zoom out</button>
+    </p>
 
     <script src="force.js"></script>
     <script src="zoom.js"></script>

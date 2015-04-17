@@ -31,7 +31,7 @@ $(document).ready(function() {
 
         // Uses the new object to initialize the graphic
         if(links[0].children==null)
-          startForce();    
+          startForce();
         else
           buildTree();
 
@@ -67,12 +67,30 @@ $(document).ready(function() {
         break;
     }
 
-    // Copies the literal string to a div when debugging
-    if(debug)
-    	$("#text").html("<p>"+evt.data+"</p>");
+    // Copies the literal string to the right panel when debugging
+    if(debug){
+    	$("#rightPanelContent").html("<p>"+evt.data+"</p>");
+    	$("#rightPanel").show();
+    	$("#rightPanel").delay(10000).hide(1000);
+    }
+
+    // Shows the feedback if it exists
+    if(message.feedback != null){
+        var chunk = message.feedback.split("$");
+        var type = chunk[0];
+        var content = chunk[1];
+        showFeedback(type, content);
+    }
   };
 
 });
+
+function showFeedback(type, content){
+    $("#feedback").text(content);
+    $("#feedback").attr("class", "alert alert-" + type);
+    $("#feedback").show();
+    $("#feedback").delay(10000).hide(1000);
+}
 
 function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.nodeId+"</p>";

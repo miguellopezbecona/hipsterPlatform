@@ -17,6 +17,9 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.File;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Utils implements Constants{
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
         HashBasedHipsterDirectedGraph g = new HashBasedHipsterDirectedGraph<>();
@@ -29,11 +32,44 @@ public class Utils implements Constants{
     public static List<String> obtainAvailableGraphs(){
         List<String> list = new ArrayList<>();
 
-        File folder = new File(GRAPH_BASE_PATH);
+        File folder = new File(GRAPH_BASE_PATH + GRAPH_EXAMPLES_FOLDER);
         for (File file : folder.listFiles())
             list.add(file.getName());
 
         return list;
+    }
+
+    /**
+     * Converts from bytes to String (using hex values)
+     * @param Bytes to convert from
+     * @return Converted string
+     */
+    private static String toHexadecimal(byte[] digest){
+        String hash = "";
+        for(byte aux : digest) {
+            int b = aux & 0xff;
+            if (Integer.toHexString(b).length() == 1) hash += "0";
+            hash += Integer.toHexString(b);
+        }
+        return hash;
+    }
+
+    /**
+     * Generates a hash
+     * @param Original string
+     * @return Hash
+     */
+    public static String generateHash(String message){
+        byte[] digest = null;
+        byte[] buffer = message.getBytes();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(HASH_ALGORITHM);
+            messageDigest.reset();
+            messageDigest.update(buffer);
+            digest = messageDigest.digest();
+        } catch (NoSuchAlgorithmException ex) {
+        }
+        return toHexadecimal(digest);
     }
 
     /** Returns a list containing the next node and the ones to be expanded

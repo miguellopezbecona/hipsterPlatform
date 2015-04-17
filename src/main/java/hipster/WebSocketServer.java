@@ -30,10 +30,41 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private void initializeGraph(String filename, String content){
         // If there is content, it means that the graph was sent by the client and must be converted.
         // If there isn't, the graph must be loaded with a DAO and it's already converted during the load.
-        if(content.equals(" "))
-            links = DAO.loadGraph(filename);
-        else
-            links = Constants.gson.fromJson(content, new TypeToken<List<Link>>(){}.getType());
+        if(content.equals(" ")){
+
+            // If the filename refers to a hash, its length (without the extension) will be always 40 (for SHA-1 algorithm)
+            if(filename.split("\\.")[0].length()==HASH_LENGTH)
+                links = DAO.loadGraph(filename, false);
+
+            // If not, it is an example graph
+            else
+                links = DAO.loadGraph(filename, true);
+        } else {
+            String extension = filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
+
+            // TODO: Different parsing depending on file's extension
+            switch(extension){
+                case "json":
+                    links = Constants.gson.fromJson(content, new TypeToken<List<Link>>(){}.getType());
+                    break;
+                default:
+                    links = null;
+            }
+
+            // Saves the graph and sends the obtained hash to the client
+            String hash = DAO.saveGraph(extension, content);
+            String response;
+            if(hash != null)
+                response = buildMessage("", "\"\"", "success$Your graph was loaded successfully, if you want to use it in future executions, put the following hash in the input field: " + hash + "." + extension);
+            else
+                response = buildMessage("", "\"\"", "danger$There was a problem parsing your graph.");
+
+            try {
+                getSession().getRemote().sendString(response);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+         }
 
 	// Obtains the equivalent object to be used with Hipster
 	g = Utils.initializeGraph(links);
@@ -86,6 +117,13 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 
     private String buildMessage(String type, String content){
         return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
+    }
+
+    private String buildMessage(String type, String content, String feedback){
+        if(feedback == null)
+            return buildMessage(type, content);
+        else
+            return "{\"type\": \"" + type + "\", \"content\": " + content + ", \"feedback\": \"" + feedback + "\"}";
     }
 
     private void handleMessage(String message) {
