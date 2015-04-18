@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class HipsterFachade {
+public class HipsterFacade {
     private static Iterator it = null;
 
     /*** One step executions ***/

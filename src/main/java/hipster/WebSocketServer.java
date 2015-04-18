@@ -205,18 +205,18 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         // Works different for each algorithm
         if(oneStep){
             switch(algorithm){
-                case DIJKSTRA: path = HipsterFachade.dijkstraOS(g, origin, goal); break;
-                case DEPTH: path = HipsterFachade.depthOS(g, origin, goal); break;
-                case BREADTH: path = HipsterFachade.breadthOS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFachade.bellmanFordOS(g, origin, goal); break;
+                case DIJKSTRA: path = HipsterFacade.dijkstraOS(g, origin, goal); break;
+                case DEPTH: path = HipsterFacade.depthOS(g, origin, goal); break;
+                case BREADTH: path = HipsterFacade.breadthOS(g, origin, goal); break;
+                case BELLMAN_FORD: path = HipsterFacade.bellmanFordOS(g, origin, goal); break;
                 default: path = new ArrayList<>(); break;
             }
         } else {
             switch(algorithm){
-                case DIJKSTRA: path = HipsterFachade.dijkstraSbS(g, origin, goal); break;
-                case DEPTH: path = HipsterFachade.depthSbS(g, origin, goal); break;
-                case BREADTH: path = HipsterFachade.breadthSbS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFachade.bellmanFordSbS(g, origin, goal); break;
+                case DIJKSTRA: path = HipsterFacade.dijkstraSbS(g, origin, goal); break;
+                case DEPTH: path = HipsterFacade.depthSbS(g, origin, goal); break;
+                case BREADTH: path = HipsterFacade.breadthSbS(g, origin, goal); break;
+                case BELLMAN_FORD: path = HipsterFacade.bellmanFordSbS(g, origin, goal); break;
                 default: path = new ArrayList<>(); break;
            }
         }
