@@ -63,9 +63,19 @@ function activateComponents(){
 
   // Resolves a search problem
   $("#showPath").on("click", function(){
-    // Default nodes that should be removed later
-    if(initialNode==null) initialNode = "0";
-    if(goalNode==null) goalNode = "7";
+    var initialNode = $("#initialNode").text();
+    var goalNode = $("#goalNode").text();
+
+    // You can't ask a path without specifing the initial and goal nodes
+    if(initialNode==null || initialNode.length==0 || goalNode==null || goalNode.length==0){
+      showFeedback("danger", NULL_NODE_FEEDBACK);
+      return;
+    }
+    // This check could be redudant as it's also done when you select both nodes, but it adds security
+    else if (initialNode.localeCompare(goalNode)==0){
+      showFeedback("danger", SAME_NODE_FEEDBACK);
+      return;
+    }
 
     var message;
 
@@ -83,6 +93,32 @@ function activateComponents(){
     tick();
   });
 
+  $("#initialNodeC").change("click", function(){
+    if($(this).is(":checked") && selected != null){
+        // Checks that the other node (goal) isn't the same as the selected one
+        var goalNode = $("#goalNode").text();
+        if(selected.localeCompare(goalNode)==0){
+            showFeedback("danger", SAME_NODE_FEEDBACK);
+            $(this)[0].checked = false;
+        } else
+            $("#initialNode").text(selected);
+    } else
+        $("#initialNode").text(null);
+  });
+
+  $("#goalNodeC").change("click", function(){
+    if($(this).is(":checked") && selected != null){
+        // Checks that the other node (initial) isn't the same as the selected one
+        var initialNode = $("#initialNode").text();
+        if(selected.localeCompare(initialNode)==0){
+            showFeedback("danger", SAME_NODE_FEEDBACK);
+            $(this)[0].checked = false;
+        } else
+            $("#goalNode").text(selected);
+    } else
+        $("#goalNode").text(null);
+  });
+
   // Builds the algorithm menu dynamically
   var select = $("#algorithm")[0];
   for(i=0;i<ALGORITHMS.length;i++)
@@ -93,9 +129,11 @@ function activateComponents(){
   for(i=0;i<LAYOUTS.length;i++)
     layout.options[i] = new Option(LAYOUTS[i].toLowerCase(), LAYOUTS[i], false);
 
-  // These checkboxes are activated by default
+  // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;
   $("#oneStep")[0].checked = true;
+  $("#initialNodeC")[0].checked = false;
+  $("#goalNodeC")[0].checked = false;
 }
 
 function checkExtension(extension){

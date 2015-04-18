@@ -135,8 +135,8 @@ function mouseout() {
   if(selected != null){
     d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", 12).style("font", "12px serif");
     d3.select("[nodeId='" + selected + "']").select("circle").transition().attr("r", r).style("fill", defaultNodeColor);
-    selected = null;
-	$("#rightPanel").hide();
+    //selected = null;
+    //$("#rightPanel").hide();
   }
 }
 

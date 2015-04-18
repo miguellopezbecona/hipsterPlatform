@@ -29,6 +29,8 @@ const linkDistance = 70;
 
 // Other util constants
 const HASH_LENGTH = 40;
+const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by clicking the desired node.";
+const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
 const EXT_SUPPORTED = ["gexf", "json"];
 const debug = 0;
 const reader = new FileReader();
@@ -38,6 +40,4 @@ var svg;
 var zoom;
 var container;
 var showWeights = true;
-var initialNode = null;
-var goalNode = null;
 var forceOS = false;

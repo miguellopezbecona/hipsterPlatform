@@ -96,7 +96,7 @@ function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.nodeId+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
-    $("#rightPanelContent").html(info);
+    $("#rightPanelText").html(info);
     $("#rightPanel").show();
 }
 
