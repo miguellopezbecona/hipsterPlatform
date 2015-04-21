@@ -27,45 +27,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     public WebSocketServer(){
     }
 
-    private void initializeGraph(String filename, String content){
-        // If there is content, it means that the graph was sent by the client and must be converted.
-        // If there isn't, the graph must be loaded with a DAO and it's already converted during the load.
-        if(content.equals(" ")){
-
-            // If the filename refers to a hash, its length (without the extension) will be always 40 (for SHA-1 algorithm)
-            if(filename.split("\\.")[0].length()==HASH_LENGTH)
-                links = DAO.loadGraph(filename, false);
-
-            // If not, it is an example graph
-            else
-                links = DAO.loadGraph(filename, true);
-        } else {
-            String extension = filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
-
-            // TODO: Different parsing depending on file's extension
-            switch(extension){
-                case "json":
-                    links = Constants.gson.fromJson(content, new TypeToken<List<Link>>(){}.getType());
-                    break;
-                default:
-                    links = null;
-            }
-
-            // Saves the graph and sends the obtained hash to the client
-            String hash = DAO.saveGraph(extension, content);
-            String response;
-            if(hash != null)
-                response = buildMessage("", "\"\"", "success$Your graph was loaded successfully, if you want to use it in future executions, put the following hash in the input field: " + hash + "." + extension);
-            else
-                response = buildMessage("", "\"\"", "danger$There was a problem parsing your graph.");
-
-            try {
-                getSession().getRemote().sendString(response);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-         }
-
+    public void initializeGraph(){
 	// Obtains the equivalent object to be used with Hipster
 	g = Utils.initializeGraph(links);
 
@@ -104,6 +66,10 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         return linkMap;
     }
 
+    public void setLinks(List<Link> l){
+        links = l;
+    }
+
     @Override
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
@@ -134,12 +100,16 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 
         switch(type){
 	    case BEGIN:
-		// Parses the content: filename and its content (if it was loaded by the client)
-		String[] fieldsB = content.split("_");
-		String filename = fieldsB[0];
-		String body = fieldsB[1];
+		// In this case, the content is just the filename
+		// If the filename refers to a hash, its length (without the extension) will be always 40 (for SHA-1 algorithm)
+                if(content.split("\\.")[0].length()==HASH_LENGTH)
+                    links = DAO.loadGraph(content, false);
 
-                initializeGraph(filename, body);
+                // If not, it is an example graph (no example will have a filename length of 40)
+                else
+                    links = DAO.loadGraph(content, true);
+
+                initializeGraph();
                 handleLayouts(DEFAULT_LAYOUT);
                 break;
 	    case LAYOUT:
@@ -239,6 +209,21 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
             getSession().getRemote().sendString(response);
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void sendHash(String hash, String extension){
+        // Sends the generated hash to the client
+        String responseMessage;
+        if(hash != null)
+            responseMessage = buildMessage("", "\"\"", "success$Your graph was loaded successfully, if you want to use it in future executions, put the following hash in the input field: " + hash + "." + extension);
+        else
+            responseMessage = buildMessage("", "\"\"", "danger$There was a problem parsing your graph.");
+
+        try {
+            getSession().getRemote().sendString(responseMessage);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

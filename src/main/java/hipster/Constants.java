@@ -28,11 +28,12 @@ public interface Constants {
     public final String TREE = "TREE";
     public final String DEFAULT_LAYOUT = FORCE;
 
-    /*** OTHERS AND UTILS ***/
+    /*** OTHERS CONSTANTS AND UTILS ***/
     public final Random random = new Random(System.currentTimeMillis());
     public final Gson gson = new Gson();
     public final String GRAPH_BASE_PATH = "graphs/";
     public final String GRAPH_EXAMPLES_FOLDER = "examples/";
     public final String HASH_ALGORITHM = "SHA-1";
     public final short HASH_LENGTH = 40;
+    public final short CHUNK_SIZE = 1024;
 }

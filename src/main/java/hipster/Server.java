@@ -8,6 +8,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import javax.servlet.MultipartConfigElement;
 
 /**
  * 
@@ -33,7 +34,7 @@ public class Server {
         // Setup the basic application "context" for this application at "/"
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/web/");
+        context.setContextPath("/");
         //server.setHandler(context);
         
         
@@ -53,7 +54,12 @@ public class Server {
 
         // Add the websocket to a specific path spec
         ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
-        context.addServlet(holderEvents, "/hipster/*");
+        context.addServlet(holderEvents, "/webSocket/*");
+
+        // Servlet to handle form requests (graph uploads) 
+        ServletHolder uploadHolder = new ServletHolder(new UploadServlet());
+        uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement("graphs/"));
+        context.addServlet(uploadHolder,"/uploadGraph/*");
 
         try {
             server.start();

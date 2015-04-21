@@ -1,5 +1,5 @@
 var ws;
-const wsUrl = "ws://localhost:8080/web/hipster";
+const wsUrl = "ws://localhost:8080/webSocket";
 
 // Keywords
 const AVAILABLE_GRAPHS = "AVAILABLE_GRAPHS";
@@ -33,7 +33,6 @@ const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. 
 const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
 const EXT_SUPPORTED = ["gexf", "json"];
 const debug = 0;
-const reader = new FileReader();
 
 // Global variables
 var svg;

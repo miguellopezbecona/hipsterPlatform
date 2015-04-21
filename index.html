@@ -39,8 +39,10 @@
         <div class="panel-body">
           <div id="begin">
             <p>You can load your own graph:
-                <input type="file" id="graphToLoadP">
-                <button id="loadGraphP" class="btn btn-primary">Load your graph</button>
+            <form action="uploadGraph" method="post" enctype="multipart/form-data" onsubmit="return validateUpload();">
+                <input type="file" id="graphToUpload" name="graphToUpload">
+                <input type="submit" class="btn btn-primary" value="Load your graph">
+            </form>
             </p>
             <p>Though you can select a server-stored graph as well. You can choose one of the examples or input the hash of some graph you have already uploaded:</p>
             <p>

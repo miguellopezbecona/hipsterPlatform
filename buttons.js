@@ -7,30 +7,6 @@ function activateComponents(){
 
   /*** Gives functionality to the buttons ***/
 
-  // Load your graph with a file
-  $("#loadGraphP").on("click", function(){
-    var selection = $("#graphToLoadP").val();
-
-    // It does nothing when the selection is empty
-    if(!selection || selection.length === 0) return;
-
-    // Alerts when it doesn't have the right extension
-    var extension = getExtension(selection);
-    if(!checkExtension(extension)){
-      showFeedback("danger", "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED);
-      return;
-    }
-
-    // Loads the selected file
-    var file = $("#graphToLoadP")[0].files[0];
-    reader.onload = function(e) {
-      // The content will be filename_content
-      var message = buildMessage(BEGIN, "'"+selection+"_"+reader.result+"'");
-      ws.send(message);
-    }
-    reader.readAsText(file);
-  });
-
   // Load a server-stored graph
   $("#loadGraph").on("click", function(){
     var selection = $("#hash").val();
@@ -48,7 +24,7 @@ function activateComponents(){
       return;
     }
 
-    var message = buildMessage(BEGIN, "'"+selection+"_ '");
+    var message = buildMessage(BEGIN, "'"+selection+"'");
 
     // Sends a message so the server gives back the selected graph
     ws.send(message);
@@ -134,6 +110,23 @@ function activateComponents(){
   $("#oneStep")[0].checked = true;
   $("#initialNodeC")[0].checked = false;
   $("#goalNodeC")[0].checked = false;
+}
+
+// This is used when submitting the form to upload a graph
+function validateUpload(){
+    var selection = $("#graphToUpload").val();
+
+    // It does nothing when the selection is empty
+    if(!selection || selection.length === 0) return false;
+
+    // Alerts and stops when the file doesn't have the right extension
+    var extension = getExtension(selection);
+    if(!checkExtension(extension)){
+      showFeedback("danger", "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED);
+      return false;
+    }
+
+    return true;
 }
 
 function checkExtension(extension){
