@@ -124,6 +124,7 @@ function showPartialPath(data){
     d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", possibleNodeColor);
 
     // If the next goal is the goal one, the search is completed, so it forces a full path call
+    var goalNode = $("#goalNode").text();
     if(data[0].localeCompare(goalNode)==0){
       forceOS = true;
       startedSbS = false;
