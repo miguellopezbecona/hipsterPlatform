@@ -8,21 +8,26 @@ function activateComponents(){
   /*** Gives functionality to the buttons ***/
 
   // Load a server-stored graph
-  $("#loadGraph").on("click", function(){
+  $("#loadGraphH").on("click", function(){
     var selection = $("#hash").val();
 
     // It the hash is empty, the selection will be the examples list
-    if(!selection || selection.length === 0){
-      selection = $("#graphToLoad").val();
-
-      // Does the same check with the menu (there could be no examples)
-      if(!selection || selection.length === 0) return;
-    }
+    if(!selection || selection.length === 0) return;
+    
     // Stops if the input data (without the extension) hasn't the length of the hash
-    else if(selection.split("\.")[0].length != HASH_LENGTH){
+    if(selection.split("\.")[0].length != HASH_LENGTH){
       showFeedback("danger", "Your input doesn't correspond to a hash.")
       return;
     }
+
+    var message = buildMessage(BEGIN, "'"+selection+"'");
+
+    // Sends a message so the server gives back the selected graph
+    ws.send(message);
+  });
+
+  $("#loadGraphS").on("click", function(){
+    var selection = $("#selectedGraph").val();
 
     var message = buildMessage(BEGIN, "'"+selection+"'");
 

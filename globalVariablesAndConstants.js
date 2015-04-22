@@ -16,8 +16,8 @@ const LAYOUTS = ["FORCE", "TREE"];
 const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants
-const width = 1200;
-const height = 350;
+const width = screen.width;
+const height = screen.height;
 const r = 8;
 const defaultNodeColor = "#3182bd";
 const defaultPathColor = "black";

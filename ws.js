@@ -61,7 +61,7 @@ $(document).ready(function() {
         break;
       case AVAILABLE_GRAPHS:
         // Builds the graph menu with the received data
-        var graphMenu = $("#graphToLoad")[0];
+        var graphMenu = $("#selectedGraph")[0];
         for(i=0;i<message.content.length;i++)
           graphMenu.options[i] = new Option(message.content[i], message.content[i], false);
         break;

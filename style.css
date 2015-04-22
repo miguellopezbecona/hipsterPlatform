@@ -10,32 +10,47 @@
    stroke-width: 4px;
 }
 
-#canvas {
-   height: 350px;
+.btn.btn-primary.smallFont {
+   font-size: 10px;
+   padding: 3px 3px;
+}
+
+input[name="graphToUpload"] {
+  size: 10px;
 }
 
 #feedback{
+   position: fixed;
+   top: 10px;
+   left: 50%;
+   right: 50%;
    text-align: center;
-   margin-left: auto;
-   margin-right: auto;
    width: 450px;
+   margin-left: -150px;
 }
 
 #rightPanel {
-   float: right;
+   position: fixed;
+   right: 25px;
+   top: 25px;
    width: 300px;
+   opacity: 0.9;
 }
 
 #leftPanel {
-   float: left;
-   width: 450px;
+   font-size: 10px;
+   position: fixed;
+   left: 25px;
+   top: 25px;
+   width: 350px;
+   opacity: 0.9;
 }
 
 #zoomButtons {
-   clear: both;
-   margin-left: auto;
-   margin-right: auto;
+   width: 150px;
    text-align: center;
-   position: relative;
-   top: 50px;
+   position: fixed;
+   left: 50%;
+   right: 50%;
+   bottom: 25px;
 }

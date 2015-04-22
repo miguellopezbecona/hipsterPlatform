@@ -15,7 +15,6 @@
 </head>
 <body>
     <div id="feedback" class="alert alert-info"></div>
-    <div id="canvas"></div>
 
     <div id="rightPanel" class="panel panel-info">
         <div class="panel-heading">
@@ -38,17 +37,21 @@
         </div>
         <div class="panel-body">
           <div id="begin">
-            <p>You can load your own graph:
+            <p>You can load your own graph:</p>
             <form action="uploadGraph" method="post" enctype="multipart/form-data" onsubmit="return validateUpload();">
-                <input type="file" id="graphToUpload" name="graphToUpload">
-                <input type="submit" class="btn btn-primary" value="Load your graph">
+                <p>
+                  <input type="file" id="graphToUpload" name="graphToUpload">
+                  <input type="submit" class="btn btn-primary smallFont" value="Load your graph">
+                </p>
             </form>
-            </p>
             <p>Though you can select a server-stored graph as well. You can choose one of the examples or input the hash of some graph you have already uploaded:</p>
             <p>
                 <input type="text" id="hash">
-                <select id="graphToLoad"></select>
-                <button id="loadGraph" class="btn btn-primary">Load graph</button>
+                <button id="loadGraphH" class="btn btn-primary smallFont">Load hashed graph</button>
+            </p>
+            <p>
+                <select id="selectedGraph"></select>
+                <button id="loadGraphS" class="btn btn-primary smallFont">Load selected graph</button>
             </p>
           </div>
 
@@ -56,12 +59,12 @@
             <p>You can select a different layout to distribute the nodes:</p>
             <p>
                 <select id="layout"></select>
-                <button id="changeLayout" class="btn btn-primary">Change layout</button>
+                <button id="changeLayout" class="btn btn-primary smallFont">Change layout</button>
             </p>
             <p>Select an algorithm to show the path that solves the problem:</p>
             <p>
                 <select id="algorithm"></select>
-                <button id="showPath" class="btn btn-primary">Show minimum path</button>
+                <button id="showPath" class="btn btn-primary smallFont">Show minimum path</button>
                 <input type="checkbox" id="oneStep">Resolve in one step
             </p>
             <p>
@@ -73,8 +76,8 @@
     
 	
     <p id="zoomButtons">
-        <button id="zoomIn" class="btn btn-success">Zoom in</button>
-        <button id="zoomOut" class="btn btn-danger">Zoom out</button>
+        <img id="zoomIn" src="img/zoomIn.png">
+        <img id="zoomOut" src="img/zoomOut.png">
     </p>
 
     <script src="force.js"></script>

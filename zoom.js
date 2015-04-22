@@ -50,5 +50,5 @@ function zoomClick() {
     interpolateZoom([view.x, view.y], view.k);
 }
 
-d3.selectAll('button').on('click', zoomClick);
+d3.selectAll('img').on('click', zoomClick);
 
