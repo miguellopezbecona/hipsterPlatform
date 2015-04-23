@@ -72,14 +72,14 @@
             <artifactId>hipster-all</artifactId>
             <version>1.0.0-rc1</version>
         </dependency>
+
+	<!-- To parse JSON data -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.2.4</version>
         </dependency>
 
-
     </dependencies>
-
 
 </project>

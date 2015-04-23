@@ -19,7 +19,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Miguel
  */
 public class DAO implements Constants{
-    public synchronized static List<Link> loadGraph(String filename, boolean isExample){
+    public static List<Link> loadGraph(String filename, boolean isExample){
         // Adding a bit of security: it doesn't allow files that contain "#", ";", "/" or ".."
         if(filename.matches(".*([#;/]|\\.\\.).*"))
             return null;
@@ -32,7 +32,20 @@ public class DAO implements Constants{
 
         String extension = filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
 
-        return obtainLinks(path, extension);
+        try {
+            // Different parsing depending on file's extension 
+            switch(extension){
+                case "json":
+                    return gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
+                case "gexf": // TODO: Not implemented yet
+                    return null;
+                default:
+                    return null;
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public synchronized static String saveGraph(InputStream content, String extension){
@@ -63,42 +76,6 @@ public class DAO implements Constants{
             return null;
         } finally {
             if (out != null) { try { out.close(); } catch (IOException e) { e.printStackTrace(); } } 
-        }
-    }
-
-    // Obtain links from a path
-    public static List<Link> obtainLinks(String path, String extension){
-        try {
-            // Different parsing depending on file's extension 
-            switch(extension){
-                case "json":
-                    return gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
-                case "gexf": // TODO: Not implemented yet
-                    return null;
-                default:
-                    return null;
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-    // Obtain links from an InputStream
-    public static List<Link> obtainLinks(InputStream inputStream, String extension){
-        try {
-            // Different parsing depending on file's extension 
-            switch(extension){
-                case "json":
-                    return gson.fromJson(new BufferedReader(new InputStreamReader(inputStream)), new TypeToken<List<Link>>(){}.getType());
-                case "gexf": // TODO: Not implemented yet
-                    return null;
-                default:
-                    return null;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
         }
     }
 }

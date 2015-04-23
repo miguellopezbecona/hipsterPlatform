@@ -2,11 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>D3</title>
-	<link href="style.css" rel="stylesheet">
+    <title>Hipster Plataform</title>
+    <link href="style.css" rel="stylesheet">
     <link href="bootstrap/bootstrap.css" rel="stylesheet">
     <link href="bootstrap/bootstrap-theme.css" rel="stylesheet">
-    <link href="bootstrap/theme.css" rel="stylesheet">
 
     <script src="d3.js"></script>
     <script src="jquery.js"></script>
@@ -38,11 +37,11 @@
         <div class="panel-body">
           <div id="begin">
             <p>You can load your own graph:</p>
-            <form action="uploadGraph" method="post" enctype="multipart/form-data" onsubmit="return validateUpload();">
-                <p>
-                  <input type="file" id="graphToUpload" name="graphToUpload">
-                  <input type="submit" class="btn btn-primary smallFont" value="Load your graph">
-                </p>
+            <form enctype="multipart/form-data">
+            <p>
+              <input type="file" id="graphToUpload" name="graphToUpload">
+              <input type="button" id="upload" class="btn btn-primary smallFont" value="Load your graph">
+            </p>
             </form>
             <p>Though you can select a server-stored graph as well. You can choose one of the examples or input the hash of some graph you have already uploaded:</p>
             <p>

@@ -211,19 +211,4 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public void sendHash(String hash, String extension){
-        // Sends the generated hash to the client
-        String responseMessage;
-        if(hash != null)
-            responseMessage = buildMessage("", "\"\"", "success$Your graph was loaded successfully, if you want to use it in future executions, put the following hash in the input field: " + hash + "." + extension);
-        else
-            responseMessage = buildMessage("", "\"\"", "danger$There was a problem parsing your graph.");
-
-        try {
-            getSession().getRemote().sendString(responseMessage);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 }

@@ -22,30 +22,26 @@ public class UploadServlet extends HttpServlet implements Constants{
         Part filePart = request.getPart("graphToUpload");
         String extension = getExtension(filePart);
 
-        WebSocketServer wss = new WebSocketServer(); // Doesn't obtain right server instance...
         String hash = null;
         InputStream fileContent = null;
         try {
             // Obtains file's content and is passed to the DAO in order to save the graph and receive the associated hash
             fileContent = filePart.getInputStream();
             hash = DAO.saveGraph(fileContent, extension);
-
-            // Resets the stream (the DAO will use it until its end)
-            fileContent = filePart.getInputStream();
-
-            List<Link> links = DAO.obtainLinks(fileContent, extension);
-            wss.setLinks(links);
-            wss.initializeGraph();
-            //wss.sendHash(hash, extension); // Will crash
         } catch (FileNotFoundException fne) {
             fne.printStackTrace();
         } finally {
             if (fileContent != null) fileContent.close();
         }
 
-        // Redirects to the view
-        response.sendRedirect("index.html");
-        return;
+        // Sends one state or another depending of save's result (defined by the returned hash)
+        if(hash == null)
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        else {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("text/html");          
+            response.getWriter().write(hash + "." + extension);
+        }
     }
 
     private String getExtension(Part part) {

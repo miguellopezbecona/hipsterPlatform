@@ -7,6 +7,35 @@ function activateComponents(){
 
   /*** Gives functionality to the buttons ***/
 
+  $("#upload").click(function () {
+    var selection = $("#graphToUpload").val();
+
+    if(!validateUpload(selection))
+      return;
+
+    var formData = new FormData($('form')[0]);
+
+    $.ajax({
+        type: "POST",
+        url: "uploadGraph",
+        data: formData,
+        // Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data, textStatus, response) {
+            showFeedback("success", "Your graph was loaded successfully. If you want to use it in future executions, put the following hash in the input field: " + data);
+             var message = buildMessage(BEGIN, "'"+data+"'");
+
+             // Sends a message so the server gives back the uploaded graph
+             ws.send(message);
+        },
+        error: function (response, textStatus, errorThrown) {
+            showFeedback("danger", "There was a problem while parsing your graph." + textStatus + " " + errorThrown);
+        }
+    });
+  });
+
   // Load a server-stored graph
   $("#loadGraphH").on("click", function(){
     var selection = $("#hash").val();
@@ -118,8 +147,7 @@ function activateComponents(){
 }
 
 // This is used when submitting the form to upload a graph
-function validateUpload(){
-    var selection = $("#graphToUpload").val();
+function validateUpload(selection){
 
     // It does nothing when the selection is empty
     if(!selection || selection.length === 0) return false;
