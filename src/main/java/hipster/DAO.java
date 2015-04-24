@@ -14,9 +14,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 /**
  *
  * @author Miguel
@@ -47,25 +44,6 @@ public class DAO implements Constants{
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String loadGraph(String filename){
-        // Adding a bit of security: it doesn't allow files that contain "#", ";", "/" or ".."
-        if(filename.matches(".*([#;/]|\\.\\.).*"))
-            return null;
-
-        String path = GRAPH_BASE_PATH;
-        if(filename.split("\\.")[0].length()!=HASH_LENGTH)
-            path += GRAPH_EXAMPLES_FOLDER;
-        path += filename;
-
-        try {
-            return new String(Files.readAllBytes(Paths.get(path)));
-        } catch (FileNotFoundException ex) {
-            return null;
-        } catch (IOException ex) {
             return null;
         }
     }

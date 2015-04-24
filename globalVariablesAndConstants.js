@@ -33,6 +33,8 @@ const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. 
 const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
 const EXT_SUPPORTED = ["gexf", "json"];
 const BASE_URI = "api/graph/"
+const GRAPH_BASE_PATH = "graphs/";
+const GRAPH_EXAMPLES_FOLDER = "examples/";
 const debug = 0;
 
 // Global variables

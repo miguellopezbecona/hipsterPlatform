@@ -14,7 +14,7 @@ import javax.servlet.MultipartConfigElement;
  * 
  * @author Miguel López
  */
-public class Server {
+public class Server implements Constants{
 
     @SuppressWarnings("serial")
     public static class EventServlet extends WebSocketServlet {
@@ -40,16 +40,16 @@ public class Server {
         
         // Create the ResourceHandler. It is the object that will actually handle the request for a given file. It is
         // a Jetty Handler object so it is suitable for chaining with other handlers as you will see in other examples.
-        ResourceHandler resource_handler = new ResourceHandler();
+        ResourceHandler rh = new ResourceHandler();
         // Configure the ResourceHandler. Setting the resource base indicates where the files should be served out of.
         // In this example it is the current directory but it can be configured to anything that the jvm has access to.
-        resource_handler.setDirectoriesListed(true);
-        resource_handler.setWelcomeFiles(new String[]{ "index.html" });
-        resource_handler.setResourceBase(".");
+        rh.setDirectoriesListed(false);
+        rh.setWelcomeFiles(new String[]{ "index.html" });
+        rh.setResourceBase(".");
  
         // Add the ResourceHandler to the server.
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{ resource_handler, context });
+        handlers.setHandlers(new Handler[]{ rh, context });
         server.setHandler(handlers);
 
         // Add the websocket to a specific path spec
@@ -57,8 +57,8 @@ public class Server {
         context.addServlet(holderEvents, "/webSocket/*");
 
         // Servlet to handle graph upload-download requests
-        ServletHolder uploadHolder = new ServletHolder(new GraphServlet());
-        uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement("graphs/"));
+        ServletHolder uploadHolder = new ServletHolder(new UploadServlet());
+        uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(GRAPH_BASE_PATH));
         context.addServlet(uploadHolder,"/api/graph/*");
 
         try {

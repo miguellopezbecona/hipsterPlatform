@@ -166,10 +166,17 @@ function getExtension(filename){
 
 function requestGraph(filename){
     var extension = getExtension(filename);
+    var isHash = (filename.length - extension.length - 1) == HASH_LENGTH;
+
+    // The url request will be different if the graph is hashed or not (an example)
+    var graphUrl = GRAPH_BASE_PATH;
+    if(!isHash)
+        graphUrl += GRAPH_EXAMPLES_FOLDER;
+    graphUrl += filename;
 
     $.ajax({
         type: "GET",
-        url: BASE_URI + "?hash=" + filename,
+        url: graphUrl,
         contentType: "text/plain",
         success: function (data, textStatus, response) {
             buildGraph(data, extension);
@@ -180,7 +187,7 @@ function requestGraph(filename){
         },
         statusCode: {
             404: function(response, textStatus, errorThrown) {
-                showFeedback("danger", "ERROR: " + errorThrown);
+                showFeedback("danger", "Error: graph not found");
             }
         }
     });
@@ -190,7 +197,7 @@ function buildGraph(data, extension){
     // Different data depending on file's extension
     switch(extension){
         case "json":
-            links = JSON.parse(data);
+            links = data;
             break;
         case "gexf": // TODO: not implemented
             links = null;

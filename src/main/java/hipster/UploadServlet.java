@@ -17,6 +17,7 @@ import javax.servlet.annotation.MultipartConfig;
 @MultipartConfig
 public class UploadServlet extends HttpServlet implements Constants{
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         // Obtains data from the form
         Part filePart = request.getPart("graphToUpload");
@@ -48,6 +49,10 @@ public class UploadServlet extends HttpServlet implements Constants{
         // Parses the header so it maintains only the filename
         String filename = part.getHeader("content-disposition").split("filename=\"")[1].replace("\"", "");
 
+        return getExtension(filename);
+    }
+
+    private String getExtension(String filename) {
         return filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
     }
 }
