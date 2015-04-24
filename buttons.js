@@ -17,7 +17,7 @@ function activateComponents(){
 
     $.ajax({
         type: "POST",
-        url: "uploadGraph",
+        url: BASE_URI,
         data: formData,
         // Options to tell jQuery not to process data or worry about content-type.
         cache: false,
@@ -25,13 +25,10 @@ function activateComponents(){
         processData: false,
         success: function (data, textStatus, response) {
             showFeedback("success", "Your graph was loaded successfully. If you want to use it in future executions, put the following hash in the input field: " + data);
-             var message = buildMessage(BEGIN, "'"+data+"'");
-
-             // Sends a message so the server gives back the uploaded graph
-             ws.send(message);
+            requestGraph(data);
         },
         error: function (response, textStatus, errorThrown) {
-            showFeedback("danger", "There was a problem while parsing your graph." + textStatus + " " + errorThrown);
+            showFeedback("danger", "There was a problem while parsing your graph.");
         }
     });
   });
@@ -40,7 +37,7 @@ function activateComponents(){
   $("#loadGraphH").on("click", function(){
     var selection = $("#hash").val();
 
-    // It the hash is empty, the selection will be the examples list
+    // Stops if the selection is null
     if(!selection || selection.length === 0) return;
     
     // Stops if the input data (without the extension) hasn't the length of the hash
@@ -49,19 +46,16 @@ function activateComponents(){
       return;
     }
 
-    var message = buildMessage(BEGIN, "'"+selection+"'");
-
-    // Sends a message so the server gives back the selected graph
-    ws.send(message);
+    requestGraph(selection);
   });
 
   $("#loadGraphS").on("click", function(){
     var selection = $("#selectedGraph").val();
 
-    var message = buildMessage(BEGIN, "'"+selection+"'");
+    // Stops if the selection is null
+    if(!selection || selection.length === 0) return;
 
-    // Sends a message so the server gives back the selected graph
-    ws.send(message);
+    requestGraph(selection);
   });
 
   // Change layout
@@ -167,5 +161,52 @@ function checkExtension(extension){
 }
 
 function getExtension(filename){
-    return filename.split("\.")[filename.split("\.").length-1];
+    return filename.split("\.")[filename.split("\.").length-1].toLowerCase();
+}
+
+function requestGraph(filename){
+    var extension = getExtension(filename);
+
+    $.ajax({
+        type: "GET",
+        url: BASE_URI + "?hash=" + filename,
+        contentType: "text/plain",
+        success: function (data, textStatus, response) {
+            buildGraph(data, extension);
+
+            // Sends a message so the server builds its internal model to work with the graph
+            var message = buildMessage(BEGIN, "'"+filename+"'");
+            ws.send(message);
+        },
+        statusCode: {
+            404: function(response, textStatus, errorThrown) {
+                showFeedback("danger", "ERROR: " + errorThrown);
+            }
+        }
+    });
+}
+
+function buildGraph(data, extension){
+    // Different data depending on file's extension
+    switch(extension){
+        case "json":
+            links = JSON.parse(data);
+            break;
+        case "gexf": // TODO: not implemented
+            links = null;
+            break;
+        default:
+            links = null;
+     }
+
+     // Uses the received data to build the graph
+     if(links[0].children==null)
+        startForce();
+     else
+        buildTree();
+
+     // Makes begin section invisible, and does the inverse with the operations and zoom ones
+     $("#begin").hide();
+     $("#operations").show();
+     $("#zoomButtons").show();
 }

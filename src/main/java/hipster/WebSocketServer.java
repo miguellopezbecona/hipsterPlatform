@@ -110,7 +110,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                     links = DAO.loadGraph(content, true);
 
                 initializeGraph();
-                handleLayouts(DEFAULT_LAYOUT);
                 break;
 	    case LAYOUT:
                 handleLayouts(content);

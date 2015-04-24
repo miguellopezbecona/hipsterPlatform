@@ -32,6 +32,7 @@ const HASH_LENGTH = 40;
 const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by clicking the desired node.";
 const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
 const EXT_SUPPORTED = ["gexf", "json"];
+const BASE_URI = "api/graph/"
 const debug = 0;
 
 // Global variables

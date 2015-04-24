@@ -56,10 +56,10 @@ public class Server {
         ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
         context.addServlet(holderEvents, "/webSocket/*");
 
-        // Servlet to handle form requests (graph uploads) 
-        ServletHolder uploadHolder = new ServletHolder(new UploadServlet());
+        // Servlet to handle graph upload-download requests
+        ServletHolder uploadHolder = new ServletHolder(new GraphServlet());
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement("graphs/"));
-        context.addServlet(uploadHolder,"/uploadGraph/*");
+        context.addServlet(uploadHolder,"/api/graph/*");
 
         try {
             server.start();
