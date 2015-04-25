@@ -1,5 +1,4 @@
 var force;
-var links;
 var link;
 var node;
 var edgelabels;
@@ -7,27 +6,36 @@ var edgepaths;
 var selected;
 
 function startForce(){
+    // Cleans the canvas if anything was drawn before
+    d3.select("svg").remove();
 
-    var nodes = {};
+    var nodeCollection = {};
+    var makeDefaultPositions = true;
 
-    // Obtain the nodes with info from the links
-    links.forEach(function(link) {
-      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-    });
+    if(nodes == null){
+      // Obtain the nodes with info from the links
+      links.forEach(function(link) {
+        link.source = nodeCollection[link.source] || (nodeCollection[link.source] = {id: link.source});
+        link.target = nodeCollection[link.target] || (nodeCollection[link.target] = {id: link.target});
+      });
+
+      nodes = d3.values(nodeCollection);
+    }
+    // If nodes isn't null, it means that it comes from a gexf file, whose positions are already defined
+      else
+    makeDefaultPositions = false;
 
     // Defines the force layout
     force = d3.layout.force()
-    .nodes(d3.values(nodes))
+    .nodes(nodes)
     .links(links)
-    .size([width, height])
-    .linkDistance(linkDistance)
+    .size([WIDTH, HEIGHT])
+    .linkDistance(LINK_DISTANCE)
     .charge(-200)
-    .on("tick", tick)
-    .start();
+    .on("tick", tick);
 
     // Defines the zoom behavious
-    zoom = d3.behavior.zoom().scaleExtent([1, 10]).on("zoom", zoomed);
+    zoom = d3.behavior.zoom().scaleExtent([0.1, 10]).on("zoom", zoomed);
 
     // Defines the drag behaviour
     var drag = d3.behavior.drag()
@@ -37,14 +45,14 @@ function startForce(){
     .on("dragend", dragended);
 
     svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", WIDTH)
+    .attr("height", HEIGHT)
     .call(zoom);
 
     // Allows to move the whole graphic
     svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", WIDTH)
+    .attr("height", HEIGHT)
     .style("fill", "none")
     .style("pointer-events", "all");
 
@@ -53,8 +61,8 @@ function startForce(){
     link = container.selectAll(".link")
     .data(force.links())
     .enter().append("line")
-    .attr("source", function(d) { return d.source.name; })
-    .attr("target", function(d) { return d.target.name; })
+    .attr("source", function(d) { return d.source.id; })
+    .attr("target", function(d) { return d.target.id; })
     .attr("stroke", defaultPathColor);
 
     edgepaths = container.selectAll(".edgepath")
@@ -69,7 +77,7 @@ function startForce(){
         .enter()
         .append('text')
         .style("pointer-events", "none")
-        .attr({'dx':linkDistance*0.5,
+        .attr({'dx':LINK_DISTANCE*0.5,
                'font-size':10,
                'fill':'#000000'});
 
@@ -85,7 +93,7 @@ function startForce(){
     .data(force.nodes())
     .enter().append("g")
     .attr("class", "node")
-    .attr("nodeId", function(d) { return d.name; })
+    .attr("nodeId", function(d) { return d.id; })
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .on("mouseout", mouseout)
@@ -93,27 +101,43 @@ function startForce(){
     .call(drag);
 
     node.append("circle")
-    .attr("r", r)
+    .attr("r", BASE_RADIUS)
     .style("fill", defaultNodeColor);
 
     node.append("text")
     .attr("x", 12)
     .attr("dy", ".35em")
     .style("fill", defaultNodeColor)
-    .text(function(d) { return d.name; });
+    .text(function(d) { return d.id; });
+
+     // Adjusts a grid-like initial positioning
+     var rows = Math.ceil(Math.sqrt(nodes.length));
+     var columns = Math.ceil(nodes.length / rows);
+     node.each(function(d,i){
+       d.fixed = true;
+       if(makeDefaultPositions){
+         d.x = BASE_W + Math.floor(i/columns) * LINK_DISTANCE;
+         d.y = BASE_H + (i % rows) * LINK_DISTANCE;
+       }
+     });
+
+     force.start();
 }
 
 function dragstarted(d) {
-  d3.event.sourceEvent.stopPropagation();
-  force.start();
+    d3.event.sourceEvent.stopPropagation();
+    d.fixed=false;
 }
 
 function dragged(d) {
-  d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);   
+    d.x = d3.event.x;
+    d.y = d3.event.y;
+    tick();
 }
 
 function dragended(d) {
-  force.stop();
+    d.fixed = true;
+    tick();
 }
 
 function tick() {
@@ -132,25 +156,22 @@ function tick() {
 
 // Restores the selected node to its initial state
 function mouseout() {
-  if(selected != null){
-    d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", 12).style("font", "12px serif");
-    d3.select("[nodeId='" + selected + "']").select("circle").transition().attr("r", r).style("fill", defaultNodeColor);
-  }
+    if(selected != null){
+      d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", 12).style("font", "12px serif");
+      d3.select("[nodeId='" + selected + "']").select("circle").transition().attr("r", BASE_RADIUS);
+    }
 }
 
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
-  d3.select(this).select("text").transition().attr("x", 22).style("font", "17.5px serif");
+    d3.select(this).select("text").transition().attr("x", 22).style("font", "17.5px serif");
 
-  d3.select(this).select("circle").transition().attr("r", 2*r)
+    d3.select(this).select("circle").transition().attr("r", 2*BASE_RADIUS)
 
-  selected = d3.select(this).select("text").text();
-  var message = buildMessage(NODE, selected);
+    selected = d3.select(this).select("text").text();
+    var message = buildMessage(NODE, selected);
 
-  // Requests information to the server
-  ws.send(message);
-
-  // Stops the influence of the force layout (this should be done once the graph is stabilized)
-  //node.each(function(d){ d.fixed=true;}) 
+    // Requests information to the server
+    ws.send(message);
 }
 

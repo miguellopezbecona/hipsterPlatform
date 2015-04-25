@@ -174,14 +174,35 @@ function requestGraph(filename){
         graphUrl += GRAPH_EXAMPLES_FOLDER;
     graphUrl += filename;
 
+    // Different fetching depending on file's extension
+    switch(extension){
+        case "json":
+            ajaxRequest(graphUrl);
+            break;
+        case "gexf":
+            var newGEXF = GexfParser.fetch(graphUrl);
+            var gD3 = gexfD3().graph(newGEXF).size([1000,1000]).nodeScale([5,20]);
+            links = gD3.links();
+            nodes = gD3.nodes();
+            buildGraph();
+            break;
+        default:
+            links = null;
+     }
+}
+
+function ajaxRequest(url){
     $.ajax({
         type: "GET",
-        url: graphUrl,
+        url: url,
         contentType: "text/plain",
         success: function (data, textStatus, response) {
-            buildGraph(data, extension);
+            links = data;
+            nodes = null;
+            buildGraph();
 
             // Sends a message so the server builds its internal model to work with the graph
+            var filename = url.split("/")[url.split("/").length-1];
             var message = buildMessage(BEGIN, "'"+filename+"'");
             ws.send(message);
         },
@@ -193,27 +214,14 @@ function requestGraph(filename){
     });
 }
 
-function buildGraph(data, extension){
-    // Different data depending on file's extension
-    switch(extension){
-        case "json":
-            links = data;
-            break;
-        case "gexf": // TODO: not implemented
-            links = null;
-            break;
-        default:
-            links = null;
-     }
-
+function buildGraph(){
      // Uses the received data to build the graph
      if(links[0].children==null)
         startForce();
      else
         buildTree();
 
-     // Makes begin section invisible, and does the inverse with the operations and zoom ones
-     $("#begin").hide();
+     // Makes operations and zoom sections visible
      $("#operations").show();
      $("#zoomButtons").show();
 }

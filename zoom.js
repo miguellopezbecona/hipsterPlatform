@@ -21,7 +21,7 @@ function zoomClick() {
         direction = 1,
         factor = 0.2,
         target_zoom = 1,
-        center = [width / 2, height / 2],
+        center = [WIDTH * 0.5, HEIGHT * 0.5],
         extent = zoom.scaleExtent(),
         translate = zoom.translate(),
         translate0 = [],
@@ -35,7 +35,6 @@ function zoomClick() {
       direction = -1;
     else
       return;
-    //direction = (this.id === 'zoomIn') ? 1 : -1;
     target_zoom = zoom.scale() * (1 + factor * direction);
 
     if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }

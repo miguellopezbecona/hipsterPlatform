@@ -16,16 +16,19 @@ const LAYOUTS = ["FORCE", "TREE"];
 const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants
-const width = screen.width;
-const height = screen.height;
-const r = 8;
+const WIDTH = screen.width;
+const HEIGHT = screen.height;
+const BASE_RADIUS = 8;
+const BASE_W = WIDTH*0.5 - 100;
+const BASE_H = HEIGHT*0.5 - 100;
+const LINK_DISTANCE = 70;
+// These probably won't be constants by the final version
 const defaultNodeColor = "#3182bd";
 const defaultPathColor = "black";
 const highlightPathColor = "green";
 const highlightNodeColor = "green";
 const possibleNodeColor = "red";
 const nextNodeColor = "yellow";
-const linkDistance = 70;
 
 // Other util constants
 const HASH_LENGTH = 40;
@@ -43,3 +46,5 @@ var zoom;
 var container;
 var showWeights = true;
 var forceOS = false;
+var links;
+var nodes;
