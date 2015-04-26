@@ -14,7 +14,6 @@ public interface Constants {
     public final String NODE = "NODE";
     public final String F_PATH = "F_PATH";
     public final String P_PATH = "P_PATH";
-    public final String BUILD_GRAPH = "BUILD_GRAPH";
 
     /*** ALGORITHMS ***/
     public final String DIJKSTRA = "DIJKSTRA";

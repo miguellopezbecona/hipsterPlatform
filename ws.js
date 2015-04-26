@@ -26,20 +26,6 @@ $(document).ready(function() {
     var message = JSON.parse(evt.data);
 
     switch(message.type){
-      case BUILD_GRAPH:
-        links = message.content;
-
-        // Uses the new object to initialize the graphic
-        if(links[0].children==null)
-          startForce();
-        else
-          buildTree();
-
-        // Makes begin section invisible, and does the inverse with the operations and zoom ones
-        $("#begin").hide();
-        $("#operations").show();
-        $("#zoomButtons").show();
-        break;
       case NODE:
         showNodeInfo(message.content);
         break;
@@ -74,13 +60,6 @@ $(document).ready(function() {
     	$("#rightPanel").delay(10000).hide(1000);
     }
 
-    // Shows the feedback if it exists
-    if(message.feedback != null){
-        var chunk = message.feedback.split("$");
-        var type = chunk[0];
-        var content = chunk[1];
-        showFeedback(type, content);
-    }
   };
 
 });
@@ -93,7 +72,7 @@ function showFeedback(type, content){
 }
 
 function showNodeInfo(nodeInfo){
-    var info = "<p>Node selected: "+nodeInfo.nodeId+"</p>";
+    var info = "<p>Node selected: "+nodeInfo.id+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
     $("#rightPanelText").html(info);

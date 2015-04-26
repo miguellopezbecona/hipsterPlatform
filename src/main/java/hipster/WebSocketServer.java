@@ -52,13 +52,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
     }
 
-    private String buildMessage(String type, String content, String feedback){
-        if(feedback == null)
-            return buildMessage(type, content);
-        else
-            return "{\"type\": \"" + type + "\", \"content\": " + content + ", \"feedback\": \"" + feedback + "\"}";
-    }
-
     private void handleMessage(String message) {
         Message m = gson.fromJson(message, Message.class);
         String type = m.getType();
@@ -121,9 +114,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 		// Generic message
 		System.out.println("Message type: " + type + ", content: " + content);
         }
-    }
-
-    private void onStart() {    
     }
 
     private List<String> handleAlgorithm(String content, boolean oneStep){

@@ -4,7 +4,6 @@ const wsUrl = "ws://localhost:8080/webSocket";
 // Keywords
 const AVAILABLE_GRAPHS = "AVAILABLE_GRAPHS";
 const BEGIN = "BEGIN";
-const BUILD_GRAPH = "BUILD_GRAPH";
 const NODE = "NODE";
 const F_PATH = "F_PATH";
 const P_PATH = "P_PATH";

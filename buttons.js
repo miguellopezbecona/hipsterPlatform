@@ -77,7 +77,7 @@ function activateComponents(){
         //url: "http://layout.jointjs.com/layout/circular/circular",
         //data: "{\"graph\":{\"cells\":" + JSON.stringify(nodes) + "}}",
         url: "api/layout/" + $("#layout").val(),
-        data: test,
+        data: JSON.stringify(test),
         contentType: "application/json",
         success: function (data, textStatus, response) {
             showFeedback("info", data);
@@ -239,10 +239,7 @@ function ajaxRequest(url){
 
 function buildGraph(){
      // Uses the received data to build the graph
-     if(links[0].children==null)
-        startForce();
-     else
-        buildTree();
+     startForce();
 
      // Makes operations and zoom sections visible
      $("#operations").show();
