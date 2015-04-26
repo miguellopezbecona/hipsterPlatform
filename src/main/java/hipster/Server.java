@@ -56,10 +56,14 @@ public class Server implements Constants{
         ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
         context.addServlet(holderEvents, "/webSocket/*");
 
-        // Servlet to handle graph upload-download requests
+        // Servlet to handle graph upload requests
         ServletHolder uploadHolder = new ServletHolder(new UploadServlet());
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(GRAPH_BASE_PATH));
-        context.addServlet(uploadHolder,"/api/graph/*");
+        context.addServlet(uploadHolder, API_BASE + "/graph/*");
+
+        // REST layout service
+        ServletHolder serviceHolder = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, "/*");
+        serviceHolder.setInitParameter("jersey.config.server.provider.classnames", LayoutServices.class.getCanonicalName());
 
         try {
             server.start();

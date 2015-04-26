@@ -15,7 +15,6 @@ public interface Constants {
     public final String F_PATH = "F_PATH";
     public final String P_PATH = "P_PATH";
     public final String BUILD_GRAPH = "BUILD_GRAPH";
-    public final String LAYOUT = "LAYOUT";
 
     /*** ALGORITHMS ***/
     public final String DIJKSTRA = "DIJKSTRA";
@@ -24,13 +23,12 @@ public interface Constants {
     public final String BELLMAN_FORD = "BELLMAN_FORD";
 
     /*** LAYOUTS ***/
-    public final String FORCE = "FORCE";
-    public final String TREE = "TREE";
-    public final String DEFAULT_LAYOUT = FORCE;
+    public final String RANDOM = "random";
 
     /*** OTHERS CONSTANTS AND UTILS ***/
     public final Random random = new Random(System.currentTimeMillis());
     public final Gson gson = new Gson();
+    public final String API_BASE = "/api";
     public final String GRAPH_BASE_PATH = "graphs/";
     public final String GRAPH_EXAMPLES_FOLDER = "examples/";
     public final String HASH_ALGORITHM = "SHA-1";

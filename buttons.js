@@ -60,9 +60,32 @@ function activateComponents(){
 
   // Change layout
   $("#changeLayout").on("click", function(){
-    d3.select("svg").remove(); // Resets the graphic
-    var message = buildMessage(LAYOUT, $("#layout").val());
-    ws.send(message);
+    var test = jQuery.extend(true, [], nodes);
+
+    test.forEach(function(d){
+      delete d.px;
+      delete d.py;
+      delete d.fixed;
+      delete d.weight;
+      delete d.index;
+      d.info = "example";
+    });
+
+    //showFeedback("info", JSON.stringify(test));
+    $.ajax({
+        type: "POST",
+        //url: "http://layout.jointjs.com/layout/circular/circular",
+        //data: "{\"graph\":{\"cells\":" + JSON.stringify(nodes) + "}}",
+        url: "api/layout/" + $("#layout").val(),
+        data: test,
+        contentType: "application/json",
+        success: function (data, textStatus, response) {
+            showFeedback("info", data);
+        },
+        error: function (response, textStatus, errorThrown) {
+            showFeedback("danger", "Error: " + errorThrown);
+        }
+    });
   });
 
   // Resolves a search problem
@@ -131,7 +154,7 @@ function activateComponents(){
   // Does the same with the layout menu
   var layout = $("#layout")[0];
   for(i=0;i<LAYOUTS.length;i++)
-    layout.options[i] = new Option(LAYOUTS[i].toLowerCase(), LAYOUTS[i], false);
+    layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i], false);
 
   // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;

@@ -1,10 +1,6 @@
 package hipster;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,7 +17,6 @@ import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 public class WebSocketServer extends WebSocketAdapter implements Constants{
     private List<Link> links;
     private List<Node> nodes;
-    private static Map<Integer, List<Integer>> linkMap;
     private HashBasedHipsterDirectedGraph g;
 
     public WebSocketServer(){
@@ -31,43 +26,15 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 	// Obtains the equivalent object to be used with Hipster
 	g = Utils.initializeGraph(links);
 
-        // TODO: this will be deleted when the tree layout is implemented manually
-        // Converts "links" to a more manipulable data structure, where eachs nodeId holds all its children
-        linkMap = new HashMap<>();
-        int source, target;
-        for(Link l : links) {
-            source = Integer.parseInt(l.getSource());
-            target = Integer.parseInt(l.getTarget());
-
-            // Creates the nodes if they don't exist
-            if(!linkMap.containsKey(source))
-                linkMap.put(source, new ArrayList<Integer>());
-
-            // The target has to be added if we want to include the leaf nodes
-            if(!linkMap.containsKey(target))
-                linkMap.put(target, new ArrayList<Integer>());
-
-            // Adds the target to the list
-            linkMap.get(source).add(target);
-        }
-
-        int numNodes = linkMap.size();
+        int numNodes = links.size() + 1;
         nodes = new ArrayList<>();
 
         for(int i=0;i<numNodes;i++) {
           Node n = new Node();
-          n.setNodeId(i);
+          n.setId(i);
           n.setInfo("Has " + random.nextInt() + " as info.");
           nodes.add(n);
         }
-    }
-
-    public static Map<Integer, List<Integer>> getLinkMap(){
-        return linkMap;
-    }
-
-    public void setLinks(List<Link> l){
-        links = l;
     }
 
     @Override
@@ -110,9 +77,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                     links = DAO.loadGraph(content, true);
 
                 initializeGraph();
-                break;
-	    case LAYOUT:
-                handleLayouts(content);
                 break;
             case NODE:
                 int id = Integer.valueOf(content);
@@ -190,24 +154,5 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
            }
         }
         return path;
-    }
-
-    // TODO: this should be implemented with REST services
-    private void handleLayouts(String layout){
-        String response = "";
-        switch(layout){
-            case FORCE:
-                response = buildMessage(BUILD_GRAPH, Constants.gson.toJson(links));
-                break;
-            case TREE:
-                response = buildMessage(BUILD_GRAPH, "["+Layout.buildTree(0)+"]");
-                break;
-        }
-
-        try {
-            getSession().getRemote().sendString(response);
-        } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

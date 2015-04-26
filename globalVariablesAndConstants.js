@@ -8,11 +8,10 @@ const BUILD_GRAPH = "BUILD_GRAPH";
 const NODE = "NODE";
 const F_PATH = "F_PATH";
 const P_PATH = "P_PATH";
-const LAYOUT = "LAYOUT";
 
 // Layouts and algorithms
 const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
-const LAYOUTS = ["FORCE", "TREE"];
+const LAYOUTS = ["random"];
 const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants

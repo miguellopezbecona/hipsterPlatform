@@ -94,8 +94,6 @@ function startForce(){
     .enter().append("g")
     .attr("class", "node")
     .attr("nodeId", function(d) { return d.id; })
-    .attr("cx", function(d) { return d.x; })
-    .attr("cy", function(d) { return d.y; })
     .on("mouseout", mouseout)
     .on("click", click)
     .call(drag);
@@ -126,7 +124,7 @@ function startForce(){
 
 function dragstarted(d) {
     d3.event.sourceEvent.stopPropagation();
-    d.fixed=false;
+    d.fixed = false;
 }
 
 function dragged(d) {
