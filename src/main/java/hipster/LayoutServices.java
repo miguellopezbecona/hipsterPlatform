@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -20,22 +21,24 @@ public class LayoutServices implements Constants {
     
     @POST
     @Path("/{layout}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGraph (@PathParam("layout") String layout, List<Node> list){
+    public Response applyLayout (@PathParam("layout") String layout, String literal){
         // Bad request if the list is empty
-        if(list == null || list.isEmpty())
+        if(literal == null || literal.isEmpty())
             return Response.status(Response.Status.BAD_REQUEST).build();
+
+        List<Node> list = gson.fromJson(literal, new TypeToken<List<Node>>(){}.getType());
 
         switch(layout){
             case RANDOM:
                 for(Node n : list){
-                    n.setX(random.nextInt() % 1200);
-                    n.setY(random.nextInt() % 600);
+                    n.setX( Math.abs(random.nextInt() % 900) + 300);
+                    n.setY( Math.abs(random.nextInt() % 300) + 100);
                 }
                 break;
         }
 
-        return Response.ok(list,MediaType.APPLICATION_JSON).build(); 
+        return Response.ok(gson.toJson(list),MediaType.APPLICATION_JSON).build(); 
     }
 }

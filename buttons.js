@@ -60,27 +60,19 @@ function activateComponents(){
 
   // Change layout
   $("#changeLayout").on("click", function(){
-    var test = jQuery.extend(true, [], nodes);
-
-    test.forEach(function(d){
-      delete d.px;
-      delete d.py;
-      delete d.fixed;
-      delete d.weight;
-      delete d.index;
-      d.info = "example";
-    });
-
-    //showFeedback("info", JSON.stringify(test));
     $.ajax({
         type: "POST",
         //url: "http://layout.jointjs.com/layout/circular/circular",
         //data: "{\"graph\":{\"cells\":" + JSON.stringify(nodes) + "}}",
         url: "api/layout/" + $("#layout").val(),
-        data: JSON.stringify(test),
-        contentType: "application/json",
+        data: JSON.stringify(nodes),
+        contentType: "text/plain",
         success: function (data, textStatus, response) {
-            showFeedback("info", data);
+            node.each(function(d,i){
+                d.px = d.x = data[i].x;
+                d.py = d.y = data[i].y;
+            });
+            tick();
         },
         error: function (response, textStatus, errorThrown) {
             showFeedback("danger", "Error: " + errorThrown);
