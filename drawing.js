@@ -63,8 +63,25 @@ function startDrawing(){
     .enter().append("line")
     .attr("source", function(d) { return d.source.id; })
     .attr("target", function(d) { return d.target.id; })
+    .attr('marker-end','url(#arrowhead)')
     .attr("stroke", defaultPathColor);
 
+    // Defines the arrow that shows each link's direction
+    container.append('defs').append('marker')
+        .attr({'id':'arrowhead',
+               'viewBox':'-0 -5 10 10',
+               'refX':17,
+               'refY':0,
+               'orient':'auto',
+               'markerWidth':10,
+               'markerHeight':10,
+               'xoverflow':'visible'})
+        .append('svg:path')
+            .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+            .attr('fill', '#000000')
+            .attr('stroke','#000000');
+
+    // Necessary to show links' weight
     edgepaths = container.selectAll(".edgepath")
         .data(links)
         .enter()
