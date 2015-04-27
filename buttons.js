@@ -231,7 +231,7 @@ function ajaxRequest(url){
 
 function buildGraph(){
      // Uses the received data to build the graph
-     startForce();
+     startDrawing();
 
      // Makes operations and zoom sections visible
      $("#operations").show();

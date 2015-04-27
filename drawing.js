@@ -1,11 +1,11 @@
-var force;
+var graph;
 var link;
 var node;
 var edgelabels;
 var edgepaths;
 var selected;
 
-function startForce(){
+function startDrawing(){
     // Cleans the canvas if anything was drawn before
     d3.select("svg").remove();
 
@@ -25,8 +25,8 @@ function startForce(){
       else
     makeDefaultPositions = false;
 
-    // Defines the force layout
-    force = d3.layout.force()
+    // Defines the graph
+    graph = d3.layout.force()
     .nodes(nodes)
     .links(links)
     .size([WIDTH, HEIGHT])
@@ -59,7 +59,7 @@ function startForce(){
     container = svg.append("g");
 
     link = container.selectAll(".link")
-    .data(force.links())
+    .data(graph.links())
     .enter().append("line")
     .attr("source", function(d) { return d.source.id; })
     .attr("target", function(d) { return d.target.id; })
@@ -90,7 +90,7 @@ function startForce(){
     node = container.append("g")
     .attr("class", "nodes")
     .selectAll(".node")
-    .data(force.nodes())
+    .data(graph.nodes())
     .enter().append("g")
     .attr("class", "node")
     .attr("nodeId", function(d) { return d.id; })
@@ -119,7 +119,7 @@ function startForce(){
        }
      });
 
-     force.start();
+     graph.start();
 }
 
 function dragstarted(d) {
