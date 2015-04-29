@@ -48,12 +48,12 @@ public class DAO implements Constants{
         }
     }
 
-    public synchronized static String saveGraph(InputStream content, String extension){
+    public static String saveGraph(InputStream content, String extension){
         // Adding a bit of security: it doesn't allow files that contain "#", ";", "/"
         if(extension.matches(".*[#;/].*"))
             return null;
 
-        String hash = Utils.generateHash(Long.toString(System.currentTimeMillis()));
+        String hash = Utils.generateHash(content);
 
         // The used filename will consist in a hash of the system's current time
         String filename = hash + "." + extension;
@@ -61,7 +61,13 @@ public class DAO implements Constants{
         String path = GRAPH_BASE_PATH + filename;
         OutputStream out = null;
         try {
-            out = new FileOutputStream(new File(GRAPH_BASE_PATH + filename));
+            File f = new File(GRAPH_BASE_PATH + filename);
+
+            // It won't write the graph if it already exists
+            if(f.exists())
+                return hash;
+
+            out = new FileOutputStream(f);
 
             int read = 0;
             final byte[] bytes = new byte[CHUNK_SIZE];
