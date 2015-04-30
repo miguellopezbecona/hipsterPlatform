@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
+import java.util.Stack;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -58,7 +60,7 @@ public class Utils implements Constants{
 
     /**
      * Generates a hash from a graph's content
-     * @param is - InputStream 
+     * @param is - InputStream which holds the file
      * @return Hash
      */
     public static String generateHash(InputStream is){
@@ -97,8 +99,8 @@ public class Utils implements Constants{
                 nextNode = aux.next().state().toString();
                 ret.add(nextNode);
                 Queue<WeightedNode> q = aux.getQueue();
-                for(WeightedNode s : q)
-                    ret.add(s.state().toString());
+                for(WeightedNode n : q)
+                    ret.add(n.state().toString());
                 if(nextNode.equals(goal))      
                     it = null;
                 return ret;
@@ -111,7 +113,9 @@ public class Utils implements Constants{
             if(aux.hasNext()){
                 nextNode = aux.next().state().toString();
                 ret.add(nextNode);
-                ret.addAll(aux.getClosed());
+                /*Stack<WeightedNode> s = aux.getStack();
+                for(StackFrameNode n : s)
+                    ret.add(n.state().toString());*/
                 if(nextNode.equals(goal))      
                     it = null;
                 return ret;

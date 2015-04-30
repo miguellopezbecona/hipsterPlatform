@@ -10,7 +10,7 @@ const P_PATH = "P_PATH";
 
 // Layouts and algorithms
 const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
-const LAYOUTS = ["random"];
+const LAYOUTS = ["random", "circle"];
 const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants

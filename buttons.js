@@ -60,12 +60,23 @@ function activateComponents(){
 
   // Change layout
   $("#changeLayout").on("click", function(){
+
+    // Prepares a graph object to send to the service
+    var g = {};
+    g.nodes = nodes;
+    g.links = []; // "= links" can't be done because of "links" structure
+    link.each(function(d){
+      var aux = {};
+      aux.source = d.source.id;
+      aux.target = d.target.id;
+      aux.weight = d.weight;
+      g.links.push(aux);
+    });
+
     $.ajax({
         type: "POST",
-        //url: "http://layout.jointjs.com/layout/circular/circular",
-        //data: "{\"graph\":{\"cells\":" + JSON.stringify(nodes) + "}}",
         url: "api/layout/" + $("#layout").val(),
-        data: JSON.stringify(nodes),
+        data: JSON.stringify(g),
         contentType: "text/plain",
         success: function (data, textStatus, response) {
             node.each(function(d,i){

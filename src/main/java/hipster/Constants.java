@@ -23,6 +23,7 @@ public interface Constants {
 
     /*** LAYOUTS ***/
     public final String RANDOM = "random";
+    public final String CIRCLE = "circle";
 
     /*** OTHERS CONSTANTS AND UTILS ***/
     public final Random random = new Random(System.currentTimeMillis());
