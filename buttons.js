@@ -151,8 +151,6 @@ function activateComponents(){
   // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;
   $("#oneStep")[0].checked = true;
-  $("#initialNodeC")[0].checked = false;
-  $("#goalNodeC")[0].checked = false;
 }
 
 // This is used when submitting the form to upload a graph
@@ -230,6 +228,14 @@ function ajaxRequest(url){
 }
 
 function buildGraph(){
+     // Removes initial and goal nodes' values from previous graphs
+     $("#initialNode").text(null);
+     $("#goalNode").text(null);
+
+     // So, its checkboxes are initially unchecked
+     $("#initialNodeC")[0].checked = false;
+     $("#goalNodeC")[0].checked = false;
+
      // Uses the received data to build the graph
      startDrawing();
 

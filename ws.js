@@ -75,7 +75,16 @@ function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.id+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
+    // Appends information to some section from the right panel
     $("#rightPanelText").html(info);
+
+    var initialNode = $("#initialNode").text();
+    var goalNode = $("#goalNode").text();
+
+    // Updates the checkboxes: they keep checked if the selected node is the same as its value (initial/goal node)
+    $("#initialNodeC")[0].checked = initialNode!=null && initialNode.localeCompare(nodeInfo.id)==0;
+    $("#goalNodeC")[0].checked = goalNode!=null && goalNode.localeCompare(nodeInfo.id)==0;
+
     $("#rightPanel").show();
 }
 
