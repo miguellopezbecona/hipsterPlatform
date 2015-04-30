@@ -9,7 +9,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.google.gson.reflect.TypeToken;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.DAGLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import java.awt.Dimension;
@@ -53,6 +58,21 @@ public class LayoutServices implements Constants {
                 break;
             case CIRCLE:
                 layout = new CircleLayout(g);
+                break;
+            /*case DAG:
+                layout = new DAGLayout(g); // Raises NullPointerException at layout.initializeLocation()
+                break;*/
+            case FR:
+                layout = new FRLayout(g);
+                break;
+            case ISOM:
+                layout = new ISOMLayout(g);
+                break;
+            case KK:
+                layout = new KKLayout(g);
+                break;
+            case SPRING:
+                layout = new SpringLayout(g);
                 break;
             default: // Unknown layout: bad request
                 return Response.status(Response.Status.BAD_REQUEST).build();

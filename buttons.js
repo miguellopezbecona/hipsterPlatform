@@ -157,7 +157,7 @@ function activateComponents(){
   // Does the same with the layout menu
   var layout = $("#layout")[0];
   for(i=0;i<LAYOUTS.length;i++)
-    layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i], false);
+    layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i].toLowerCase(), false);
 
   // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;
