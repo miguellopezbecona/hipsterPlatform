@@ -194,7 +194,7 @@ function requestGraph(filename){
             break;
         case "gexf":
             var newGEXF = GexfParser.fetch(graphUrl);
-            var gD3 = gexfD3().graph(newGEXF).size([1000,1000]).nodeScale([5,20]);
+            gD3 = gexfD3().graph(newGEXF).size([WIDTH,HEIGHT]).nodeScale([5,20]);
             links = gD3.links();
             nodes = gD3.nodes();
             buildGraph();
@@ -235,6 +235,9 @@ function buildGraph(){
      // So, its checkboxes are initially unchecked
      $("#initialNodeC")[0].checked = false;
      $("#goalNodeC")[0].checked = false;
+
+     // Activates the algorithm menu if it was disabled due to a step-by-step execution
+     $("#algorithm").prop("disabled", false);
 
      // Uses the received data to build the graph
      startDrawing();

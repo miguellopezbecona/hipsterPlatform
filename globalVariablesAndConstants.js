@@ -46,3 +46,4 @@ var showWeights = true;
 var forceOS = false;
 var links;
 var nodes;
+var gD3;

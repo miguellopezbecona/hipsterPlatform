@@ -53,13 +53,9 @@ $(document).ready(function() {
         break;
     }
 
-    // Copies the literal string to the right panel when debugging
-    if(debug){
-    	$("#rightPanelContent").html("<p>"+evt.data+"</p>");
-    	$("#rightPanel").show();
-    	$("#rightPanel").delay(10000).hide(1000);
-    }
-
+    // Copies the literal string as a feedback when debugging
+    if(debug)
+    	showFeedback("info", evt.data);
   };
 
 });

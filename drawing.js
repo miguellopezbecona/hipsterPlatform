@@ -4,6 +4,8 @@ var node;
 var edgelabels;
 var edgepaths;
 var selected;
+var auxiliarRadius = null;
+var auxiliarTextDistance = null;
 
 function startDrawing(){
     // Cleans the canvas if anything was drawn before
@@ -12,7 +14,10 @@ function startDrawing(){
     var nodeCollection = {};
     var makeDefaultPositions = true;
 
-    if(nodes == null){
+    // If "nodes" isn't null, it means that it comes from a gexf file, whose positions are already defined
+    var isGexfGraph = (nodes != null);
+
+    if(!isGexfGraph){
       // Obtain the nodes with info from the links
       links.forEach(function(link) {
         link.source = nodeCollection[link.source] || (nodeCollection[link.source] = {id: link.source});
@@ -21,9 +26,6 @@ function startDrawing(){
 
       nodes = d3.values(nodeCollection);
     }
-    // If nodes isn't null, it means that it comes from a gexf file, whose positions are already defined
-      else
-    makeDefaultPositions = false;
 
     // Defines the graph
     graph = d3.layout.force()
@@ -115,22 +117,38 @@ function startDrawing(){
     .on("click", click)
     .call(drag);
 
-    node.append("circle")
-    .attr("r", BASE_RADIUS)
-    .style("fill", defaultNodeColor);
+    // GEXF graphs' nodes will have preset sizes and colors
+    if(isGexfGraph){
+        var sizeScale = gD3.nodeScale();
+        node.append("circle")
+          .attr("r", function(d) {return sizeScale(d.size);})
+          .style("fill", function(d) {return d.rgbColor;});
 
-    node.append("text")
-    .attr("x", 12)
-    .attr("dy", ".35em")
-    .style("fill", defaultNodeColor)
-    .text(function(d) { return d.id; });
+        node.append("text")
+          .attr("x", function(d) {return 1.5*sizeScale(d.size);})
+          .attr("dy", ".35em")
+          .style("fill", defaultNodeColor)
+          .text(function(d) { return d.id; });
+    } else {
+        node.append("circle")
+          .attr("r", BASE_RADIUS)
+          .style("fill", defaultNodeColor);
+
+        node.append("text")
+          .attr("x", 1.5*BASE_RADIUS)
+          .attr("dy", ".35em")
+          .style("fill", defaultNodeColor)
+          .text(function(d) { return d.id; });
+    }
+
+
 
      // Adjusts a grid-like initial positioning
      var rows = Math.ceil(Math.sqrt(nodes.length));
      var columns = Math.ceil(nodes.length / rows);
      node.each(function(d,i){
        d.fixed = true;
-       if(makeDefaultPositions){
+       if(!isGexfGraph){
          d.x = BASE_W + Math.floor(i/columns) * LINK_DISTANCE;
          d.y = BASE_H + (i % rows) * LINK_DISTANCE;
        }
@@ -172,16 +190,24 @@ function tick() {
 // Restores the selected node to its initial state
 function mouseout() {
     if(selected != null){
-      d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", 12).style("font", "12px serif");
-      d3.select("[nodeId='" + selected + "']").select("circle").transition().attr("r", BASE_RADIUS);
+      if(auxiliarTextDistance != null){
+        d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", auxiliarTextDistance).style("font", "12px serif");
+        auxiliarTextDistance = null;
+      }
+      if(auxiliarRadius != null){
+        d3.select(this).select("circle").transition().attr("r", auxiliarRadius);
+        auxiliarRadius = null;
+      }
     }
 }
 
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
-    d3.select(this).select("text").transition().attr("x", 22).style("font", "17.5px serif");
+    auxiliarTextDistance = d3.select(this).select("text").attr("x");
+    d3.select(this).select("text").transition().attr("x", 1.5*auxiliarTextDistance).style("font", "17.5px serif");
 
-    d3.select(this).select("circle").transition().attr("r", 2*BASE_RADIUS)
+    auxiliarRadius = d3.select(this).select("circle").attr("r");
+    d3.select(this).select("circle").transition().attr("r", 2*auxiliarRadius);
 
     selected = d3.select(this).select("text").text();
     var message = buildMessage(NODE, selected);
