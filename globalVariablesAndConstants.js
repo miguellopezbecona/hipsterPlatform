@@ -36,7 +36,7 @@ const EXT_SUPPORTED = ["gexf", "json"];
 const BASE_URI = "api/graph/"
 const GRAPH_BASE_PATH = "graphs/";
 const GRAPH_EXAMPLES_FOLDER = "examples/";
-const debug = 0;
+const debug = true;
 
 // Global variables
 var svg;

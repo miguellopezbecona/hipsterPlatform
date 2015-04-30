@@ -64,7 +64,8 @@ function showFeedback(type, content){
     $("#feedback").text(content);
     $("#feedback").attr("class", "alert alert-" + type);
     $("#feedback").show();
-    $("#feedback").delay(10000).hide(1000);
+	if(!debug)
+	    $("#feedback").delay(10000).hide(1000);
 }
 
 function showNodeInfo(nodeInfo){
