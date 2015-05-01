@@ -63,7 +63,19 @@ function activateComponents(){
 
     // Prepares a graph object to send to the service
     var g = {};
-    g.nodes = nodes;
+
+    var nodeList = jQuery.extend(true, [], nodes);
+    var validFields = ["id", "x", "y"];
+
+    // Deletes unused fields from the copy to send the correct (and less) information
+    nodeList.forEach(function(d){
+      for(var field in d) {
+          if(validFields.indexOf(field) == -1)
+              delete d[field];
+      }
+    });
+    g.nodes = nodeList;
+
     g.links = []; // "= links" can't be done because of "links" structure
     link.each(function(d){
       var aux = {};
@@ -72,12 +84,14 @@ function activateComponents(){
       aux.weight = d.weight;
       g.links.push(aux);
     });
+    g.width = WIDTH;
+    g.height = HEIGHT;
 
     $.ajax({
         type: "POST",
         url: "api/layout/" + $("#layout").val(),
         data: JSON.stringify(g),
-        contentType: "text/plain",
+        contentType: "application/json",
         success: function (data, textStatus, response) {
             node.each(function(d,i){
                 d.px = d.x = data[i].x;

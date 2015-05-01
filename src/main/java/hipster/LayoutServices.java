@@ -1,5 +1,6 @@
 package hipster;
 
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,21 +30,24 @@ public class LayoutServices implements Constants {
     
     @POST
     @Path("/{layout}")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response applyLayout (@PathParam("layout") String layoutName, String literal){
-        // Bad request if the list is empty
-        if(literal == null || literal.isEmpty())
+    public Response applyLayout (@PathParam("layout") String layoutName, MyGraph graph){
+        int width = graph.getWidth();
+        int height = graph.getHeight();
+
+        // Bad request if the list is empty or the dimensions are wrong
+        if(graph == null || width < 1 || height < 1)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
-        // Some initialization work
-        MyGraph graph = gson.fromJson(literal, new TypeToken<MyGraph>(){}.getType());
+        List<Node> nodes = graph.getNodes();
         
+        // Some initialization work
         Graph<Node, Link> g = new SparseMultigraph<>();
         for(Link l : graph.getLinks()) {
             g.addEdge(l,
-                graph.getNodes().get(Integer.valueOf(l.getSource())),
-                graph.getNodes().get(Integer.valueOf(l.getTarget()))
+                nodes.get(Integer.valueOf(l.getSource())),
+                nodes.get(Integer.valueOf(l.getTarget()))
             );
         }
 
@@ -51,43 +55,74 @@ public class LayoutServices implements Constants {
 
         switch(layoutName){
             case RANDOM:
-                for(Node n : graph.getNodes()){
-                    n.setX( Math.abs(random.nextInt() % 900) + 300);
-                    n.setY( Math.abs(random.nextInt() % 300) + 100);
-                }
+                applyRandom(nodes, width, height);
                 break;
             case CIRCLE:
                 layout = new CircleLayout(g);
+                applyLayout(layout, nodes, width, height);
                 break;
-            /*case DAG:
-                layout = new DAGLayout(g); // Raises NullPointerException at layout.initializeLocation()
-                break;*/
             case FR:
                 layout = new FRLayout(g);
+                applyLayout(layout, nodes, width, height);
+                break;
+            case GRID:
+                applyGrid(nodes, width, height);
                 break;
             case ISOM:
                 layout = new ISOMLayout(g);
+                applyLayout(layout, nodes, width, height);
                 break;
             case KK:
                 layout = new KKLayout(g);
+                applyLayout(layout, nodes, width, height);
                 break;
             case SPRING:
                 layout = new SpringLayout(g);
+                applyLayout(layout, nodes, width, height);
                 break;
             default: // Unknown layout: bad request
                 return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        
-        // Same work to every non-random layout
-        if(!layoutName.equals(RANDOM)){
-            layout.setSize(new Dimension(1300, 700));
-            for (Node n : graph.getNodes()) {
-                Point2D coord = layout.transform(n);
-                n.setX(coord.getX());
-                n.setY(coord.getY());
+
+        return Response.ok(gson.toJson(nodes),MediaType.APPLICATION_JSON).build(); 
+    }
+
+    // Same work to every non-random or grid layout
+    private void applyLayout(Layout<Node, Point2D> layout, List<Node> nodes, int width, int height){
+        layout.setSize(new Dimension(width, height));
+        for (Node n : nodes) {
+            Point2D coord = layout.transform(n);
+            n.setX(coord.getX());
+            n.setY(coord.getY());
+        }
+    }
+
+    private void applyGrid(List<Node> nodes, int width, int height){
+        // Tries to build a square-like grid
+        int side = (int) Math.ceil(Math.sqrt(nodes.size()));
+
+        int baseW = width/2 - 200;
+        int baseH = height/2 - 100;
+        int nodeDistance = (width - baseW) / side;
+
+        for(int r=0;r<side;r++){
+            for(int c=0;c<side;c++){
+                int toSelect = r*side+c;
+
+                // Stops when all nodes are processed
+                if(toSelect == nodes.size())
+                    break;
+                Node node = nodes.get(toSelect);
+                node.setX(baseW + c * nodeDistance);
+                node.setY(baseH + r * nodeDistance);
             }
         }
+    }
 
-        return Response.ok(gson.toJson(graph.getNodes()),MediaType.APPLICATION_JSON).build(); 
+    private void applyRandom(List<Node> nodes, int width, int height){
+        for(Node n : nodes){
+            n.setX( Math.abs(random.nextInt() % width) );
+            n.setY( Math.abs(random.nextInt() % height) );
+        }
     }
 }

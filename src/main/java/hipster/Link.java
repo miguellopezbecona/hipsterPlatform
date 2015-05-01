@@ -15,6 +15,10 @@ public class Link {
         this.weight = weight;
     }
 
+    public Link() {
+    }
+
+
     public String getSource() {
         return source;
     }

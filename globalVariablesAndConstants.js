@@ -10,12 +10,12 @@ const P_PATH = "P_PATH";
 
 // Layouts and algorithms
 const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
-const LAYOUTS = ["Circle", /*"DAG",*/ "Fruchterman-Reingold", "ISOM", "Kamada-Kawai", "Random", "Spring"];
+const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai", "Random", "Spring"];
 const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants
 const WIDTH = screen.width;
-const HEIGHT = screen.height;
+const HEIGHT = screen.height - 100;
 const BASE_RADIUS = 8;
 const BASE_W = WIDTH*0.5 - 100;
 const BASE_H = HEIGHT*0.5 - 100;

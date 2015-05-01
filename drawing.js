@@ -143,18 +143,17 @@ function startDrawing(){
 
 
 
-     // Adjusts a grid-like initial positioning
-     var rows = Math.ceil(Math.sqrt(nodes.length));
-     var columns = Math.ceil(nodes.length / rows);
-     node.each(function(d,i){
-       d.fixed = true;
-       if(!isGexfGraph){
-         d.x = BASE_W + Math.floor(i/columns) * LINK_DISTANCE;
-         d.y = BASE_H + (i % rows) * LINK_DISTANCE;
-       }
-     });
+    // Adjusts a grid-like initial positioning
+    var side = Math.ceil(Math.sqrt(nodes.length));
+    node.each(function(d,i){
+      d.fixed = true;
+      if(!isGexfGraph){
+        d.x = BASE_W + (i % side) * LINK_DISTANCE;
+        d.y = BASE_H + Math.floor(i/side) * LINK_DISTANCE;
+      }
+    });
 
-     graph.start();
+    graph.start();
 }
 
 function dragstarted(d) {

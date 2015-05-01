@@ -24,8 +24,8 @@ public interface Constants {
     /*** LAYOUTS ***/
     public final String RANDOM = "random";
     public final String CIRCLE = "circle";
-    public final String DAG = "dag";
     public final String FR = "fruchterman-reingold";
+    public final String GRID = "grid";
     public final String ISOM = "isom";
     public final String KK = "kamada-kawai";
     public final String SPRING = "spring";

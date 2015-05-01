@@ -9,6 +9,8 @@ import java.util.List;
 public class MyGraph {
     private List<Node> nodes;
     private List<Link> links;
+    private int width;
+    private int height;
 
     public MyGraph() {
     }
@@ -28,6 +30,20 @@ public class MyGraph {
     public void setLinks(List<Link> links) {
         this.links = links;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
     
-    
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }
