@@ -5,7 +5,6 @@ import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.problem.SearchProblem;
 import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 

@@ -7,7 +7,7 @@ var selected;
 var auxiliarRadius = null;
 var auxiliarTextDistance = null;
 
-function startDrawing(){
+function buildGraph(){
     // Cleans the canvas if anything was drawn before
     d3.select("svg").remove();
 

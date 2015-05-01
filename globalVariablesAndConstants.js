@@ -11,7 +11,6 @@ const P_PATH = "P_PATH";
 // Layouts and algorithms
 const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
 const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai", "Random", "Spring"];
-const DEFAULT_LAYOUT = LAYOUTS[0];
 
 // Graphic-related constants
 const WIDTH = screen.width;
@@ -36,7 +35,7 @@ const EXT_SUPPORTED = ["gexf", "json"];
 const BASE_URI = "api/graph/"
 const GRAPH_BASE_PATH = "graphs/";
 const GRAPH_EXAMPLES_FOLDER = "examples/";
-const debug = true;
+const debug = false;
 
 // Global variables
 var svg;

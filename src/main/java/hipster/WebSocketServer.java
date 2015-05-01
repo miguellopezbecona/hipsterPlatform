@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import com.google.gson.reflect.TypeToken;
 import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 
 /**

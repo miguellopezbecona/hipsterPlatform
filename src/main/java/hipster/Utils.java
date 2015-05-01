@@ -5,21 +5,15 @@ import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.BellmanFord;
 import es.usc.citius.hipster.algorithm.BreadthFirstSearch;
 import es.usc.citius.hipster.algorithm.DepthFirstSearch;
-import es.usc.citius.hipster.algorithm.DepthFirstSearch.StackFrameNode;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
-import java.util.Stack;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
 
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -114,19 +108,6 @@ public class Utils implements Constants{
             if(aux.hasNext()){
                 nextNode = aux.next().state().toString();
                 ret.add(nextNode);
-                Stack<StackFrameNode> s = aux.getStack();
-                for(StackFrameNode n : s){
-                    ret.add(n.getNode().state().toString());
-                    /*if(n.getNode().state().toString().equals(nextNode)){
-                        System.out.print("\n" + n.getNode().state().toString() + ": ");
-                        Iterator i = n.getSuccessors();
-                        while(i.hasNext()){
-                          WeightedNode x = (WeightedNode) i.next();
-                          System.out.print(x.state().toString() + " ");
-                        }
-                    }*/
-
-                }
                 if(nextNode.equals(goal))      
                     it = null;
                 return ret;

@@ -9,7 +9,7 @@ $(document).ready(function() {
   ws = new WebSocket(wsUrl);
   startedSbS = false;
 
-  $.getScript('buttons.js', function(){
+  $.getScript('gui.js', function(){
     activateComponents();
   });
 
@@ -86,8 +86,9 @@ function showNodeInfo(nodeInfo){
 }
 
 function showFullPath(data){
+    // Restores the posibility to change the parameters
     startedSbS = false;
-    $("#algorithm").prop("disabled", false);
+    disableParameters(false);
 
     /* To avoid duplicated data, instead of receiving every pair of source-target,
      * all the numbers are the target, except for the first one, that is the initial source
@@ -102,8 +103,8 @@ function showFullPath(data){
 }
 
 function showPartialPath(data){
-    // Prevents non-sense change. If you are running an algorithm step by step, you should not change it during the proccess
-    $("#algorithm").prop("disabled", true);
+    // Prevents non-sense changes. If you are running an algorithm step by step, you should not change parameters during the proccess
+    disableParameters(true);
 
     // In every step, the server will send back the next node and the following ones to be expanded
     d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", possibleNodeColor);
@@ -119,4 +120,10 @@ function showPartialPath(data){
     var i;
     for(i=1;i<data.length;i++)
       d3.select("[nodeId='" + data[i] + "']").select("circle").style("fill", nextNodeColor);      
+}
+
+function disableParameters(bol){
+    $("#algorithm").prop("disabled", bol);
+    $("#initialNodeC").prop("disabled", bol);
+    $("#goalNodeC").prop("disabled", bol);
 }

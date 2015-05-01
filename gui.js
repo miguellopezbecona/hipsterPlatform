@@ -222,7 +222,7 @@ function requestGraph(filename){
             gD3 = gexfD3().graph(newGEXF).size([WIDTH,HEIGHT]).nodeScale([5,20]);
             links = gD3.links();
             nodes = gD3.nodes();
-            buildGraph();
+            initialize();
             break;
         default:
             links = null;
@@ -237,7 +237,7 @@ function ajaxRequest(url){
         success: function (data, textStatus, response) {
             links = data;
             nodes = null;
-            buildGraph();
+            initialize();
 
             // Sends a message so the server builds its internal model to work with the graph
             var filename = url.split("/")[url.split("/").length-1];
@@ -252,22 +252,22 @@ function ajaxRequest(url){
     });
 }
 
-function buildGraph(){
-     // Removes initial and goal nodes' values from previous graphs
-     $("#initialNode").text(null);
-     $("#goalNode").text(null);
+function initialize(){
+    // Removes initial and goal nodes' values from previous graphs
+    $("#initialNode").text(null);
+    $("#goalNode").text(null);
 
-     // So, its checkboxes are initially unchecked
-     $("#initialNodeC")[0].checked = false;
-     $("#goalNodeC")[0].checked = false;
+    // So, its checkboxes are initially unchecked
+    $("#initialNodeC")[0].checked = false;
+    $("#goalNodeC")[0].checked = false;
 
-     // Activates the algorithm menu if it was disabled due to a step-by-step execution
-     $("#algorithm").prop("disabled", false);
+    // Activates the algorithm parameters for the case they were disabled due to a step-by-step execution
+    disableParameters(false);
 
-     // Uses the received data to build the graph
-     startDrawing();
+    // Uses the received data to build the graph
+    buildGraph();
 
-     // Makes operations and zoom sections visible
-     $("#operations").show();
-     $("#zoomButtons").show();
+    // Makes operations and zoom sections visible
+    $("#operations").show();
+    $("#zoomButtons").show();
 }
