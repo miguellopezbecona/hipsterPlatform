@@ -9,7 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class HipsterFacade {
-    private static Iterator it = null;
+    private static Iterator it;
+
+    public static void resetIt(){
+        it = null;
+    }    
 
     /*** One step executions ***/
     public static List<String> dijkstraOS(HashBasedHipsterDirectedGraph g, String first, String goal){

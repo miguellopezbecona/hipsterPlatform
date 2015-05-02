@@ -20,21 +20,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     public WebSocketServer(){
     }
 
-    public void initializeGraph(){
-	// Obtains the equivalent object to be used with Hipster
-	g = Utils.initializeGraph(links);
-
-        int numNodes = links.size() + 1;
-        nodes = new ArrayList<>();
-
-        for(int i=0;i<numNodes;i++) {
-          Node n = new Node();
-          n.setId(i);
-          n.setInfo("Has " + random.nextInt() + " as info.");
-          nodes.add(n);
-        }
-    }
-
     @Override
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
@@ -44,10 +29,6 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
-    }
-
-    private String buildMessage(String type, String content){
-        return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
     }
 
     private void handleMessage(String message) {
@@ -112,6 +93,28 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 		// Generic message
 		System.out.println("Message type: " + type + ", content: " + content);
         }
+    }
+
+    private String buildMessage(String type, String content){
+        return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
+    }
+
+    private void initializeGraph(){
+	// Obtains the equivalent object to be used with Hipster
+	g = Utils.initializeGraph(links);
+
+        // Builds node info
+        int numNodes = links.size() + 1;
+        nodes = new ArrayList<>();
+
+        for(int i=0;i<numNodes;i++) {
+          Node n = new Node();
+          n.setId(i);
+          n.setInfo("Has " + random.nextInt() + " as info.");
+          nodes.add(n);
+        }
+
+        HipsterFacade.resetIt();
     }
 
     private List<String> handleAlgorithm(String content, boolean oneStep){
