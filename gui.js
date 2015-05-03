@@ -187,7 +187,7 @@ function validateUpload(selection){
     // Alerts and stops when the file doesn't have the right extension
     var extension = getExtension(selection);
     if(!checkExtension(extension)){
-      showFeedback("danger", "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED);
+      showFeedback("danger", EXT_SUPPORT_FEEDBACK);
       return false;
     }
 
@@ -222,10 +222,10 @@ function requestGraph(filename){
             gD3 = gexfD3().graph(newGEXF).size([WIDTH,HEIGHT]).nodeScale([5,20]);
             links = gD3.links();
             nodes = gD3.nodes();
-            initialize();
+            initialize(filename);
             break;
         default:
-            links = null;
+            showFeedback("danger", EXT_SUPPORT_FEEDBACK);
      }
 }
 
@@ -237,12 +237,8 @@ function ajaxRequest(url){
         success: function (data, textStatus, response) {
             links = data;
             nodes = null;
-            initialize();
-
-            // Sends a message so the server builds its internal model to work with the graph
             var filename = url.split("/")[url.split("/").length-1];
-            var message = buildMessage(BEGIN, "'"+filename+"'");
-            ws.send(message);
+            initialize(filename);
         },
         statusCode: {
             404: function(response, textStatus, errorThrown) {
@@ -252,7 +248,14 @@ function ajaxRequest(url){
     });
 }
 
-function initialize(){
+function initialize(filename){
+    // Hides right panel because of possible previous work
+    $("#rightPanel").hide();
+
+    // Sends a message so the server builds its internal model to work with the graph
+    var message = buildMessage(BEGIN, "'"+filename+"'");
+    ws.send(message);
+
     // Removes initial and goal nodes' values from previous graphs
     $("#initialNode").text(null);
     $("#goalNode").text(null);

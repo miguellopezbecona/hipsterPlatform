@@ -32,8 +32,8 @@ public class DAO implements Constants{
             switch(extension){
                 case "json":
                     return gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
-                case "gexf": // TODO: Not implemented yet
-                    return null;
+                case "gexf":
+                    return GEXFParser.getLinks(path);
                 default:
                     return null;
             }
