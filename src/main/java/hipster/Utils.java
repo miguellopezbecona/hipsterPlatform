@@ -7,17 +7,15 @@ import es.usc.citius.hipster.algorithm.BreadthFirstSearch;
 import es.usc.citius.hipster.algorithm.DepthFirstSearch;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
-
-import java.io.File;
-import java.io.InputStream;
-
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class Utils implements Constants{
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
@@ -59,14 +57,24 @@ public class Utils implements Constants{
      * @return Hash
      */
     public static String generateHash(InputStream is){
-        byte[] digest = null;
         try {
             MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
-            DigestInputStream dis = new DigestInputStream(is, md);
-            digest = md.digest();
-        } catch (NoSuchAlgorithmException ex) {
+            is.mark(Integer.MAX_VALUE);
+
+            byte[] buffer = new byte[CHUNK_SIZE];
+            int numRead;
+
+            do {
+                numRead = is.read(buffer);
+                if (numRead > 0)
+                    md.update(buffer, 0, numRead);
+            } while (numRead != -1);
+            is.reset(); // Necessary as it will be used to save its content as well
+
+            return toHexadecimal(md.digest());
+        } catch (NoSuchAlgorithmException | IOException ex) {
+            return null;
         }
-        return toHexadecimal(digest);
     }
 
     /** Returns a list containing the next node and the ones to be expanded

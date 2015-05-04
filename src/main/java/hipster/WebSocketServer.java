@@ -92,7 +92,8 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private void initializeGraph(String filename){
         String extension = filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
 
-        boolean isExample = ( filename.length() - extension.length() ) != HASH_LENGTH;
+        // -1 is include because of the dot "."
+        boolean isExample = ( filename.length() - extension.length() - 1) != HASH_LENGTH;
         graph = DAO.loadGraph(filename, isExample);
 
 	// Obtains the equivalent object to be used with Hipster

@@ -93,9 +93,9 @@ function activateComponents(){
         data: JSON.stringify(g),
         contentType: "application/json",
         success: function (data, textStatus, response) {
-            node.each(function(d,i){
-                d.px = d.x = data[i].x;
-                d.py = d.y = data[i].y;
+            node.each(function(d){
+                d.px = d.x = data[d.id].x;
+                d.py = d.y = data[d.id].y;
             });
             tick();
         },

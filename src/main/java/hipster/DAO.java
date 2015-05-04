@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -40,7 +41,7 @@ public class DAO implements Constants{
                 default:
                     return null;
             }
-        } catch (IOException ex) {
+        } catch (IOException | JsonSyntaxException ex) {
             ex.printStackTrace();
             return null;
         }
