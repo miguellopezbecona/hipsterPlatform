@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
  * @author Miguel
  */
 public class DAO implements Constants{
-    public static List<Link> loadGraph(String filename, boolean isExample){
+    public static MyGraph loadGraph(String filename, boolean isExample){
         // Adding a bit of security: it doesn't allow files that contain "#", ";", "/" or ".."
         if(filename.matches(".*([#;/]|\\.\\.).*"))
             return null;
@@ -31,9 +31,12 @@ public class DAO implements Constants{
             // Different parsing depending on file's extension 
             switch(extension){
                 case "json":
-                    return gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
+                    MyGraph m = new MyGraph();
+                    List<Link> links = gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
+                    m.setLinks(links);
+                    return m;
                 case "gexf":
-                    return GEXFParser.getLinks(path);
+                    return GEXFParser.getGraph(path);
                 default:
                     return null;
             }

@@ -99,6 +99,9 @@ function showFullPath(data){
     for(i=0;i<data.length-1;i++){
       d3.selectAll("[source='"+data[i]+"']").filter("[target='"+data[i+1]+"']").style("stroke", highlightPathColor);
       d3.select("[nodeId='" + data[i+1] + "']").select("circle").style("fill", highlightNodeColor);
+
+      // For undirected graphs
+      d3.selectAll("[target='"+data[i]+"']").filter("[source='"+data[i+1]+"']").style("stroke", highlightPathColor);
     }
 }
 

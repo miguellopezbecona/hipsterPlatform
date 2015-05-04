@@ -13,9 +13,8 @@ import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
  * @author Miguel López
  */
 public class WebSocketServer extends WebSocketAdapter implements Constants{
-    private List<Link> links;
-    private List<Node> nodes;
-    private HashBasedHipsterDirectedGraph g;
+    private MyGraph graph;
+    private HashBasedHipsterDirectedGraph hipsterGraph;
 
     public WebSocketServer(){
     }
@@ -39,20 +38,11 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 
         switch(type){
 	    case BEGIN:
-		// In this case, the content is just the filename
-		// If the filename refers to a hash, its length (without the extension) will be always 40 (for SHA-1 algorithm)
-                if(content.split("\\.")[0].length()==HASH_LENGTH)
-                    links = DAO.loadGraph(content, false);
-
-                // If not, it is an example graph (no example will have a filename length of 40)
-                else
-                    links = DAO.loadGraph(content, true);
-
-                initializeGraph();
+		initializeGraph(content);
                 break;
             case NODE:
                 int id = Integer.valueOf(content);
-                String nodeInfo = gson.toJson(nodes.get(id));
+                String nodeInfo = gson.toJson(graph.getNodes().get(id));
                 response = buildMessage(NODE, nodeInfo);
                 try {
                     getSession().getRemote().sendString(response);
@@ -99,20 +89,17 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
     }
 
-    private void initializeGraph(){
+    private void initializeGraph(String filename){
+        String extension = filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
+
+        boolean isExample = ( filename.length() - extension.length() ) != HASH_LENGTH;
+        graph = DAO.loadGraph(filename, isExample);
+
 	// Obtains the equivalent object to be used with Hipster
-	g = Utils.initializeGraph(links);
+	hipsterGraph = Utils.initializeGraph(graph.getLinks());
 
-        // Builds node info
-        int numNodes = links.size() + 1;
-        nodes = new ArrayList<>();
-
-        for(int i=0;i<numNodes;i++) {
-          Node n = new Node();
-          n.setId(i);
-          n.setInfo("Has " + random.nextInt() + " as info.");
-          nodes.add(n);
-        }
+        // Builds node info if it doesn't exist
+        graph.initializeRandomNodes();
 
         HipsterFacade.resetIt();
     }
@@ -129,18 +116,18 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         // Works different for each algorithm
         if(oneStep){
             switch(algorithm){
-                case DIJKSTRA: path = HipsterFacade.dijkstraOS(g, origin, goal); break;
-                case DEPTH: path = HipsterFacade.depthOS(g, origin, goal); break;
-                case BREADTH: path = HipsterFacade.breadthOS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFacade.bellmanFordOS(g, origin, goal); break;
+                case DIJKSTRA: path = HipsterFacade.dijkstraOS(hipsterGraph, origin, goal); break;
+                case DEPTH: path = HipsterFacade.depthOS(hipsterGraph, origin, goal); break;
+                case BREADTH: path = HipsterFacade.breadthOS(hipsterGraph, origin, goal); break;
+                case BELLMAN_FORD: path = HipsterFacade.bellmanFordOS(hipsterGraph, origin, goal); break;
                 default: path = new ArrayList<>(); break;
             }
         } else {
             switch(algorithm){
-                case DIJKSTRA: path = HipsterFacade.dijkstraSbS(g, origin, goal); break;
-                case DEPTH: path = HipsterFacade.depthSbS(g, origin, goal); break;
-                case BREADTH: path = HipsterFacade.breadthSbS(g, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFacade.bellmanFordSbS(g, origin, goal); break;
+                case DIJKSTRA: path = HipsterFacade.dijkstraSbS(hipsterGraph, origin, goal); break;
+                case DEPTH: path = HipsterFacade.depthSbS(hipsterGraph, origin, goal); break;
+                case BREADTH: path = HipsterFacade.breadthSbS(hipsterGraph, origin, goal); break;
+                case BELLMAN_FORD: path = HipsterFacade.bellmanFordSbS(hipsterGraph, origin, goal); break;
                 default: path = new ArrayList<>(); break;
            }
         }

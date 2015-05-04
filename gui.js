@@ -219,10 +219,11 @@ function requestGraph(filename){
             break;
         case "gexf":
             var newGEXF = GexfParser.fetch(graphUrl);
+            var isDirected = (newGEXF.defaultEdgeType != null && newGEXF.defaultEdgeType.localeCompare("undirected") != 0);
             gD3 = gexfD3().graph(newGEXF).size([WIDTH,HEIGHT]).nodeScale([5,20]);
             links = gD3.links();
             nodes = gD3.nodes();
-            initialize(filename);
+            initialize(filename, isDirected);
             break;
         default:
             showFeedback("danger", EXT_SUPPORT_FEEDBACK);
@@ -238,7 +239,7 @@ function ajaxRequest(url){
             links = data;
             nodes = null;
             var filename = url.split("/")[url.split("/").length-1];
-            initialize(filename);
+            initialize(filename, true);
         },
         statusCode: {
             404: function(response, textStatus, errorThrown) {
@@ -248,7 +249,7 @@ function ajaxRequest(url){
     });
 }
 
-function initialize(filename){
+function initialize(filename, directed){
     // Hides right panel because of possible previous work
     $("#rightPanel").hide();
 
@@ -268,7 +269,7 @@ function initialize(filename){
     disableParameters(false);
 
     // Uses the received data to build the graph
-    buildGraph();
+    buildGraph(directed);
 
     // Makes operations and zoom sections visible
     $("#operations").show();

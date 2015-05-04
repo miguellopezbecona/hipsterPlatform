@@ -4,13 +4,13 @@ package hipster;
  *
  * @author Miguel López
  */
-public class Node {
+public class MyNode {
     private int id;
     private String info;
     private double x;
     private double y;
 
-    public Node(){
+    public MyNode(){
     }
 
     public int getid(){

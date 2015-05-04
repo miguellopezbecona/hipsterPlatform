@@ -38,10 +38,10 @@ public class LayoutServices implements Constants {
         if(graph == null || width < 1 || height < 1)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
-        List<Node> nodes = graph.getNodes();
+        List<MyNode> nodes = graph.getNodes();
         
         // Some initialization work
-        Graph<Node, Link> g = new SparseMultigraph<>();
+        Graph<MyNode, Link> g = new SparseMultigraph<>();
         for(Link l : graph.getLinks()) {
             g.addEdge(l,
                 nodes.get(Integer.valueOf(l.getSource())),
@@ -49,7 +49,7 @@ public class LayoutServices implements Constants {
             );
         }
 
-        Layout<Node, Point2D> layout = null;
+        Layout<MyNode, Point2D> layout = null;
 
         switch(layoutName){
             case RANDOM:
@@ -86,16 +86,16 @@ public class LayoutServices implements Constants {
     }
 
     // Same work to every non-random or grid layout
-    private void applyLayout(Layout<Node, Point2D> layout, List<Node> nodes, int width, int height){
+    private void applyLayout(Layout<MyNode, Point2D> layout, List<MyNode> nodes, int width, int height){
         layout.setSize(new Dimension(width, height));
-        for (Node n : nodes) {
+        for (MyNode n : nodes) {
             Point2D coord = layout.transform(n);
             n.setX(coord.getX());
             n.setY(coord.getY());
         }
     }
 
-    private void applyGrid(List<Node> nodes, int width, int height){
+    private void applyGrid(List<MyNode> nodes, int width, int height){
         // Tries to build a square-like grid
         int side = (int) Math.ceil(Math.sqrt(nodes.size()));
 
@@ -110,15 +110,15 @@ public class LayoutServices implements Constants {
                 // Stops when all nodes are processed
                 if(toSelect == nodes.size())
                     break;
-                Node node = nodes.get(toSelect);
+                MyNode node = nodes.get(toSelect);
                 node.setX(baseW + c * nodeDistance);
                 node.setY(baseH + r * nodeDistance);
             }
         }
     }
 
-    private void applyRandom(List<Node> nodes, int width, int height){
-        for(Node n : nodes){
+    private void applyRandom(List<MyNode> nodes, int width, int height){
+        for(MyNode n : nodes){
             n.setX( Math.abs(random.nextInt() % width) );
             n.setY( Math.abs(random.nextInt() % height) );
         }

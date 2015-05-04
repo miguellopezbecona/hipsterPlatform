@@ -7,7 +7,7 @@ var selected;
 var auxiliarRadius = null;
 var auxiliarTextDistance = null;
 
-function buildGraph(){
+function buildGraph(directed){
     // Cleans the canvas if anything was drawn before
     d3.select("svg").remove();
 
@@ -68,8 +68,10 @@ function buildGraph(){
     .attr('marker-end','url(#arrowhead)')
     .attr("stroke", defaultPathColor);
 
+
     // Defines the arrow that shows each link's direction
-    container.append('defs').append('marker')
+    if(directed){
+      container.append('defs').append('marker')
         .attr({'id':'arrowhead',
                'viewBox':'-0 -5 10 10',
                'refX':17,
@@ -82,6 +84,7 @@ function buildGraph(){
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
             .attr('fill', '#000000')
             .attr('stroke','#000000');
+    }
 
     // Necessary to show links' weight
     edgepaths = container.selectAll(".edgepath")
@@ -202,6 +205,10 @@ function mouseout() {
 
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
+    // Avoids infinite grows by consecutive clicks
+    if(auxiliarRadius != null)
+      return;
+
     auxiliarTextDistance = d3.select(this).select("text").attr("x");
     d3.select(this).select("text").transition().attr("x", 1.5*auxiliarTextDistance).style("font", "17.5px serif");
 

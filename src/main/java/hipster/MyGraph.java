@@ -1,5 +1,6 @@
 package hipster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,19 +8,20 @@ import java.util.List;
  * @author Miguel López
  */
 public class MyGraph {
-    private List<Node> nodes;
+    private List<MyNode> nodes;
     private List<Link> links;
     private int width;
     private int height;
+    private boolean directed;
 
     public MyGraph() {
     }
 
-    public List<Node> getNodes() {
+    public List<MyNode> getNodes() {
         return nodes;
     }
 
-    public void setNodes(List<Node> nodes) {
+    public void setNodes(List<MyNode> nodes) {
         this.nodes = nodes;
     }
 
@@ -45,5 +47,28 @@ public class MyGraph {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public boolean isDirected() {
+        return directed;
+    }
+
+    public void setDirected(boolean directed) {
+        this.directed = directed;
+    }
+
+    public void initializeRandomNodes(){
+        if(nodes != null && !nodes.isEmpty())
+            return;
+
+        int numMyNodes = links.size() + 1;
+        nodes = new ArrayList<>();
+
+        for(int i=0;i<numMyNodes;i++) {
+          MyNode n = new MyNode();
+          n.setId(i);
+          n.setInfo(Integer.toString(Constants.random.nextInt()));
+          nodes.add(n);
+        }
     }
 }
