@@ -41,7 +41,7 @@ public class GEXFParser {
                 String source = e.getAttribute("source");
                 String target = e.getAttribute("target");
                 String weightS = e.getAttribute("weight");
-                double weight = 0;
+                double weight = 1;
                 
                 // Fills with weight value if possible
                 if(!weightS.isEmpty())
