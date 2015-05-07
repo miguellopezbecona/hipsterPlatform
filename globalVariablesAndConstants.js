@@ -15,13 +15,16 @@ const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai
 // Graphic-related constants
 const WIDTH = screen.width;
 const HEIGHT = screen.height - 100;
-const BASE_RADIUS = 8;
 const BASE_W = WIDTH*0.5 - 100;
 const BASE_H = HEIGHT*0.5 - 100;
 const LINK_DISTANCE = 70;
 // These probably won't be constants by the final version
 const defaultNodeColor = "#3182bd";
+const defaultNodeSize = 8;
 const defaultPathColor = "black";
+const defaultLinkWidth = 1;
+const defaultTextColor = defaultNodeColor;
+const defaultTextSize = 12;
 const highlightPathColor = "green";
 const highlightNodeColor = "green";
 const possibleNodeColor = "red";

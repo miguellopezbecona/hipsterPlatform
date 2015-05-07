@@ -280,3 +280,9 @@ function initialize(filename, directed){
     $("#operations").show();
     $("#zoomButtons").show();
 }
+
+function disableParameters(bol){
+    $("#algorithm").prop("disabled", bol);
+    $("#initialNodeC").prop("disabled", bol);
+    $("#goalNodeC").prop("disabled", bol);
+}

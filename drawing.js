@@ -4,8 +4,7 @@ var node;
 var edgelabels;
 var edgepaths;
 var selected;
-var auxiliarRadius = null;
-var auxiliarTextDistance = null;
+var clicked;
 
 function buildGraph(directed){
     // Cleans the canvas if anything was drawn before
@@ -124,23 +123,28 @@ function buildGraph(directed){
     if(isGexfGraph){
         var sizeScale = gD3.nodeScale();
         node.append("circle")
+          // Radius and color are duplicated in order to ease transformations
           .attr("r", function(d) {return sizeScale(d.size);})
+          .attr("size", function(d) {return sizeScale(d.size);})
+          .attr("color", function(d) {return d.rgbColor;})
           .style("fill", function(d) {return d.rgbColor;});
 
         node.append("text")
           .attr("x", function(d) {return 1.5*sizeScale(d.size);})
           .attr("dy", ".35em")
-          .style("fill", defaultNodeColor)
+          .style("fill", defaultTextColor)
           .text(function(d) { return d.id; });
     } else {
         node.append("circle")
-          .attr("r", BASE_RADIUS)
+          .attr("r", defaultNodeSize)
+          .attr("size", defaultNodeSize)
+          .attr("color", defaultNodeColor)
           .style("fill", defaultNodeColor);
 
         node.append("text")
-          .attr("x", 1.5*BASE_RADIUS)
+          .attr("x", 1.5*defaultNodeSize)
           .attr("dy", ".35em")
-          .style("fill", defaultNodeColor)
+          .style("fill", defaultTextColor)
           .text(function(d) { return d.id; });
     }
 
@@ -191,34 +195,47 @@ function tick() {
 
 // Restores the selected node to its initial state
 function mouseout() {
-    if(selected != null){
-      if(auxiliarTextDistance != null){
-        d3.select("[nodeId='" + selected + "']").select("text").transition().attr("x", auxiliarTextDistance).style("font", "12px serif");
-        auxiliarTextDistance = null;
-      }
-      if(auxiliarRadius != null){
-        d3.select(this).select("circle").transition().attr("r", auxiliarRadius);
-        auxiliarRadius = null;
-      }
+    if(clicked){
+      var color = d3.select(this).select("circle").attr("color");
+      changeNode(selected, color, 1.0);
+      clicked = false;
     }
 }
 
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
-    // Avoids infinite grows by consecutive clicks
-    if(auxiliarRadius != null)
-      return;
-
-    auxiliarTextDistance = d3.select(this).select("text").attr("x");
-    d3.select(this).select("text").transition().attr("x", 1.5*auxiliarTextDistance).style("font", "17.5px serif");
-
-    auxiliarRadius = d3.select(this).select("circle").attr("r");
-    d3.select(this).select("circle").transition().attr("r", 2*auxiliarRadius);
-
+    clicked = true;
     selected = d3.select(this).select("text").text();
+    var color = d3.select(this).select("circle").attr("color");
+    changeNode(selected, color, 2.0);
+
     var message = buildMessage(NODE, selected);
 
     // Requests information to the server
     ws.send(message);
 }
 
+function resetColorsAndSizes(){
+    d3.selectAll(".node").select("circle").transition().attr("r", function(d){
+      return d3.select(this).attr("size");});
+    d3.selectAll(".node").select("circle").style("fill", function(d){
+      return d3.select(this).attr("color");});
+
+    d3.selectAll("line").style("stroke", defaultPathColor);
+    d3.selectAll("line").style("stroke-width", defaultLinkWidth);
+}
+
+function changeNode(id, color, sizeFactor){
+    var nod =  d3.select("[nodeId='" + id + "']");
+    var c =  nod.select("circle");
+    var s = c.attr("size");
+    nod.select("text").transition().attr("x", 1.5*sizeFactor*s).style("font", sizeFactor*defaultTextSize);
+    c.transition().attr("r", sizeFactor*s);
+    c.style("fill", color);
+}
+
+function highlightLink(source, target){
+    var l = d3.selectAll("[target='" + source + "']").filter("[source='" + target + "']");
+    l.style("stroke", highlightPathColor);
+    l.style("stroke-width", 2*defaultLinkWidth);
+}

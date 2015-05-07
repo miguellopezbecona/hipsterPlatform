@@ -31,15 +31,13 @@ $(document).ready(function() {
         break;
       case F_PATH:
         // Resets the stroke of the lines and the color of the nodes to discard changes from other painted paths
-        d3.selectAll(".node").select("circle").style("fill", defaultNodeColor);
-    	d3.selectAll("line").style("stroke", defaultPathColor);
+        resetColorsAndSizes();
         showFullPath(message.content);
         break;
       case P_PATH:
-        // If it's the beginning of this phase, resets the stroke of the lines and the color of the nodes to discard changes from other painted paths
+        // If it's the beginning of this phase, resets the stroke of the lines and the color and size of the nodes to discard changes from other painted paths
         if(!startedSbS){
-          d3.selectAll(".node").select("circle").style("fill", defaultNodeColor);
-    	  d3.selectAll("line").style("stroke", defaultPathColor);
+          resetColorsAndSizes();
           startedSbS = true;
         }
 
@@ -93,15 +91,16 @@ function showFullPath(data){
     /* To avoid duplicated data, instead of receiving every pair of source-target,
      * all the numbers are the target, except for the first one, that is the initial source
      */
-    // Colors the links and the nodes
-    d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", highlightNodeColor);
+
+    // Colors and makes grow the involved links and nodes
+    changeNode(data[0], highlightNodeColor, 1.5);
     var i;
     for(i=0;i<data.length-1;i++){
-      d3.selectAll("[source='"+data[i]+"']").filter("[target='"+data[i+1]+"']").style("stroke", highlightPathColor);
-      d3.select("[nodeId='" + data[i+1] + "']").select("circle").style("fill", highlightNodeColor);
+      changeNode(data[i+1], highlightNodeColor, 1.5);
+      highlightLink(data[i],data[i+1]);
 
       // For undirected graphs
-      d3.selectAll("[target='"+data[i]+"']").filter("[source='"+data[i+1]+"']").style("stroke", highlightPathColor);
+      highlightLink(data[i+1],data[i]);
     }
 }
 
@@ -110,7 +109,9 @@ function showPartialPath(data){
     disableParameters(true);
 
     // In every step, the server will send back the next node and the following ones to be expanded
-    d3.select("[nodeId='" + data[0] + "']").select("circle").style("fill", possibleNodeColor);
+
+    // First, the next node is highlighted and grown
+    changeNode(data[0], possibleNodeColor, 1.5);
 
     // If the next goal is the goal one, the search is completed, so it forces a full path call
     var goalNode = $("#goalNode").text();
@@ -120,13 +121,8 @@ function showPartialPath(data){
       return;
     }
 
+    // If there are known expanding nodes, they will be highlighted and grown as well
     var i;
     for(i=1;i<data.length;i++)
-      d3.select("[nodeId='" + data[i] + "']").select("circle").style("fill", nextNodeColor);      
-}
-
-function disableParameters(bol){
-    $("#algorithm").prop("disabled", bol);
-    $("#initialNodeC").prop("disabled", bol);
-    $("#goalNodeC").prop("disabled", bol);
+      changeNode(data[i], nextNodeColor, 1.5);
 }
