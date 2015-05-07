@@ -187,10 +187,21 @@ function tick() {
     .attr("y2", function(d) { return d.target.y; });
 
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    // Updates weights' positions (center of the line)
+    edgelabels.attr('dx',function(d,i) { return getLinkHalfLength(d.source.id, d.target.id); })
+
     if(showWeights)
       edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y; return path});
     else
       edgepaths.attr('d', function(d) { var path='M -2000 -2000 L -2000 -2000'; return path});
+}
+
+function getLinkHalfLength(source, target){
+    var l = d3.selectAll("[source='" + source + "']").filter("[target='" + target + "']");
+    var xPart = Math.pow(l.attr("x2") - l.attr("x1"),2);
+    var yPart = Math.pow(l.attr("y2") - l.attr("y1"),2);
+    return 0.5*Math.sqrt(xPart + yPart);
 }
 
 // Restores the selected node to its initial state
@@ -235,7 +246,7 @@ function changeNode(id, color, sizeFactor){
 }
 
 function highlightLink(source, target){
-    var l = d3.selectAll("[target='" + source + "']").filter("[source='" + target + "']");
+    var l = d3.selectAll("[source='" + source + "']").filter("[target='" + target + "']");
     l.style("stroke", highlightPathColor);
     l.style("stroke-width", 2*defaultLinkWidth);
 }
