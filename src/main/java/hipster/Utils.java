@@ -21,7 +21,7 @@ public class Utils implements Constants{
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
         HashBasedHipsterDirectedGraph g = new HashBasedHipsterDirectedGraph<>();
         for(Link l : list)
-            g.connect(l.getSource(), l.getTarget(), l.getWeight());
+            g.connect(Integer.toString(l.getSource()), Integer.toString(l.getTarget()), l.getWeight());
         
         return g;
     }

@@ -32,10 +32,10 @@ public class DAO implements Constants{
             // Different parsing depending on file's extension 
             switch(extension){
                 case "json":
-                    MyGraph m = new MyGraph();
-                    List<Link> links = gson.fromJson(new FileReader(path), new TypeToken<List<Link>>(){}.getType());
-                    m.setLinks(links);
-                    return m;
+                    MyGraph g = gson.fromJson(new FileReader(path), MyGraph.class);
+                    if(!g.isDirected())
+                        g.duplicateLinks();
+                    return g;
                 case "gexf":
                     return GEXFParser.getGraph(path);
                 default:

@@ -71,4 +71,11 @@ public class MyGraph {
           nodes.add(n);
         }
     }
+
+    public void duplicateLinks(){
+        List<Link> list = new ArrayList();
+        for(Link l : links)
+            list.add(new Link(l, true));
+        links.addAll(list);
+    }
 }

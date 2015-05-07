@@ -46,8 +46,8 @@ public class GEXFParser {
                 // Fills with weight value if possible
                 if(!weightS.isEmpty())
                     weight = Double.valueOf(weightS);
-                link.setSource(source);
-                link.setTarget(target);
+                link.setSource(Integer.valueOf(source));
+                link.setTarget(Integer.valueOf(target));
                 link.setWeight(weight);
                 linksL.add(link);
          
@@ -55,11 +55,7 @@ public class GEXFParser {
                     continue;
 
                 // Creates duplicated inverse link if graph is undirected
-                Link inverseLink = new Link();
-                inverseLink.setSource(target);
-                inverseLink.setTarget(source);
-                inverseLink.setWeight(weight);
-                linksL.add(inverseLink);
+                linksL.add(new Link(link, true));
             }
             g.setLinks(linksL);
 
@@ -83,7 +79,6 @@ public class GEXFParser {
             g.setNodes(nodesL);
             return g;
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

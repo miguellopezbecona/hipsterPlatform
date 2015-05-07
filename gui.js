@@ -236,10 +236,15 @@ function ajaxRequest(url){
         url: url,
         contentType: "text/plain",
         success: function (data, textStatus, response) {
-            links = data;
-            nodes = null;
+            links = data.links;
+            nodes = data.nodes;
+
+            // If there is no data about links' direction, it will be assumed that the graph is directed
+            var isDirected = data.directed;
+            if(isDirected == null)
+                isDirected = true;
             var filename = url.split("/")[url.split("/").length-1];
-            initialize(filename, true);
+            initialize(filename, isDirected);
         },
         statusCode: {
             404: function(response, textStatus, errorThrown) {
