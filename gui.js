@@ -7,6 +7,16 @@ function activateComponents(){
 
   /*** Gives functionality to the buttons ***/
 
+$("#rightPanel").hide();
+  $("#feedback").hide();
+  $("#zoomButtons").hide();
+
+  /*** Gives functionality to the buttons ***/
+
+  $("#hideRightPanel").click(function () {
+    $("#rightPanel").hide();
+  });
+
   $("#upload").click(function () {
     var selection = $("#graphToUpload").val();
 

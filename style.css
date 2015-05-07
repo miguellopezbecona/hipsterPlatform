@@ -1,11 +1,20 @@
-select, input#hash {
-   width: 210px;
-}
-
 .btn.btn-primary.smallFont {
    font-size: 10px;
    padding: 3px 3px;
    width: 105px;
+}
+
+.btn.btn-danger.smallFont {
+   font-size: 10px;
+   padding: 3px 3px;
+}
+
+.right {
+   float: right; 
+}
+
+select, input#hash {
+   width: 210px;
 }
 
 #feedback{
