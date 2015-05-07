@@ -7,12 +7,6 @@ function activateComponents(){
 
   /*** Gives functionality to the buttons ***/
 
-$("#rightPanel").hide();
-  $("#feedback").hide();
-  $("#zoomButtons").hide();
-
-  /*** Gives functionality to the buttons ***/
-
   $("#hideRightPanel").click(function () {
     $("#rightPanel").hide();
   });
@@ -148,29 +142,11 @@ $("#rightPanel").hide();
   });
 
   $("#initialNodeC").change("click", function(){
-    if($(this).is(":checked") && selected != null){
-        // Checks that the other node (goal) isn't the same as the selected one
-        var goalNode = $("#goalNode").text();
-        if(selected.localeCompare(goalNode)==0){
-            showFeedback("danger", SAME_NODE_FEEDBACK);
-            $(this)[0].checked = false;
-        } else
-            $("#initialNode").text(selected);
-    } else
-        $("#initialNode").text(null);
+    setInitialGoal(this, "#initialNode");
   });
 
   $("#goalNodeC").change("click", function(){
-    if($(this).is(":checked") && selected != null){
-        // Checks that the other node (initial) isn't the same as the selected one
-        var initialNode = $("#initialNode").text();
-        if(selected.localeCompare(initialNode)==0){
-            showFeedback("danger", SAME_NODE_FEEDBACK);
-            $(this)[0].checked = false;
-        } else
-            $("#goalNode").text(selected);
-    } else
-        $("#goalNode").text(null);
+    setInitialGoal(this, "#goalNode");
   });
 
   // Builds the algorithm menu dynamically
@@ -289,6 +265,33 @@ function initialize(filename, directed){
     // Makes operations and zoom sections visible
     $("#operations").show();
     $("#zoomButtons").show();
+}
+
+function setInitialGoal(cb, element){
+    var other = null;
+    if(element.localeCompare("#initialNode")==0)
+        other = $("#goalNode").text();
+    else if(element.localeCompare("#goalNode")==0)
+        other = $("#initialNode").text();
+
+    if($(cb).is(":checked") && selected != null){
+        // Checks that the other position node (initial or goal) isn't the same as the selected one
+        if(selected.localeCompare(other)==0){
+            showFeedback("danger", SAME_NODE_FEEDBACK);
+            $(cb)[0].checked = false;
+        } else {
+            // Restores previous selected node to its original color
+            if($(element).text() != null && !$(element).text().length == 0)
+                changeNode($(element).text(), "ORIGINAL", 1.0);
+            $(element).text(selected);
+            changeNode(selected, initialGoalColor, 1.0);
+        }
+    } else {
+        // The checkbox is unchecked, so it restores the previous selected node to its original color and the value is removed
+        if($(element).text() != null && !$(element).text().length == 0)
+            changeNode($(element).text(), "ORIGINAL", 1.0);
+        $(element).text(null);
+    }
 }
 
 function disableParameters(bol){

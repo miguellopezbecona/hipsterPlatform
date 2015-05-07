@@ -7,6 +7,7 @@ const BEGIN = "BEGIN";
 const NODE = "NODE";
 const F_PATH = "F_PATH";
 const P_PATH = "P_PATH";
+const ORIGINAL = "ORIGINAL";
 
 // Layouts and algorithms
 const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
@@ -29,6 +30,7 @@ const highlightPathColor = "green";
 const highlightNodeColor = "green";
 const possibleNodeColor = "red";
 const nextNodeColor = "yellow";
+const initialGoalColor = "purple";
 
 // Other util constants
 const HASH_LENGTH = 40;

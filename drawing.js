@@ -242,6 +242,9 @@ function changeNode(id, color, sizeFactor){
     var s = c.attr("size");
     nod.select("text").transition().attr("x", 1.5*sizeFactor*s).style("font", sizeFactor*defaultTextSize);
     c.transition().attr("r", sizeFactor*s);
+
+    if(color.localeCompare(ORIGINAL)==0)
+        color = c.attr("color");
     c.style("fill", color);
 }
 
