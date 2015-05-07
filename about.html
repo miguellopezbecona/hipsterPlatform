@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hipster Plataform - About</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="bootstrap/bootstrap-theme.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="index.html">Go back to the app</a></li>
+    </ul>
+
+    <div class="container">
+    <h2 id="about-this-project">About this project</h2>
+    <p>This application is meant to allow you to visualize graphs and make searches over them. To do that, first you must load a graph. There are 3 ways to do this:</p>
+
+    <ul>
+        <li>Loading your own graph on the top option from the left panel. The file must be in JSON or GEXF format. If it's a JSON file, it should include at least an array called "links". Each element from the collection must have a numerical source and target, and an optional weight. Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions.</li>
+        <li>Selecting an example graph from the server.</li>
+        <li>Introducing the hash obtained by the first method.</li>
+    </ul>
+
+    <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by clicking on them and then marking the right checkboxes on the right. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, and zooming with the lower lens.</p>
+    </p>
+
+    <p>This project was created by Miguel López Becoña. Its graph-search component is Hipster, which was originally created and is currently maintained by:</p>
+
+    <blockquote>
+      <p>Rodriguez-Mier, P., Gonzalez-Sieira, A., Mucientes, M., Lama, M. &amp; Bugarin, A. (2014).
+      <a href="http://hipster4j.org">Hipster: An Open Source Java Library for Heuristic Search</a>.
+      <em>9th Iberian Conference on Information Systems and Technologies (CISTI)</em>.</p>
+    </blockquote>
+
+    <p>As the app is licensed by Apache 2.0, you can access to the source code in <a href="https://github.com/miguellopezbecona/hipsterPlataform">its GitHub repository</a>.</p>
+    </div>
+</body>
+</html>

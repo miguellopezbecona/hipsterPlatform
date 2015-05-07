@@ -21,7 +21,7 @@ select, input#hash {
 #rightPanel {
    position: fixed;
    right: 25px;
-   top: 25px;
+   top: 50px;
    width: 300px;
    opacity: 0.9;
 }
