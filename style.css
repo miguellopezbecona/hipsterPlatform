@@ -17,6 +17,14 @@ select, input#hash {
    width: 210px;
 }
 
+footer {
+   text-align: center;
+}
+
+img {
+   margin-right: 25px;
+}
+
 #feedback{
    position: fixed;
    top: 10px;
@@ -45,7 +53,7 @@ select, input#hash {
 }
 
 #zoomButtons {
-   width: 150px;
+   width: 250px;
    text-align: center;
    position: fixed;
    left: 50%;

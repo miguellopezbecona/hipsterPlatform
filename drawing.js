@@ -45,7 +45,7 @@ function buildGraph(directed){
     .on("drag", dragged)
     .on("dragend", dragended);
 
-    svg = d3.select("body").append("svg")
+    svg = d3.select("#canvas").append("svg")
     .attr("width", WIDTH)
     .attr("height", HEIGHT)
     .call(zoom);
@@ -207,8 +207,7 @@ function getLinkHalfLength(source, target){
 // Restores the selected node to its initial state
 function mouseout() {
     if(clicked){
-      var color = d3.select(this).select("circle").attr("color");
-      changeNode(selected, color, 1.0);
+      changeNode(selected, null, 1.0);
       clicked = false;
     }
 }
@@ -217,8 +216,7 @@ function mouseout() {
 function click() {
     clicked = true;
     selected = d3.select(this).select("text").text();
-    var color = d3.select(this).select("circle").attr("color");
-    changeNode(selected, color, 2.0);
+    changeNode(selected, null, 2.0);
 
     var message = buildMessage(NODE, selected);
 
@@ -242,6 +240,10 @@ function changeNode(id, color, sizeFactor){
     var s = c.attr("size");
     nod.select("text").transition().attr("x", 1.5*sizeFactor*s).style("font", sizeFactor*defaultTextSize);
     c.transition().attr("r", sizeFactor*s);
+
+    // Doesn't change color if there isn't need to do it
+    if(color == null)
+        return;
 
     if(color.localeCompare(ORIGINAL)==0)
         color = c.attr("color");

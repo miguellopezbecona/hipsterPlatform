@@ -5,6 +5,10 @@ function activateComponents(){
   $("#feedback").hide();
   $("#zoomButtons").hide();
 
+  // Sets canvas dimensions in order to move the footer to the right place
+  $("#canvas").css("width", WIDTH);
+  $("#canvas").css("height", HEIGHT);
+
   /*** Gives functionality to the buttons ***/
 
   $("#hideRightPanel").click(function () {

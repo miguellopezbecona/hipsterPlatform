@@ -15,7 +15,7 @@ const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai
 
 // Graphic-related constants
 const WIDTH = screen.width;
-const HEIGHT = screen.height - 100;
+const HEIGHT = screen.height - 200;
 const BASE_W = WIDTH*0.5 - 100;
 const BASE_H = HEIGHT*0.5 - 100;
 const LINK_DISTANCE = 70;
