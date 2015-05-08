@@ -1,5 +1,6 @@
 package hipster;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,4 +83,25 @@ public class GEXFParser {
             return null;
         }
     }
+
+    public static boolean isValid(InputStream is){
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+ 
+        // If an exception is raised, then the file is bad-formed
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            /*
+            Document doc = builder.parse(is);
+            NodeList someNode = doc.getElementsByTagName("gexf");
+            Element el = (Element) someNode.item(0);
+            is.reset();
+            */
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

@@ -42,7 +42,6 @@ public class DAO implements Constants{
                     return null;
             }
         } catch (IOException | JsonSyntaxException ex) {
-            ex.printStackTrace();
             return null;
         }
     }

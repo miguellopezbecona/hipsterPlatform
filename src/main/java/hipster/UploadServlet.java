@@ -1,7 +1,10 @@
 package hipster;
 
+import com.google.gson.JsonSyntaxException;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -23,9 +26,12 @@ public class UploadServlet extends HttpServlet implements Constants{
         String hash = null;
         InputStream fileContent = null;
         try {
-            // Obtains file's content and is passed to the DAO in order to save the graph and receive the associated hash
+            // Obtains file's content
             fileContent = filePart.getInputStream();
-            hash = DAO.saveGraph(fileContent, extension);
+
+            // Tests file format. If it's okay, it's passed to the DAO in order to save the graph and receive the associated hash
+            if(hasValidFormat(fileContent, extension))
+                hash = DAO.saveGraph(fileContent, extension);
         } catch (FileNotFoundException fne) {
             fne.printStackTrace();
         } finally {
@@ -51,5 +57,26 @@ public class UploadServlet extends HttpServlet implements Constants{
 
     private String getExtension(String filename) {
         return filename.split("\\.")[filename.split("\\.").length-1].toLowerCase();
+    }
+
+    private boolean hasValidFormat(InputStream is, String extension){
+        is.mark(Integer.MAX_VALUE);
+        switch(extension){
+            case "json":
+                MyGraph g = null;
+                try {
+                    g = gson.fromJson(new InputStreamReader(is), MyGraph.class);
+                    is.reset();
+
+                    // A valid graph must, at least, have link information
+                    return ( (g != null) && (g.getLinks() != null) );
+                } catch (IOException | JsonSyntaxException ex) {
+                    return false;
+                }
+            case "gexf":
+                return GEXFParser.isValid(is);
+            default:
+                return false;
+        }
     }
 }
