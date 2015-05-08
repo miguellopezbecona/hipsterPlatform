@@ -1,12 +1,13 @@
 package hipster;
 
+import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 
 /**
  *
@@ -15,6 +16,7 @@ import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 public class WebSocketServer extends WebSocketAdapter implements Constants{
     private MyGraph graph;
     private HashBasedHipsterDirectedGraph hipsterGraph;
+    private Iterator it;
 
     public WebSocketServer(){
     }
@@ -44,40 +46,24 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 int id = Integer.valueOf(content);
                 String nodeInfo = gson.toJson(graph.getNodes().get(id));
                 response = buildMessage(NODE, nodeInfo);
-                try {
-                    getSession().getRemote().sendString(response);
-		} catch (IOException ex) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                sendMessage(response);
                 break;
             case F_PATH:
 		List<String> path = handleAlgorithm(content, true);
 
                 response = buildMessage(F_PATH, gson.toJson(path));
-                try {
-                    getSession().getRemote().sendString(response);
-		} catch (IOException ex) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                sendMessage(response);
                 break;
             case P_PATH:
 		List<String> nextNodes = handleAlgorithm(content, false);
 
                 response = buildMessage(P_PATH, gson.toJson(nextNodes));
-                try {
-                    getSession().getRemote().sendString(response);
-		} catch (IOException ex) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                sendMessage(response);
                 break;
             case AVAILABLE_GRAPHS:
                 List<String> graphs = Utils.obtainAvailableGraphs();
                 response = buildMessage(AVAILABLE_GRAPHS, gson.toJson(graphs));
-                try {
-                    getSession().getRemote().sendString(response);
-		} catch (IOException ex) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                sendMessage(response);
                 break;
             default:
 		// Generic message
@@ -87,6 +73,14 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 
     private String buildMessage(String type, String content){
         return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
+    }
+
+    private void sendMessage(String message){
+        try {
+            getSession().getRemote().sendString(message);
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void initializeGraph(String filename){
@@ -102,7 +96,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         // Builds node info if it doesn't exist
         graph.initializeRandomNodes();
 
-        HipsterFacade.resetIt();
+        it = null;
     }
 
     private List<String> handleAlgorithm(String content, boolean oneStep){
@@ -116,6 +110,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 
         // Works different for each algorithm
         if(oneStep){
+            it = null;
             switch(algorithm){
                 case DIJKSTRA: path = HipsterFacade.dijkstraOS(hipsterGraph, origin, goal); break;
                 case DEPTH: path = HipsterFacade.depthOS(hipsterGraph, origin, goal); break;
@@ -124,13 +119,14 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 default: path = new ArrayList<>(); break;
             }
         } else {
+            if(it == null)
             switch(algorithm){
-                case DIJKSTRA: path = HipsterFacade.dijkstraSbS(hipsterGraph, origin, goal); break;
-                case DEPTH: path = HipsterFacade.depthSbS(hipsterGraph, origin, goal); break;
-                case BREADTH: path = HipsterFacade.breadthSbS(hipsterGraph, origin, goal); break;
-                case BELLMAN_FORD: path = HipsterFacade.bellmanFordSbS(hipsterGraph, origin, goal); break;
-                default: path = new ArrayList<>(); break;
+                case DIJKSTRA: it = HipsterFacade.dijkstraIt(hipsterGraph, origin, goal); break;
+                case DEPTH: it = HipsterFacade.depthIt(hipsterGraph, origin, goal); break;
+                case BREADTH: it = HipsterFacade.breadthIt(hipsterGraph, origin, goal); break;
+                case BELLMAN_FORD: it = HipsterFacade.bellmanFordIt(hipsterGraph, origin, goal); break;
            }
+           path = Utils.handleIterator(it, goal);
         }
         return path;
     }
