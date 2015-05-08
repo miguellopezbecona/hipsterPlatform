@@ -21,6 +21,7 @@ public class Server implements Constants{
 
         @Override
         public void configure(WebSocketServletFactory factory) {
+            factory.getPolicy().setIdleTimeout(1000*60*30); // 30 minutes
             factory.register(WebSocketServer.class);
         }
     }
