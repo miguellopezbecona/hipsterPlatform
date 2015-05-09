@@ -1,5 +1,6 @@
 package hipster;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import java.io.File;
- 
+
 public class GEXFParser {
     public static MyGraph getGraph(String filePath) {
         MyGraph g = new MyGraph();
@@ -90,15 +90,15 @@ public class GEXFParser {
         // If an exception is raised, then the file is bad-formed
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            /*
-            Document doc = builder.parse(is);
+            InputStream copy = Utils.copyInputStream(is);
+            Document doc = builder.parse(copy);
+
+            // All GEXF valid graphs must have an "gexf" tag
             NodeList someNode = doc.getElementsByTagName("gexf");
             Element el = (Element) someNode.item(0);
-            is.reset();
-            */
-            return true;
+            
+            return el != null;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

@@ -36,7 +36,7 @@ function activateComponents(){
             requestGraph(data);
         },
         error: function (response, textStatus, errorThrown) {
-            showFeedback("danger", "There was a problem while parsing your graph.");
+            showFeedback("danger", "You uploaded an invalid graph. Please, check its format.");
         }
     });
   });

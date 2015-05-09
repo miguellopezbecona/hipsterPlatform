@@ -7,6 +7,8 @@ import es.usc.citius.hipster.algorithm.BreadthFirstSearch;
 import es.usc.citius.hipster.algorithm.DepthFirstSearch;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
@@ -57,12 +59,12 @@ public class Utils implements Constants{
      * @return Hash
      */
     public static String generateHash(InputStream is){
+        byte[] buffer = new byte[CHUNK_SIZE];
+        int numRead;
+        is.mark(Integer.MAX_VALUE);
+
         try {
             MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
-            is.mark(Integer.MAX_VALUE);
-
-            byte[] buffer = new byte[CHUNK_SIZE];
-            int numRead;
 
             do {
                 numRead = is.read(buffer);
@@ -75,6 +77,28 @@ public class Utils implements Constants{
         } catch (NoSuchAlgorithmException | IOException ex) {
             return null;
         }
+    }
+
+    /**
+     * Copies an InputStream object in order to reuse it when reset is not possible.
+     * This happens in the XML parser, as it automatically closes the source and is
+     * necessary to reuse it.
+     * @param is - The InputStream object to be copies
+     * @return A copy of the object
+     */
+    public static InputStream copyInputStream(InputStream is){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[CHUNK_SIZE];
+        int len;
+        try {
+            while ((len = is.read(buffer)) > -1 )
+                baos.write(buffer, 0, len);
+            baos.flush();
+            is.reset();
+        } catch (IOException e) {
+            return null;
+        }
+        return new ByteArrayInputStream(baos.toByteArray()); 
     }
 
     /** Returns a list containing the next node and the ones to be expanded
