@@ -56,7 +56,7 @@ public class Utils implements Constants{
     /**
      * Generates a hash from a graph's content
      * @param is - InputStream which holds the file
-     * @return Hash
+     * @return Associated hash from file's content
      */
     public static String generateHash(InputStream is){
         byte[] buffer = new byte[CHUNK_SIZE];
@@ -83,13 +83,15 @@ public class Utils implements Constants{
      * Copies an InputStream object in order to reuse it when reset is not possible.
      * This happens in the XML parser, as it automatically closes the source and is
      * necessary to reuse it.
-     * @param is - The InputStream object to be copies
+     * @param is - The InputStream object to be copied
      * @return A copy of the object
      */
     public static InputStream copyInputStream(InputStream is){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[CHUNK_SIZE];
         int len;
+        is.mark(Integer.MAX_VALUE);
+
         try {
             while ((len = is.read(buffer)) > -1 )
                 baos.write(buffer, 0, len);

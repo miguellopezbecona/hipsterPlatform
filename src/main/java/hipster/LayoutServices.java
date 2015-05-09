@@ -14,8 +14,8 @@ import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.KKLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
@@ -41,7 +41,7 @@ public class LayoutServices implements Constants {
         List<MyNode> nodes = graph.getNodes();
         
         // Some initialization work
-        Graph<MyNode, Link> g = new SparseMultigraph<>();
+        Graph<MyNode, Link> g = new DirectedSparseMultigraph<>();
         for(Link l : graph.getLinks()) {
             g.addEdge(l,
                 nodes.get(Integer.valueOf(l.getSource())),

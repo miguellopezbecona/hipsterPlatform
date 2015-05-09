@@ -60,10 +60,10 @@ public class UploadServlet extends HttpServlet implements Constants{
     }
 
     private boolean hasValidFormat(InputStream is, String extension){
-        is.mark(Integer.MAX_VALUE);
         switch(extension){
             case "json":
                 MyGraph g = null;
+                is.mark(Integer.MAX_VALUE);
                 try {
                     g = gson.fromJson(new InputStreamReader(is), MyGraph.class);
                     is.reset();
