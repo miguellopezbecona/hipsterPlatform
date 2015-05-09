@@ -13,10 +13,10 @@ function buildGraph(directed){
     var nodeCollection = {};
     var makeDefaultPositions = true;
 
-    // If "nodes" isn't null, it means that it comes from a gexf file, whose positions are already defined
-    var isGexfGraph = (nodes != null);
+    // This is crucial when setting colors, sizes and positions to the nodes
+    var hasNodeInfo = (nodes != null);
 
-    if(!isGexfGraph){
+    if(!hasNodeInfo){
       // Obtain the nodes with info from the links
       links.forEach(function(link) {
         link.source = nodeCollection[link.source] || (nodeCollection[link.source] = {id: link.source});
@@ -73,11 +73,11 @@ function buildGraph(directed){
       container.append('defs').append('marker')
         .attr({'id':'arrowhead',
                'viewBox':'-0 -5 10 10',
-               'refX':17,
+               'refX':25,
                'refY':0,
                'orient':'auto',
-               'markerWidth':10,
-               'markerHeight':10,
+               'markerWidth':5,
+               'markerHeight':5,
                'xoverflow':'visible'})
         .append('svg:path')
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -119,8 +119,8 @@ function buildGraph(directed){
     .on("click", click)
     .call(drag);
 
-    // GEXF graphs' nodes will have preset sizes and colors
-    if(isGexfGraph){
+    // Uses imported data or generates it
+    if(hasNodeInfo){
         var sizeScale = gD3.nodeScale();
         node.append("circle")
           // Radius and color are duplicated in order to ease transformations
@@ -154,7 +154,7 @@ function buildGraph(directed){
     var side = Math.ceil(Math.sqrt(nodes.length));
     node.each(function(d,i){
       d.fixed = true;
-      if(!isGexfGraph){
+      if(!hasNodeInfo){
         d.x = BASE_W + (i % side) * LINK_DISTANCE;
         d.y = BASE_H + Math.floor(i/side) * LINK_DISTANCE;
       }

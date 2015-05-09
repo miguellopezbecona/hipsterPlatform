@@ -129,15 +129,40 @@ function activateComponents(){
       return;
     }
 
-    var message;
-
     // Different if the algorithm is done step by step or not
+    var keyword;
     if($("#oneStep").is(":checked") || forceOS)
-      message = buildMessage(F_PATH, "'" + $("#algorithm").val() + " " + initialNode + " " + goalNode + "'");
+      keyword = F_PATH;
     else
-      message = buildMessage(P_PATH, "'" + $("#algorithm").val() + " " + initialNode + " " + goalNode + "'");
+      keyword = P_PATH;
+
+    // Base content
+    var content = $("#algorithm").val() + "_" + initialNode + "_" + goalNode;
+
     forceOS = false;
-    ws.send(message);
+
+    // Adds heuristic table if present
+    var selection = $("#heuristicTable").val();
+    var message = null;
+    if(selection != null && selection.length != 0){
+
+      // Loads the selected file
+      var file = $("#heuristicTable")[0].files[0];
+      reader.onload = function(e) {
+        // Won't append bad formed JSONs
+        try {
+          JSON.parse(reader.result);
+          content += "_" + reader.result;
+        } catch (e) {
+        }
+        message = buildMessage(keyword, "'" + content + "'");
+        ws.send(message);
+      }
+      reader.readAsText(file);
+    } else { // Redundant lines because the reading is asynchronous
+      message = buildMessage(keyword, "'" + content + "'");
+      ws.send(message);
+    }
   });
 
   $("#showWeights").change("click", function(){

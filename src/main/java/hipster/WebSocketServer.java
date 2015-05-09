@@ -1,10 +1,12 @@
 package hipster;
 
+import com.google.gson.reflect.TypeToken;
 import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
@@ -102,11 +104,14 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private List<String> handleAlgorithm(String content, boolean oneStep){
         List<String> path = null;
 
-        // Parses the content: algorithm, initial node and goal node
-        String[] fieldsP = content.split(" ");
-        String algorithm = fieldsP[0];
-        String origin = fieldsP[1];
-        String goal = fieldsP[2];
+        // Parses the content: algorithm, initial node, goal node and heuristic table
+        String[] fields = content.split("_");
+        String algorithm = fields[0];
+        String origin = fields[1];
+        String goal = fields[2];
+        Map<Integer, Double> heuristicTable = null;
+        if(fields.length > 3)
+            heuristicTable = gson.fromJson(fields[3],new TypeToken<Map<Integer, Double>>(){}.getType());
 
         // Works different for each algorithm
         if(oneStep){

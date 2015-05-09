@@ -42,6 +42,7 @@ const BASE_URI = "api/graph/"
 const GRAPH_BASE_PATH = "graphs/";
 const GRAPH_EXAMPLES_FOLDER = "examples/";
 const debug = false;
+const reader = new FileReader();
 
 // Global variables
 var svg;
