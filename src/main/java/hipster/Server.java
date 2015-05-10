@@ -29,7 +29,7 @@ public class Server implements Constants{
     public static void main(String[] args) {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
         ServerConnector connector = new ServerConnector(server);
-        connector.setPort(8080);
+        connector.setPort(5000);
         server.addConnector(connector);
 
         // Setup the basic application "context" for this application at "/"
