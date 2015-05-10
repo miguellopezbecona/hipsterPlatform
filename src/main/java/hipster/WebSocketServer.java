@@ -92,6 +92,10 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         boolean isExample = ( filename.length() - extension.length() - 1) != HASH_LENGTH;
         graph = DAO.loadGraph(filename, isExample);
 
+        // The DAO will return null if the saved graph has a bad format. This should never happen.
+        if(graph == null)
+            return;
+
 	// Obtains the equivalent object to be used with Hipster
 	hipsterGraph = Utils.initializeGraph(graph.getLinks());
 

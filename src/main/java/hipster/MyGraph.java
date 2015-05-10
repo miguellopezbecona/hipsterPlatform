@@ -67,7 +67,7 @@ public class MyGraph {
         for(int i=0;i<numMyNodes;i++) {
           MyNode n = new MyNode();
           n.setId(i);
-          n.setInfo(Integer.toString(Constants.random.nextInt()));
+          n.setInfo("nothing");
           nodes.add(n);
         }
     }
