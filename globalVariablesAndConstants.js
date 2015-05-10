@@ -10,8 +10,9 @@ const P_PATH = "P_PATH";
 const ORIGINAL = "ORIGINAL";
 
 // Layouts and algorithms
-const ALGORITHMS = ["DIJKSTRA", "DEPTH", "BREADTH", "BELLMAN_FORD"];
+const ALGORITHMS = ["Dijkstra", "Depth", "Breadth", "Bellman-Ford"];
 const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai", "Random", "Spring"];
+const DEFAULT_LAYOUT = "grid";
 
 // Graphic-related constants
 const WIDTH = screen.width;
@@ -35,6 +36,7 @@ const initialGoalColor = "purple";
 // Other util constants
 const HASH_LENGTH = 40;
 const EXT_SUPPORTED = ["gexf", "json"];
+const HEURISTIC_ALGORITHMS = ["A*"];
 const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by clicking the desired node.";
 const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
 const EXT_SUPPORT_FEEDBACK = "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED;

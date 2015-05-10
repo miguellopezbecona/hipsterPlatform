@@ -99,16 +99,16 @@ public class LayoutServices implements Constants {
         // Tries to build a square-like grid
         int side = (int) Math.ceil(Math.sqrt(nodes.size()));
 
-        int baseW = width/2 - 200;
-        int baseH = height/2 - 100;
-        int nodeDistance = (width - baseW) / side;
+        int baseW = width/2 - 250;
+        int baseH = height/2 - 200;
+        int nodeDistance = 100;
 
         for(int r=0;r<side;r++){
             for(int c=0;c<side;c++){
                 int toSelect = r*side+c;
 
                 // Stops when all nodes are processed
-                if(toSelect == nodes.size())
+                if(toSelect >= nodes.size())
                     break;
                 MyNode node = nodes.get(toSelect);
                 node.setX(baseW + c * nodeDistance);

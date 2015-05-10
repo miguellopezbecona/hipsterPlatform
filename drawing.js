@@ -148,17 +148,14 @@ function buildGraph(directed){
           .text(function(d) { return d.id; });
     }
 
-
-
-    // Adjusts a grid-like initial positioning
-    var side = Math.ceil(Math.sqrt(nodes.length));
     node.each(function(d,i){
       d.fixed = true;
-      if(!hasNodeInfo){
-        d.x = BASE_W + (i % side) * LINK_DISTANCE;
-        d.y = BASE_H + Math.floor(i/side) * LINK_DISTANCE;
-      }
     });
+
+
+    // Applies the default layout when the nodes haven't a position
+    if(!hasNodeInfo)
+      applyLayout(prepareServiceGraph(), DEFAULT_LAYOUT);
 
     graph.start();
 }
@@ -191,10 +188,7 @@ function tick() {
     // Updates weights' positions (center of the line)
     edgelabels.attr('dx',function(d,i) { return getLinkHalfLength(d.source.id, d.target.id); })
 
-    if(showWeights)
-      edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y; return path});
-    else
-      edgepaths.attr('d', function(d) { var path='M -2000 -2000 L -2000 -2000'; return path});
+    edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y; return path});
 }
 
 function getLinkHalfLength(source, target){
@@ -226,9 +220,10 @@ function click() {
 
 function resetColorsAndSizes(){
     d3.selectAll(".node").select("circle").transition().attr("r", function(d){
-      return d3.select(this).attr("size");});
-    d3.selectAll(".node").select("circle").style("fill", function(d){
+      return d3.select(this).attr("size");}).style("fill", function(d){
       return d3.select(this).attr("color");});
+    d3.selectAll(".node").select("text").transition().attr("x", function(d){
+      return 1.5*d3.select("[nodeId='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
 
     d3.selectAll("line").style("stroke", defaultPathColor);
     d3.selectAll("line").style("stroke-width", defaultLinkWidth);

@@ -15,6 +15,7 @@ function activateComponents(){
     $("#rightPanel").hide();
   });
 
+  // Uploads a graph to the server
   $("#upload").click(function () {
     var selection = $("#graphToUpload").val();
 
@@ -23,25 +24,10 @@ function activateComponents(){
 
     var formData = new FormData($('form')[0]);
 
-    $.ajax({
-        type: "POST",
-        url: BASE_URI,
-        data: formData,
-        // Options to tell jQuery not to process data or worry about content-type.
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (data, textStatus, response) {
-            showFeedback("success", "Your graph was loaded successfully. If you want to use it in future executions, put the following hash in the input field: " + data);
-            requestGraph(data);
-        },
-        error: function (response, textStatus, errorThrown) {
-            showFeedback("danger", "You uploaded an invalid graph. Please, check its format.");
-        }
-    });
+    publishGraph(formData);
   });
 
-  // Load a server-stored graph
+  // Load a server-stored graph by inputting a hash
   $("#loadGraphH").on("click", function(){
     var selection = $("#hash").val();
 
@@ -54,22 +40,127 @@ function activateComponents(){
       return;
     }
 
-    requestGraph(selection);
+    handleGraphRequest(selection);
   });
 
+  // Load a server-stored graph by selecting an example
   $("#loadGraphS").on("click", function(){
     var selection = $("#selectedGraph").val();
 
     // Stops if the selection is null
     if(!selection || selection.length === 0) return;
 
-    requestGraph(selection);
+    handleGraphRequest(selection);
   });
 
   // Change layout
   $("#changeLayout").on("click", function(){
+    applyLayout(prepareServiceGraph(), $("#layout").val() );
+  });
 
-    // Prepares a graph object to send to the service
+  // Resolves a search problem
+  $("#showPath").on("click", function(){
+    var initialNode = $("#initialNode").text();
+    var goalNode = $("#goalNode").text();
+
+    // You can't ask a path without specifing the initial and goal nodes
+    if(initialNode==null || initialNode.length==0 || goalNode==null || goalNode.length==0){
+      showFeedback("danger", NULL_NODE_FEEDBACK);
+      return;
+    }
+    // This check could be redudant as it's also done when you select both nodes, but it adds security
+    else if (initialNode.localeCompare(goalNode)==0){
+      showFeedback("danger", SAME_NODE_FEEDBACK);
+      return;
+    }
+
+    // Different keyword if the algorithm is done step by step or not
+    var keyword;
+    if($("#oneStep").is(":checked") || forceOS)
+      keyword = F_PATH;
+    else
+      keyword = P_PATH;
+
+    // Base content
+    var algorithm = $("#algorithm").val();
+    var content = algorithm + "_" + initialNode + "_" + goalNode;
+
+    forceOS = false;
+
+    // Adds heuristic table if present and if the select algorithm can use it
+    var selection = $("#heuristicTable").val();
+    var message = null;
+    if(selection != null && selection.length != 0 && isHeuristicAlgorithm(algorithm)){
+
+      // Loads the selected file
+      var file = $("#heuristicTable")[0].files[0];
+      reader.onload = function(e) {
+        // Won't append bad formed JSONs
+        try {
+          JSON.parse(reader.result);
+          content += "_" + reader.result;
+        } catch (e) {
+        }
+        message = buildMessage(keyword, "'" + content + "'");
+        ws.send(message);
+      }
+      reader.readAsText(file);
+    } else { // Redundant lines because the reading is asynchronous
+      message = buildMessage(keyword, "'" + content + "'");
+      ws.send(message);
+    }
+  });
+
+  $("#showWeights").change("click", function(){
+    var isVisible = $(this).is(":checked");
+    var labelStyle;
+    if(isVisible)
+      labelStyle = "visible";
+    else
+      labelStyle = "hidden";
+    d3.selectAll("textPath").style("visibility", labelStyle);
+    tick();
+  });
+
+  $("#initialNodeC").change("click", function(){
+    setInitialGoal(this, "#initialNode");
+  });
+
+  $("#goalNodeC").change("click", function(){
+    setInitialGoal(this, "#goalNode");
+  });
+
+  // Builds the algorithm menu dynamically
+  var select = $("#algorithm")[0];
+  for(i=0;i<ALGORITHMS.length;i++)
+    select.options[i] = new Option(ALGORITHMS[i], ALGORITHMS[i], false);
+
+  // Does the same with the layout menu
+  var layout = $("#layout")[0];
+  for(i=0;i<LAYOUTS.length;i++)
+    layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i].toLowerCase(), false);
+
+  // Set of checkboxes' default values
+  $("#showWeights")[0].checked = true;
+  $("#oneStep")[0].checked = true;
+}
+
+
+function checkExtension(extension){
+    return EXT_SUPPORTED.indexOf(extension) > -1;
+}
+
+function getExtension(filename){
+    return filename.split("\.")[filename.split("\.").length-1].toLowerCase();
+}
+
+function isHeuristicAlgorithm(algorithm){
+    return HEURISTIC_ALGORITHMS.indexOf(algorithm) > -1;
+}
+
+
+// Prepares a graph object, with a determinated structure, to send to the service
+function prepareServiceGraph(){
     var g = {};
 
     var nodeList = jQuery.extend(true, [], nodes);
@@ -95,102 +186,7 @@ function activateComponents(){
     g.width = WIDTH;
     g.height = HEIGHT;
 
-    $.ajax({
-        type: "POST",
-        url: "api/layout/" + $("#layout").val(),
-        data: JSON.stringify(g),
-        contentType: "application/json",
-        success: function (data, textStatus, response) {
-            node.each(function(d){
-                d.px = d.x = data[d.id].x;
-                d.py = d.y = data[d.id].y;
-            });
-            tick();
-        },
-        error: function (response, textStatus, errorThrown) {
-            showFeedback("danger", "Error: " + errorThrown);
-        }
-    });
-  });
-
-  // Resolves a search problem
-  $("#showPath").on("click", function(){
-    var initialNode = $("#initialNode").text();
-    var goalNode = $("#goalNode").text();
-
-    // You can't ask a path without specifing the initial and goal nodes
-    if(initialNode==null || initialNode.length==0 || goalNode==null || goalNode.length==0){
-      showFeedback("danger", NULL_NODE_FEEDBACK);
-      return;
-    }
-    // This check could be redudant as it's also done when you select both nodes, but it adds security
-    else if (initialNode.localeCompare(goalNode)==0){
-      showFeedback("danger", SAME_NODE_FEEDBACK);
-      return;
-    }
-
-    // Different if the algorithm is done step by step or not
-    var keyword;
-    if($("#oneStep").is(":checked") || forceOS)
-      keyword = F_PATH;
-    else
-      keyword = P_PATH;
-
-    // Base content
-    var content = $("#algorithm").val() + "_" + initialNode + "_" + goalNode;
-
-    forceOS = false;
-
-    // Adds heuristic table if present
-    var selection = $("#heuristicTable").val();
-    var message = null;
-    if(selection != null && selection.length != 0){
-
-      // Loads the selected file
-      var file = $("#heuristicTable")[0].files[0];
-      reader.onload = function(e) {
-        // Won't append bad formed JSONs
-        try {
-          JSON.parse(reader.result);
-          content += "_" + reader.result;
-        } catch (e) {
-        }
-        message = buildMessage(keyword, "'" + content + "'");
-        ws.send(message);
-      }
-      reader.readAsText(file);
-    } else { // Redundant lines because the reading is asynchronous
-      message = buildMessage(keyword, "'" + content + "'");
-      ws.send(message);
-    }
-  });
-
-  $("#showWeights").change("click", function(){
-    showWeights = $(this).is(":checked");
-    tick();
-  });
-
-  $("#initialNodeC").change("click", function(){
-    setInitialGoal(this, "#initialNode");
-  });
-
-  $("#goalNodeC").change("click", function(){
-    setInitialGoal(this, "#goalNode");
-  });
-
-  // Builds the algorithm menu dynamically
-  var select = $("#algorithm")[0];
-  for(i=0;i<ALGORITHMS.length;i++)
-    select.options[i] = new Option(ALGORITHMS[i].toLowerCase().replace("_"," "), ALGORITHMS[i], false);
-
-  // Does the same with the layout menu
-  var layout = $("#layout")[0];
-  for(i=0;i<LAYOUTS.length;i++)
-    layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i].toLowerCase(), false);
-
-  // Set of checkboxes' default values
-  $("#showWeights")[0].checked = true;
-  $("#oneStep")[0].checked = true;
+    return g;
 }
 
 // This is used when submitting the form to upload a graph
@@ -209,15 +205,8 @@ function validateUpload(selection){
     return true;
 }
 
-function checkExtension(extension){
-    return EXT_SUPPORTED.indexOf(extension) > -1;
-}
-
-function getExtension(filename){
-    return filename.split("\.")[filename.split("\.").length-1].toLowerCase();
-}
-
-function requestGraph(filename){
+// Different graph fetching depending on graph's extension and type (example or not)
+function handleGraphRequest(filename){
     var extension = getExtension(filename);
     var isHash = (filename.length - extension.length - 1) == HASH_LENGTH;
 
@@ -230,7 +219,7 @@ function requestGraph(filename){
     // Different fetching depending on file's extension
     switch(extension){
         case "json":
-            ajaxRequest(graphUrl);
+            requestGraph(graphUrl);
             break;
         case "gexf":
             var newGEXF = GexfParser.fetch(graphUrl);
@@ -245,29 +234,6 @@ function requestGraph(filename){
      }
 }
 
-function ajaxRequest(url){
-    $.ajax({
-        type: "GET",
-        url: url,
-        contentType: "text/plain",
-        success: function (data, textStatus, response) {
-            links = data.links;
-            nodes = data.nodes;
-
-            // If there is no data about links' direction, it will be assumed that the graph is directed
-            var isDirected = data.directed;
-            if(isDirected == null)
-                isDirected = true;
-            var filename = url.split("/")[url.split("/").length-1];
-            initialize(filename, isDirected);
-        },
-        statusCode: {
-            404: function(response, textStatus, errorThrown) {
-                showFeedback("danger", "Error: graph not found");
-            }
-        }
-    });
-}
 
 function initialize(filename, directed){
     // Hides right panel because of possible previous work

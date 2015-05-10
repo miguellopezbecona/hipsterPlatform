@@ -13,6 +13,9 @@ $(document).ready(function() {
     activateComponents();
   });
 
+  $.getScript('ajax.js', function(){
+  });
+
   ws.onopen = function(){
     // Requests the available graphs
     var initialMessage = buildMessage(AVAILABLE_GRAPHS, "''");

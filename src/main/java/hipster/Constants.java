@@ -16,10 +16,11 @@ public interface Constants {
     public final String P_PATH = "P_PATH";
 
     /*** ALGORITHMS ***/
-    public final String DIJKSTRA = "DIJKSTRA";
-    public final String BREADTH = "BREADTH";
-    public final String DEPTH = "DEPTH";
-    public final String BELLMAN_FORD = "BELLMAN_FORD";
+    public final String DIJKSTRA = "Dijkstra";
+    public final String BREADTH = "Breadth";
+    public final String DEPTH = "Depth";
+    public final String BELLMAN_FORD = "Bellman-Ford";
+    public final String A_STAR = "A*";
 
     /*** LAYOUTS ***/
     public final String RANDOM = "random";

@@ -97,27 +97,27 @@ public class Tests implements Constants{
         }
         g.setNodes(nodes);
         g.setLinks(new ArrayList<Link>());
-        g.setWidth(600); // baseW = 100
-        g.setHeight(400); // baseH = 100
-        // nodeDistance = (600 - 100) / 2 = 250
+        g.setWidth(800); // baseW = 150
+        g.setHeight(600); // baseH = 100
+        // nodeDistance = 100
 
         LayoutServices service = new LayoutServices();
         service.applyLayout("grid", g);
 
-        // posX/Y = baseW/H + column/rowIndex*nodeDistance
-        /* 0 -nD- 1
+        // pos(X|Y) = base(W|H) + (column|row)Index*nodeDistance
+        /* 0--nD--1
          * |      |
          * nD    nD
          * |      |
-         * 2 -nD- 3
+         * 2--nD--3
          */
-        assertEquals("Grid test", nodes.get(0).getX(), 100.0 + 0*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(0).getY(), 100.0 + 0*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(1).getX(), 100.0 + 1*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(1).getY(), 100.0 + 0*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(2).getX(), 100.0 + 0*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(2).getY(), 100.0 + 1*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(3).getX(), 100.0 + 1*250.0, 1e-6);
-        assertEquals("Grid test", nodes.get(3).getY(), 100.0 + 1*250.0, 1e-6);
+        assertEquals("Grid test", nodes.get(0).getX(), 150.0 + 0*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(0).getY(), 100.0 + 0*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(1).getX(), 150.0 + 1*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(1).getY(), 100.0 + 0*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(2).getX(), 150.0 + 0*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(2).getY(), 100.0 + 1*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(3).getX(), 150.0 + 1*100.0, 1e-6);
+        assertEquals("Grid test", nodes.get(3).getY(), 100.0 + 1*100.0, 1e-6);
     }
 }
