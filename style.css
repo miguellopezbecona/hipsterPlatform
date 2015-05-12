@@ -12,6 +12,16 @@
    padding: 0;
 }
 
+.context-menu a {
+    display: block;
+    padding: 3px;
+    text-decoration: none;
+}
+.context-menu a:hover {
+    background-color: #DDEFF8;
+    text-decoration: none;
+}
+
 /* Bootstrap buttons */
 .btn.btn-primary.smallFont {
    font-size: 10px;

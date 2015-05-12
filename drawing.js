@@ -121,13 +121,13 @@ function buildGraph(directed){
 
     // Customs right-click behaviour
     $('.node').contextMenu('node-context-menu', {
-        'Mark/unmark this node as the initial one': {
+        'Mark/unmark this node as the <b>initial</b> one': {
             click: function(e) {
               var nodeId = e[0].__data__.id.toString();
               setInitialGoal(nodeId, "#initialNode");
             },
         },
-        'Mark/unmark this node as the goal one': {
+        'Mark/unmark this node as the <b>goal</b> one': {
             click: function(e) {
               var nodeId = e[0].__data__.id.toString();
               setInitialGoal(nodeId, "#goalNode");
