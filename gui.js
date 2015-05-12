@@ -122,14 +122,6 @@ function activateComponents(){
     tick();
   });
 
-  $("#initialNodeC").change("click", function(){
-    setInitialGoal(this, "#initialNode");
-  });
-
-  $("#goalNodeC").change("click", function(){
-    setInitialGoal(this, "#goalNode");
-  });
-
   // Builds the algorithm menu dynamically
   var select = $("#algorithm")[0];
   for(i=0;i<ALGORITHMS.length;i++)
@@ -247,10 +239,6 @@ function initialize(filename, directed){
     $("#initialNode").text(null);
     $("#goalNode").text(null);
 
-    // So, its checkboxes are initially unchecked
-    $("#initialNodeC")[0].checked = false;
-    $("#goalNodeC")[0].checked = false;
-
     // Activates the algorithm parameters for the case they were disabled due to a step-by-step execution
     disableParameters(false);
 
@@ -260,33 +248,6 @@ function initialize(filename, directed){
     // Makes operations and zoom sections visible
     $("#operations").show();
     $("#zoomButtons").show();
-}
-
-function setInitialGoal(cb, element){
-    var other = null;
-    if(element.localeCompare("#initialNode")==0)
-        other = $("#goalNode").text();
-    else if(element.localeCompare("#goalNode")==0)
-        other = $("#initialNode").text();
-
-    if($(cb).is(":checked") && selected != null){
-        // Checks that the other position node (initial or goal) isn't the same as the selected one
-        if(selected.localeCompare(other)==0){
-            showFeedback("danger", SAME_NODE_FEEDBACK);
-            $(cb)[0].checked = false;
-        } else {
-            // Restores previous selected node to its original color
-            if($(element).text() != null && !$(element).text().length == 0)
-                changeNode($(element).text(), "ORIGINAL", 1.0);
-            $(element).text(selected);
-            changeNode(selected, initialGoalColor, 1.0);
-        }
-    } else {
-        // The checkbox is unchecked, so it restores the previous selected node to its original color and the value is removed
-        if($(element).text() != null && !$(element).text().length == 0)
-            changeNode($(element).text(), "ORIGINAL", 1.0);
-        $(element).text(null);
-    }
 }
 
 function disableParameters(bol){

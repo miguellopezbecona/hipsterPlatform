@@ -37,8 +37,8 @@ const initialGoalColor = "purple";
 const HASH_LENGTH = 40;
 const EXT_SUPPORTED = ["gexf", "json"];
 const HEURISTIC_ALGORITHMS = ["A*"];
-const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by clicking the desired node.";
-const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by clicking on them.";
+const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by right-clicking the desired node.";
+const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by right-clicking on them.";
 const EXT_SUPPORT_FEEDBACK = "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED;
 const BASE_URI = "api/graph/"
 const GRAPH_BASE_PATH = "graphs/";
@@ -50,7 +50,6 @@ const reader = new FileReader();
 var svg;
 var zoom;
 var container;
-var showWeights = true;
 var forceOS = false;
 var links;
 var nodes;

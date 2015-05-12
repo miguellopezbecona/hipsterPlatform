@@ -119,6 +119,22 @@ function buildGraph(directed){
     .on("click", click)
     .call(drag);
 
+    // Customs right-click behaviour
+    $('.node').contextMenu('node-context-menu', {
+        'Mark/unmark this node as the initial one': {
+            click: function(e) {
+              var nodeId = e[0].__data__.id.toString();
+              setInitialGoal(nodeId, "#initialNode");
+            },
+        },
+        'Mark/unmark this node as the goal one': {
+            click: function(e) {
+              var nodeId = e[0].__data__.id.toString();
+              setInitialGoal(nodeId, "#goalNode");
+            },
+        }
+    });
+
     // Uses imported data or generates it
     if(hasNodeInfo){
         var sizeScale = gD3.nodeScale();
@@ -209,7 +225,7 @@ function mouseout() {
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
     clicked = true;
-    selected = d3.select(this).select("text").text();
+    selected = d3.select(this).attr("nodeId");
     changeNode(selected, null, 2.0);
 
     var message = buildMessage(NODE, selected);
@@ -249,4 +265,39 @@ function highlightLink(source, target){
     var l = d3.selectAll("[source='" + source + "']").filter("[target='" + target + "']");
     l.style("stroke", highlightPathColor);
     l.style("stroke-width", 2*defaultLinkWidth);
+}
+
+/**
+ * nodeId: node's id to be marked/unmarked as initial/goal node
+ * type: type of node to be marked/unmarked, "#initialNode" or "#goalNode"
+ */
+function setInitialGoal(nodeId, type){
+    var other = null;
+    if(type.localeCompare("#initialNode")==0)
+        other = $("#goalNode").text();
+    else if(type.localeCompare("#goalNode")==0)
+        other = $("#initialNode").text();
+
+    // Is the node already marked as initial/goal node?
+    var isMarked = nodeId.localeCompare($(type).text()) == 0;
+
+    if(!isMarked){
+        // Checks that the other position node (initial or goal) isn't the same as the selected one
+        if(nodeId.localeCompare(other)==0)
+            showFeedback("danger", SAME_NODE_FEEDBACK);
+        else {
+            // Restores previous initial/goal node (if exists) to its original color
+            if($(type).text() != null && $(type).text().length > 0)
+                changeNode($(type).text(), ORIGINAL, 1.0);
+
+            // Updates the value and highlights the node
+            $(type).text(nodeId);
+            changeNode(nodeId, initialGoalColor, 1.0);
+        }
+    } else {
+        // The node is already marked, so it restores the previous selected node to its original color and the value is removed
+        if($(type).text() != null && !$(type).text().length == 0)
+            changeNode($(type).text(), "ORIGINAL", 1.0);
+        $(type).text(null);
+    }
 }
