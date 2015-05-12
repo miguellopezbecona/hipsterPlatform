@@ -1,5 +1,5 @@
 var ws;
-const wsUrl = "ws://localhost:8080/webSocket";
+const wsUrl = "ws://localhost:5000/webSocket";
 
 // Keywords
 const AVAILABLE_GRAPHS = "AVAILABLE_GRAPHS";
