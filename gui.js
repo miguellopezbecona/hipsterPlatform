@@ -76,7 +76,7 @@ function activateComponents(){
 
     // Different keyword if the algorithm is done step by step or not
     var keyword;
-    if($("#oneStep").is(":checked") || forceOS)
+    if(!$("#stepByStep").is(":checked") || forceOS)
       keyword = F_PATH;
     else
       keyword = P_PATH;
@@ -134,7 +134,7 @@ function activateComponents(){
 
   // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;
-  $("#oneStep")[0].checked = true;
+  $("#stepByStep")[0].checked = false;
 }
 
 
