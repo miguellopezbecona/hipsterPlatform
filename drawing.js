@@ -65,7 +65,7 @@ function buildGraph(directed){
     .attr("source", function(d) { return d.source.id; })
     .attr("target", function(d) { return d.target.id; })
     .attr('marker-end','url(#arrowhead)')
-    .attr("stroke", defaultPathColor);
+    .attr("stroke", pathColors["default"]);
 
 
     // Defines the arrow that shows each link's direction
@@ -154,8 +154,8 @@ function buildGraph(directed){
         node.append("circle")
           .attr("r", defaultNodeSize)
           .attr("size", defaultNodeSize)
-          .attr("color", defaultNodeColor)
-          .style("fill", defaultNodeColor);
+          .attr("color", nodeColors["default"])
+          .style("fill", nodeColors["default"]);
 
         node.append("text")
           .attr("x", 1.5*defaultNodeSize)
@@ -241,7 +241,7 @@ function resetColorsAndSizes(){
     d3.selectAll(".node").select("text").transition().attr("x", function(d){
       return 1.5*d3.select("[nodeId='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
 
-    d3.selectAll("line").style("stroke", defaultPathColor);
+    d3.selectAll("line").style("stroke", pathColors["default"]);
     d3.selectAll("line").style("stroke-width", defaultLinkWidth);
 }
 
@@ -263,7 +263,7 @@ function changeNode(id, color, sizeFactor){
 
 function highlightLink(source, target){
     var l = d3.selectAll("[source='" + source + "']").filter("[target='" + target + "']");
-    l.style("stroke", highlightPathColor);
+    l.style("stroke", pathColors["finalPath"]);
     l.style("stroke-width", 2*defaultLinkWidth);
 }
 
@@ -292,7 +292,7 @@ function setInitialGoal(nodeId, type){
 
             // Updates the value and highlights the node
             $(type).text(nodeId);
-            changeNode(nodeId, initialGoalColor, 1.0);
+            changeNode(nodeId, nodeColors["initialGoal"], 1.0);
         }
     } else {
         // The node is already marked, so it restores the previous selected node to its original color and the value is removed

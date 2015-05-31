@@ -34,10 +34,6 @@
    padding: 3px 3px;
 }
 
-.right {
-   float: right; 
-}
-
 select, input#hash {
    width: 210px;
 }
@@ -64,8 +60,11 @@ img {
    position: fixed;
    right: 25px;
    top: 50px;
-   width: 300px;
    opacity: 0.9;
+}
+
+#nodePanel, #legendPanel {
+   width: 300px;
 }
 
 #leftPanel {

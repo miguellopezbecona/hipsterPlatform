@@ -1,7 +1,8 @@
 function activateComponents(){
   // These sections are initially invisible
   $("#operations").hide();
-  $("#rightPanel").hide();
+  $("#nodePanel").hide();
+  $("#legendPanel").hide();
   $("#feedback").hide();
   $("#zoomButtons").hide();
 
@@ -9,10 +10,23 @@ function activateComponents(){
   $("#canvas").css("width", WIDTH);
   $("#canvas").css("height", HEIGHT);
 
-  /*** Gives functionality to the buttons ***/
+  // Builds color legend dynamically
+  var colorList = "";
+  for(var field in nodeColors) 
+      colorList += "<p><span style=\"background-color: " + nodeColors[field] + "\">&nbsp;&nbsp;&nbsp;</span>: " + colorDescriptions[field] + ".</p>";
+  $("#colorList").html(colorList);
 
-  $("#hideRightPanel").click(function () {
-    $("#rightPanel").hide();
+  /*** Gives functionality to the buttons ***/
+  $("#hideNodePanel").click(function () {
+    $("#nodePanel").hide();
+  });
+
+  $("#showLegendPanel").click(function () {
+    $("#legendPanel").show();
+  });
+
+  $("#hideLegendPanel").click(function () {
+    $("#legendPanel").hide();
   });
 
   // Uploads a graph to the server
@@ -228,8 +242,8 @@ function handleGraphRequest(filename){
 
 
 function initialize(filename, directed){
-    // Hides right panel because of possible previous work
-    $("#rightPanel").hide();
+    // Hides node panel because of possible previous work
+    $("#nodePanel").hide();
 
     // Sends a message so the server builds its internal model to work with the graph
     var message = buildMessage(BEGIN, "'"+filename+"'");

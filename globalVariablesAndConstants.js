@@ -14,24 +14,35 @@ const ALGORITHMS = ["Dijkstra", "Depth", "Breadth", "Bellman-Ford"];
 const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai", "Random", "Spring"];
 const DEFAULT_LAYOUT = "grid";
 
-// Graphic-related constants
+// Graphic-related constants and variables
 const WIDTH = screen.width;
 const HEIGHT = screen.height - 200;
 const BASE_W = WIDTH*0.5 - 100;
 const BASE_H = HEIGHT*0.5 - 100;
 const LINK_DISTANCE = 70;
-// These probably won't be constants by the final version
-const defaultNodeColor = "#3182bd";
+
+var nodeColors = {};
+nodeColors["default"] = "#3182bd";
+nodeColors["finalPath"] = "green";
+nodeColors["processed"] = "red";
+nodeColors["expanded"] = "yellow";
+nodeColors["initialGoal"] = "purple";
+
+var colorDescriptions = {};
+colorDescriptions["default"] = "the default one";
+colorDescriptions["finalPath"] = "the node is part of the final shortest path";
+colorDescriptions["processed"] = "the node has been processed (step-by-step executions only)";
+colorDescriptions["expanded"] = "the node can be expanded in the next iteration (step-by-step executions only)";
+colorDescriptions["initialGoal"] = "the node is marked as the initial or goal one";
+
+var pathColors = {};
+pathColors["default"] = "black";
+pathColors["finalPath"] = "green";
+
 const defaultNodeSize = 8;
-const defaultPathColor = "black";
 const defaultLinkWidth = 1;
-const defaultTextColor = defaultNodeColor;
+const defaultTextColor = nodeColors["default"];
 const defaultTextSize = 12;
-const highlightPathColor = "green";
-const highlightNodeColor = "green";
-const possibleNodeColor = "red";
-const nextNodeColor = "yellow";
-const initialGoalColor = "purple";
 
 // Other util constants
 const HASH_LENGTH = 40;

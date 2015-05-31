@@ -16,6 +16,7 @@
 <body>
     <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav navbar-right">
+        <li id="showLegendPanel"><a>Color legend</a></li>
         <li><a href="about.html">About</a></li>
     </ul>
     </div>
@@ -24,12 +25,25 @@
 
     <div id="feedback" class="alert alert-info"></div>
 
-    <div id="rightPanel" class="panel panel-info">
+    <div id="rightPanel">
+    <div id="legendPanel" class="panel panel-info right">
         <div class="panel-heading">
-            <h3 class="panel-title">Node info <button id="hideRightPanel" class="btn btn-lg btn-danger smallFont right">x</button></h3>
+            <h3 class="panel-title">Color legend <button id="hideLegendPanel" class="btn btn-lg btn-danger smallFont right">x</button></h3>
         </div>
         <div class="panel-body">
-             <div id="rightPanelText"></div>
+             <p>
+                 When doing a search, these are the following colors that the nodes might get. Note that the default color is only applied when your graph's nodes don't have a preset color.
+             </p>
+             <div id="colorList"></div>
+        </div>
+    </div>
+
+    <div id="nodePanel" class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Node info <button id="hideNodePanel" class="btn btn-lg btn-danger smallFont right">x</button></h3>
+        </div>
+        <div class="panel-body">
+             <div id="nodePanelText"></div>
              <p>
                  Current initial node: <span id="initialNode"></span>
              </p>
@@ -37,6 +51,7 @@
                  Current goal node: <span id="goalNode"></span>
              </p>
         </div>
+    </div>
     </div>
 
     <div id="leftPanel" class="panel panel-info">

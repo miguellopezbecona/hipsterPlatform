@@ -73,10 +73,10 @@ function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.id+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
 
-    // Appends information to some section from the right panel
-    $("#rightPanelText").html(info);
+    // Appends information to some section from the node panel
+    $("#nodePanelText").html(info);
 
-    $("#rightPanel").show();
+    $("#nodePanel").show();
 }
 
 function showFullPath(data){
@@ -89,10 +89,10 @@ function showFullPath(data){
      */
 
     // Colors and makes grow the involved links and nodes
-    changeNode(data[0], highlightNodeColor, 1.5);
+    changeNode(data[0], nodeColors["finalPath"], 1.5);
     var i;
     for(i=0;i<data.length-1;i++){
-      changeNode(data[i+1], highlightNodeColor, 1.5);
+      changeNode(data[i+1], nodeColors["finalPath"], 1.5);
       highlightLink(data[i],data[i+1]);
 
       // For undirected graphs
@@ -107,7 +107,7 @@ function showPartialPath(data){
     // In every step, the server will send back the next node and the following ones to be expanded
 
     // First, the next node is highlighted and grown
-    changeNode(data[0], possibleNodeColor, 1.5);
+    changeNode(data[0], nodeColors["processed"], 1.5);
 
     // If the next goal is the goal one, the search is completed, so it forces a full path call
     var goalNode = $("#goalNode").text();
@@ -120,5 +120,5 @@ function showPartialPath(data){
     // If there are known expanding nodes, they will be highlighted and grown as well
     var i;
     for(i=1;i<data.length;i++)
-      changeNode(data[i], nextNodeColor, 1.5);
+      changeNode(data[i], nodeColors["expanded"], 1.5);
 }
