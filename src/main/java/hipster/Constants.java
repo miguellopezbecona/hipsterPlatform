@@ -22,6 +22,10 @@ public interface Constants {
     public final String BELLMAN_FORD = "Bellman-Ford";
     public final String A_STAR = "A*";
 
+    /*** HEURISTICS ***/
+    public final String EUCLIDEAN = "Euclidean";
+    public final String MANHATTAN = "Manhattan";
+
     /*** LAYOUTS ***/
     public final String RANDOM = "random";
     public final String CIRCLE = "circle";

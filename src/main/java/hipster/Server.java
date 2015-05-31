@@ -1,11 +1,17 @@
 package hipster;
 
+import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import javax.servlet.MultipartConfigElement;
@@ -28,7 +34,20 @@ public class Server implements Constants{
 
     public static void main(String[] args) {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
-        ServerConnector connector = new ServerConnector(server);
+
+        // Necessary configuration to use websockets under SSL
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setKeyStorePath("clientkeystore");
+        sslContextFactory.setKeyStorePassword("hipster");
+        sslContextFactory.setKeyManagerPassword("hipster");
+        SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString());
+
+        // SSL HTTP Configuration
+        HttpConfiguration https_config = new HttpConfiguration();
+        https_config.addCustomizer(new SecureRequestCustomizer());
+        HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(new HttpConfiguration());
+
+        ServerConnector connector = new ServerConnector(server, sslConnectionFactory, httpConnectionFactory);
 
         int port = 5000; // Default port
         String portStr = System.getenv("PORT");
@@ -44,8 +63,6 @@ public class Server implements Constants{
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        //server.setHandler(context);
-        
         
         // Create the ResourceHandler. It is the object that will actually handle the request for a given file. It is
         // a Jetty Handler object so it is suitable for chaining with other handlers as you will see in other examples.

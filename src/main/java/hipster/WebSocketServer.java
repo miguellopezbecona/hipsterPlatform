@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
@@ -113,9 +112,12 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         String algorithm = fields[0];
         String origin = fields[1];
         String goal = fields[2];
-        Map<Integer, Double> heuristicTable = null;
-        if(fields.length > 3)
-            heuristicTable = gson.fromJson(fields[3],new TypeToken<Map<Integer, Double>>(){}.getType());
+        String heuristic = null;
+        List<MyNode> nodeInfo = null;
+        if(fields.length == 5){
+            heuristic = fields[3];
+            nodeInfo = gson.fromJson(fields[4],new TypeToken<List<MyNode>>(){}.getType());
+        }
 
         // Works different for each algorithm
         if(oneStep){
@@ -125,6 +127,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 case DEPTH: path = HipsterFacade.depthOS(hipsterGraph, origin, goal); break;
                 case BREADTH: path = HipsterFacade.breadthOS(hipsterGraph, origin, goal); break;
                 case BELLMAN_FORD: path = HipsterFacade.bellmanFordOS(hipsterGraph, origin, goal); break;
+                case A_STAR: path = HipsterFacade.AStarOS(hipsterGraph, origin, goal, heuristic, nodeInfo); break;
                 default: path = new ArrayList<>(); break;
             }
         } else {
@@ -134,6 +137,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 case DEPTH: it = HipsterFacade.depthIt(hipsterGraph, origin, goal); break;
                 case BREADTH: it = HipsterFacade.breadthIt(hipsterGraph, origin, goal); break;
                 case BELLMAN_FORD: it = HipsterFacade.bellmanFordIt(hipsterGraph, origin, goal); break;
+                case A_STAR: it = HipsterFacade.AStarIt(hipsterGraph, origin, goal, heuristic, nodeInfo); break;
            }
            path = Utils.handleIterator(it, goal);
         }

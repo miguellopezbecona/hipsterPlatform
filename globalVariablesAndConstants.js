@@ -1,5 +1,5 @@
 var ws;
-const wsUrl = "ws://localhost:5000/webSocket";
+const wsUrl = "wss://localhost:5000/webSocket";
 
 // Keywords
 const AVAILABLE_GRAPHS = "AVAILABLE_GRAPHS";
@@ -10,7 +10,9 @@ const P_PATH = "P_PATH";
 const ORIGINAL = "ORIGINAL";
 
 // Layouts and algorithms
-const ALGORITHMS = ["Dijkstra", "Depth", "Breadth", "Bellman-Ford"];
+const ALGORITHMS = ["Dijkstra", "Depth", "Breadth", "Bellman-Ford", "A*"];
+const HEURISTICS = ["Euclidean distance", "Manhattan distance"];
+const HEURISTIC_ALGORITHMS = ["A*"];
 const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai", "Random", "Spring"];
 const DEFAULT_LAYOUT = "grid";
 
@@ -47,7 +49,6 @@ const defaultTextSize = 12;
 // Other util constants
 const HASH_LENGTH = 40;
 const EXT_SUPPORTED = ["gexf", "json"];
-const HEURISTIC_ALGORITHMS = ["A*"];
 const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by right-clicking the desired node.";
 const NULL_NODE_FEEDBACK = "You need to specify both initial and goal nodes first by right-clicking on them.";
 const EXT_SUPPORT_FEEDBACK = "Sorry, this application only supports the following file formats: " + EXT_SUPPORTED;
@@ -55,7 +56,6 @@ const BASE_URI = "api/graph/"
 const GRAPH_BASE_PATH = "graphs/";
 const GRAPH_EXAMPLES_FOLDER = "examples/";
 const debug = false;
-const reader = new FileReader();
 
 // Global variables
 var svg;

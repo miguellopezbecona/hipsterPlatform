@@ -101,28 +101,13 @@ function activateComponents(){
 
     forceOS = false;
 
-    // Adds heuristic table if present and if the select algorithm can use it
-    var selection = $("#heuristicTable").val();
-    var message = null;
-    if(selection != null && selection.length != 0 && isHeuristicAlgorithm(algorithm)){
+    // Adds graph info if the select algorithm is heuristic
+    var heuristic = $("#heuristic").val();
+    if(heuristic != null && isHeuristicAlgorithm(algorithm))
+      content += "_" + heuristic + "_" + JSON.stringify(prepareServiceGraph().nodes);
 
-      // Loads the selected file
-      var file = $("#heuristicTable")[0].files[0];
-      reader.onload = function(e) {
-        // Won't append bad formed JSONs
-        try {
-          JSON.parse(reader.result);
-          content += "_" + reader.result;
-        } catch (e) {
-        }
-        message = buildMessage(keyword, "'" + content + "'");
-        ws.send(message);
-      }
-      reader.readAsText(file);
-    } else { // Redundant lines because the reading is asynchronous
-      message = buildMessage(keyword, "'" + content + "'");
-      ws.send(message);
-    }
+    var message = buildMessage(keyword, "'" + content + "'");
+    ws.send(message);
   });
 
   $("#showWeights").change("click", function(){
@@ -145,6 +130,11 @@ function activateComponents(){
   var layout = $("#layout")[0];
   for(i=0;i<LAYOUTS.length;i++)
     layout.options[i] = new Option(LAYOUTS[i], LAYOUTS[i].toLowerCase(), false);
+
+  // ... and with the heuristic one
+  var heuristic = $("#heuristic")[0];
+  for(i=0;i<HEURISTICS.length;i++)
+    heuristic.options[i] = new Option(HEURISTICS[i], HEURISTICS[i].split(" ")[0], false);
 
   // Set of checkboxes' default values
   $("#showWeights")[0].checked = true;
