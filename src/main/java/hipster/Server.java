@@ -29,7 +29,15 @@ public class Server implements Constants{
     public static void main(String[] args) {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
         ServerConnector connector = new ServerConnector(server);
-        connector.setPort(5000);
+
+        int port = 5000; // Default port
+        String portStr = System.getenv("PORT");
+
+        // Imports Heroku's port if it exists
+        if(portStr != null && !portStr.isEmpty())
+            port = Integer.valueOf(portStr);
+
+        connector.setPort(port);
         server.addConnector(connector);
 
         // Setup the basic application "context" for this application at "/"
