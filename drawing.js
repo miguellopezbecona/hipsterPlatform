@@ -264,7 +264,7 @@ function changeNode(id, color, sizeFactor){
 function highlightLink(source, target){
     var l = d3.selectAll("[source='" + source + "']").filter("[target='" + target + "']");
     l.style("stroke", pathColors["finalPath"]);
-    l.style("stroke-width", 2*defaultLinkWidth);
+    l.style("stroke-width", 4*defaultLinkWidth);
 }
 
 /**

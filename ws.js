@@ -33,8 +33,13 @@ $(document).ready(function() {
         showNodeInfo(message.content);
         break;
       case F_PATH:
-        // Resets the stroke of the lines and the color of the nodes to discard changes from other painted paths
-        resetColorsAndSizes();
+        /* Resets the stroke of the lines and the color of the nodes to discard changes from other painted paths, except
+         * when we want to maintain the processed nodes after finishing a step-by-step execution
+         */
+        if(!forceOS)
+          resetColorsAndSizes();
+        forceOS = false;
+
         showFullPath(message.content);
         break;
       case P_PATH:

@@ -99,8 +99,6 @@ function activateComponents(){
     var algorithm = $("#algorithm").val();
     var content = algorithm + "_" + initialNode + "_" + goalNode;
 
-    forceOS = false;
-
     // Adds graph info if the select algorithm is heuristic
     var heuristic = $("#heuristic").val();
     if(heuristic != null && isHeuristicAlgorithm(algorithm))
