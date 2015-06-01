@@ -8,7 +8,7 @@ gexfD3 =
       var xExtent = [];
       var yExtent = [];
       var nodeScale = [1,10];
-      var layoutSize = [500,500];
+      var layoutSize = [WIDTH,HEIGHT];
       var sizeExtent = [];
       var dAtt = "";
       var dynamicExtent = [];
@@ -58,6 +58,7 @@ gexfD3 =
         var newLink = {id: x, properties: {}};
         newLink.source = nodeHash[gLinks[x].source];
         newLink.target = nodeHash[gLinks[x].target];
+        newLink.weight = gLinks[x].weight;
         //process attributes
         for (y in gLinks[x].attributes) {
         newLink.properties[y] = gLinks[x].attributes[y];

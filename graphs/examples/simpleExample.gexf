@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:viz="http://www.gexf.net/1.2draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2014-03-04">
+    <creator>Gephi 0.8.1</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="directed" mode="static">
+    <nodes>
+      <node id="0" label="Begin">
+        <viz:size value="3.5"></viz:size>
+        <viz:position x="400.0" y="250.0" z="0.0"></viz:position>
+        <viz:color r="255" g="0" b="0"></viz:color>
+      </node>
+      <node id="1" label="Middle">
+        <viz:size value="2.5"></viz:size>
+        <viz:position x="550.0" y="250.0" z="0.0"></viz:position>
+        <viz:color r="0" g="255" b="0"></viz:color>
+      </node>
+      <node id="2" label="End">
+        <viz:size value="2.0"></viz:size>
+        <viz:position x="700.0" y="250.0" z="0.0"></viz:position>
+        <viz:color r="0" g="0" b="255"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="0" target="1" weight="2.0">
+      </edge>
+      <edge id="1" source="1" target="2" weight="3.0">
+      </edge>
+    </edges>
+  </graph>
+</gexf>
