@@ -19,13 +19,16 @@ import org.junit.Test;
 
 
 public class Tests implements Constants{
-    private static final String GOOD_JSON_FILE = GRAPH_BASE_PATH + GRAPH_EXAMPLES_FOLDER + "fewLinksDirected.json";
-    private static InputStream goodJSONIS;
+    private static final String jsonFileUrl = GRAPH_BASE_PATH + GRAPH_EXAMPLES_FOLDER + "fewLinksDirected.json";
+    private static final String gexfFileUrl = GRAPH_BASE_PATH + GRAPH_EXAMPLES_FOLDER + "simpleExample.gexf";
+    private static InputStream jsonFileIS;
+    private static InputStream gexfFileIS;
 
     @BeforeClass
     public static void setUp() throws Exception {
         try {
-            goodJSONIS = new BufferedInputStream(new FileInputStream(GOOD_JSON_FILE));
+            jsonFileIS = new BufferedInputStream(new FileInputStream(jsonFileUrl));
+            gexfFileIS = new BufferedInputStream(new FileInputStream(gexfFileUrl));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,8 +39,16 @@ public class Tests implements Constants{
     }
 
     @Test
-    public void badGEXFFile() {
-        assertNull("Incorrect graph",GEXFParser.getGraph(GOOD_JSON_FILE));
+    public void gexfGraphModeling() {
+        // Tries to load a JSON file as a GEXF graph. It should return null
+        assertNull("Incorrect GEXF graph",GEXFParser.getGraph(jsonFileUrl));
+
+        // Loads a valid GEXF graph
+        MyGraph gexfG = GEXFParser.getGraph(gexfFileUrl);
+        assertNotNull("Not null GEXF graph", gexfG);
+
+        // Checks it has the correct number of links
+        assertEquals("Check of number of links", gexfG.getLinks().size(), 2);
     }
 
     @Test
@@ -45,25 +56,25 @@ public class Tests implements Constants{
         // Obtained with: openssl sha1 graphs/examples/fewLinksDirected.json | cut -d " " -f 2
         String hash = "e2533784078910caf7f78d5e9aad040c91c532b7";
 
-        String calculatedHash = Utils.generateHash(goodJSONIS);
+        String calculatedHash = Utils.generateHash(jsonFileIS);
         assertEquals("Hash calculation", hash, calculatedHash);
     }
 
     @Test
     public void copyInputStream() {
-        InputStream copy = Utils.copyInputStream(goodJSONIS);
+        InputStream copy = Utils.copyInputStream(jsonFileIS);
 
-        goodJSONIS.mark(Integer.MAX_VALUE);
+        jsonFileIS.mark(Integer.MAX_VALUE);
 
         // Gets literal content from each InputStream (the test graph is small, so it shouldn't give problems)
         Scanner s = new Scanner(copy).useDelimiter("\\A");
         String copyC = s.hasNext() ? s.next() : "";
 
-        s = new Scanner(goodJSONIS).useDelimiter("\\A");
+        s = new Scanner(jsonFileIS).useDelimiter("\\A");
         String isC = s.hasNext() ? s.next() : "";
 
         try {
-            goodJSONIS.reset();
+            jsonFileIS.reset();
         } catch (IOException e) {
         }
 
@@ -80,7 +91,12 @@ public class Tests implements Constants{
 
         List<String> ret = HipsterFacade.dijkstraOS(g, "0", "2");
         List<String> path = Arrays.asList("0", "1", "2");
+        assertEquals("Hipster integration", ret, path);
 
+        ret = HipsterFacade.breadthOS(g, "0", "2");
+        assertEquals("Hipster integration", ret, path);
+
+        ret = HipsterFacade.depthOS(g, "0", "2");
         assertEquals("Hipster integration", ret, path);
     }
 
