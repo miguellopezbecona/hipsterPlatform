@@ -1,6 +1,7 @@
 package hipster;
 
 import com.google.gson.reflect.TypeToken;
+import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +20,39 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     private HashBasedHipsterDirectedGraph hipsterGraph;
     private Iterator it;
 
+    // Auxilial variables used for heuristic functions
+    private MyGraph auxGraph;
+    private String goalState;
+
+    /*** Heuristic functions ***/
+    // Euclidean distance: sqrt( (x2-x1)^2 + (y2-y1)^2 )
+    private HeuristicFunction<String, Double> euclideanDistance = new HeuristicFunction<String, Double>() {
+        @Override
+        public Double estimate(String state) {
+            MyNode processingNode = auxGraph.getNode(state);
+            MyNode goalNode = auxGraph.getNode(goalState);
+            double xPart = Math.pow( goalNode.getX() - processingNode.getX(), 2);
+            double yPart = Math.pow( goalNode.getY() - processingNode.getY(), 2);
+
+            return Math.sqrt(xPart + yPart);
+        }
+    };
+
+    // Manhattan distance: abs(x2-x1) + abs(y2-y1)
+    private HeuristicFunction<String, Double> manhattanDistance = new HeuristicFunction<String, Double>() {
+        @Override
+        public Double estimate(String state) {
+            MyNode processingNode = auxGraph.getNode(state);
+            MyNode goalNode = auxGraph.getNode(goalState);
+            double xPart = Math.abs( goalNode.getX() - processingNode.getX() );
+            double yPart = Math.abs( goalNode.getY() - processingNode.getY() );
+
+            return xPart + yPart;
+        }
+    };
+
     public WebSocketServer(){
+        auxGraph = new MyGraph();
     }
 
     @Override
@@ -112,11 +145,25 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
         String algorithm = fields[0];
         String origin = fields[1];
         String goal = fields[2];
-        String heuristic = null;
+
         List<MyNode> nodeInfo = null;
+        HeuristicFunction<String, Double> hf = null;
+
+        // If there is extra info, it means that an heuristic algorithm was selected
         if(fields.length == 5){
-            heuristic = fields[3];
+            String heuristic = fields[3];
             nodeInfo = gson.fromJson(fields[4],new TypeToken<List<MyNode>>(){}.getType());
+            auxGraph.setNodes(nodeInfo);
+            goalState = goal;
+
+            switch(heuristic){
+                case EUCLIDEAN:
+                    hf = euclideanDistance;
+                    break;
+                case MANHATTAN:
+                    hf = manhattanDistance;
+                    break;
+            }
         }
 
         // Works different for each algorithm
@@ -127,7 +174,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 case DEPTH: path = HipsterFacade.depthOS(hipsterGraph, origin, goal); break;
                 case BREADTH: path = HipsterFacade.breadthOS(hipsterGraph, origin, goal); break;
                 case BELLMAN_FORD: path = HipsterFacade.bellmanFordOS(hipsterGraph, origin, goal); break;
-                case A_STAR: path = HipsterFacade.AStarOS(hipsterGraph, origin, goal, heuristic, nodeInfo); break;
+                case A_STAR: path = HipsterFacade.AStarOS(hipsterGraph, origin, goal, hf); break;
                 default: path = new ArrayList<>(); break;
             }
         } else {
@@ -137,7 +184,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
                 case DEPTH: it = HipsterFacade.depthIt(hipsterGraph, origin, goal); break;
                 case BREADTH: it = HipsterFacade.breadthIt(hipsterGraph, origin, goal); break;
                 case BELLMAN_FORD: it = HipsterFacade.bellmanFordIt(hipsterGraph, origin, goal); break;
-                case A_STAR: it = HipsterFacade.AStarIt(hipsterGraph, origin, goal, heuristic, nodeInfo); break;
+                case A_STAR: it = HipsterFacade.AStarIt(hipsterGraph, origin, goal, hf); break;
            }
            path = Utils.handleIterator(it, goal);
         }

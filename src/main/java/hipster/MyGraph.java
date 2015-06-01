@@ -78,4 +78,22 @@ public class MyGraph {
             list.add(new Link(l, true));
         links.addAll(list);
     }
+
+    /**
+     * Returns the node whose id is state. It's implemented because array index couldn't be equal to node id
+     * @param state - The state (id) of the node you want to get
+     * @returns The node whose id is "state", null in any other cases
+     */ 
+    public MyNode getNode(String state){
+        if(nodes == null || state == null || state.isEmpty())
+            return null;
+
+        for(MyNode n : nodes){
+            String idStr = Integer.toString(n.getId());
+            if(idStr.equals(state))
+                return n;
+        }
+
+        return null;
+    }
 }

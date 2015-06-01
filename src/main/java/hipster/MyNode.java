@@ -13,7 +13,7 @@ public class MyNode {
     public MyNode(){
     }
 
-    public int getid(){
+    public int getId(){
         return id;
     }
 
