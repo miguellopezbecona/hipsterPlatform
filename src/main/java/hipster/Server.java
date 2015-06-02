@@ -16,10 +16,15 @@ import javax.servlet.MultipartConfigElement;
  * @author Miguel López
  */
 public class Server implements Constants{
-    private static int port = 5000;
+    private static int port = 5000; // Default port
+    private static String host = "http://localhost"; // Default hostname
 
     public static int getPort(){
         return port;
+    }
+
+    public static String getHost(){
+        return host;
     }
 
     @SuppressWarnings("serial")
@@ -40,6 +45,11 @@ public class Server implements Constants{
         String portStr = System.getenv("PORT");
         if(portStr != null && !portStr.isEmpty())
             port = Integer.valueOf(portStr);
+
+        // Imports Heroku's host if it exists
+        String auxH = System.getenv("BASE_IRI");
+        if(auxH != null && !auxH.isEmpty())
+            host = auxH;
 
         connector.setPort(port);
         server.addConnector(connector);
@@ -72,9 +82,9 @@ public class Server implements Constants{
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(GRAPH_BASE_PATH));
         context.addServlet(uploadHolder, API_BASE + "/graph/*");
 
-        // Servlet to handle websocket port requests
-        ServletHolder portHolder = new ServletHolder(new PortServlet());
-        context.addServlet(portHolder, API_BASE + "/port/*");
+        // Servlet to handle host and port requests
+        ServletHolder paramHolder = new ServletHolder(new ParamServlet());
+        context.addServlet(paramHolder, API_BASE + "/param/*");
 
         // REST layout service
         ServletHolder serviceHolder = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, "/*");

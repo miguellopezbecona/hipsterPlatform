@@ -11,13 +11,13 @@ $(document).ready(function() {
   });
 
   $.getScript('ajax.js', function(){
-    requestPort();
+    requestParams();
   });
 });
 
-function initializeWebsocket(port){
-  // Inserts port in websocket url and then initializes it
-  wsUrl = wsUrl.replace("$", ":" + port);
+function initializeWebsocket(data){
+  // Inserts "host":"port" in websocket url and then initializes it
+  wsUrl = wsUrl.replace("$", data);
   ws = new WebSocket(wsUrl);
   startedSbS = false;
 

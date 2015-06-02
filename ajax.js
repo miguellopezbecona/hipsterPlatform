@@ -60,10 +60,10 @@ function requestGraph(url){
     });
 }
 
-function requestPort(){
+function requestParams(){
     $.ajax({
         type: "GET",
-        url: "api/port/",
+        url: "api/param/",
         contentType: "text/plain",
         success: function (data, textStatus, response) {
             initializeWebsocket(data);
