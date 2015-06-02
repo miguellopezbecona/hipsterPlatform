@@ -4,17 +4,22 @@ function buildMessage(type, content){
   return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
 }
 
-// When the document is ready, the websocket is initialized
+// When the document ready, gui components are initialized and the websocket port is requested
 $(document).ready(function() {
-  ws = new WebSocket(wsUrl);
-  startedSbS = false;
-
   $.getScript('gui.js', function(){
     activateComponents();
   });
 
   $.getScript('ajax.js', function(){
+    requestPort();
   });
+});
+
+function initializeWebsocket(port){
+  // Inserts port in websocket url and then initializes it
+  wsUrl = wsUrl.replace("$", ":" + port);
+  ws = new WebSocket(wsUrl);
+  startedSbS = false;
 
   ws.onopen = function(){
     // Requests the available graphs
@@ -63,8 +68,7 @@ $(document).ready(function() {
     if(debug)
     	showFeedback("info", evt.data);
   };
-
-});
+}
 
 function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.id+"</p>";

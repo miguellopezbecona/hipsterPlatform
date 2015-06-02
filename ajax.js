@@ -59,3 +59,19 @@ function requestGraph(url){
         }
     });
 }
+
+function requestPort(){
+    $.ajax({
+        type: "GET",
+        url: "api/port/",
+        contentType: "text/plain",
+        success: function (data, textStatus, response) {
+            initializeWebsocket(data);
+        },
+        statusCode: {
+            404: function(response, textStatus, errorThrown) {
+                showFeedback("danger", "Couldn't connect to server.");
+            }
+        }
+    });
+}

@@ -2,16 +2,11 @@ package hipster;
 
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.server.SslConnectionFactory;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import javax.servlet.MultipartConfigElement;
@@ -21,6 +16,11 @@ import javax.servlet.MultipartConfigElement;
  * @author Miguel López
  */
 public class Server implements Constants{
+    private static int port = 5000;
+
+    public static int getPort(){
+        return port;
+    }
 
     @SuppressWarnings("serial")
     public static class EventServlet extends WebSocketServlet {
@@ -34,25 +34,10 @@ public class Server implements Constants{
 
     public static void main(String[] args) {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
-
-        // Necessary configuration to use websockets under SSL
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStorePath("clientkeystore");
-        sslContextFactory.setKeyStorePassword("hipster");
-        sslContextFactory.setKeyManagerPassword("hipster");
-        SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString());
-
-        // SSL HTTP Configuration
-        HttpConfiguration https_config = new HttpConfiguration();
-        https_config.addCustomizer(new SecureRequestCustomizer());
-        HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(new HttpConfiguration());
-
-        ServerConnector connector = new ServerConnector(server, sslConnectionFactory, httpConnectionFactory);
-
-        int port = 5000; // Default port
-        String portStr = System.getenv("PORT");
+        ServerConnector connector = new ServerConnector(server);
 
         // Imports Heroku's port if it exists
+        String portStr = System.getenv("PORT");
         if(portStr != null && !portStr.isEmpty())
             port = Integer.valueOf(portStr);
 
@@ -86,6 +71,10 @@ public class Server implements Constants{
         ServletHolder uploadHolder = new ServletHolder(new UploadServlet());
         uploadHolder.getRegistration().setMultipartConfig(new MultipartConfigElement(GRAPH_BASE_PATH));
         context.addServlet(uploadHolder, API_BASE + "/graph/*");
+
+        // Servlet to handle websocket port requests
+        ServletHolder portHolder = new ServletHolder(new PortServlet());
+        context.addServlet(portHolder, API_BASE + "/port/*");
 
         // REST layout service
         ServletHolder serviceHolder = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, "/*");
