@@ -3,7 +3,6 @@ function zoomed(){
 }
 
 function interpolateZoom (translate, scale) {
-    var self = this;
     return d3.transition().duration(350).tween("zoom", function () {
         var iTranslate = d3.interpolate(zoom.translate(), translate),
             iScale = d3.interpolate(zoom.scale(), scale);
@@ -49,5 +48,43 @@ function zoomClick() {
     interpolateZoom([view.x, view.y], view.k);
 }
 
+function centerGraph(){
+    // Obtains graphic's bounds
+    var minX, maxX, minY, maxY;
+    minX = minY = Number.MAX_VALUE;
+    maxX = maxY = Number.MIN_VALUE;
+    node.each(function(d){
+        if(d.x < minX) minX = d.x;
+        else if(d.x > maxX) maxX = d.x;
+
+        if(d.y < minY) minY = d.y;
+        else if(d.y > maxY) maxY = d.y;
+    });
+
+    // Obtains "free" space where to place the graph
+    var someMargin = 50;
+    var usedWidth = $("#leftPanel").width() + $("#leftPanel").position().left + someMargin;
+    var usedHeight = $("#showLegendPanel").height();
+    var availableWidth = WIDTH - usedWidth;
+
+    // Calculates graph proportion
+    var factor = availableWidth / (maxX - minX);
+    if(factor > 1) factor = 1; // No zoomIn if there is enough view
+
+    var translateX = usedWidth - minX;
+    var translateY = usedHeight - minY;
+
+    // Centers the view to the right place with the appropiate scale factor
+    container.attr("transform", "translate(" + translateX + "," + translateY + ")scale(" + factor + ")");
+
+    // Updates zoom object to maintain the view
+    zoom.translate([translateX,translateY]);
+    zoom.scale(factor);
+    zoomed();
+    tick();
+}
+
 d3.selectAll('i').on('click', zoomClick);
+
+d3.select('#centerGraph').on('click', centerGraph);
 

@@ -133,10 +133,6 @@ function activateComponents(){
   var heuristic = $("#heuristic")[0];
   for(i=0;i<HEURISTICS.length;i++)
     heuristic.options[i] = new Option(HEURISTICS[i], HEURISTICS[i].split(" ")[0], false);
-
-  // Set of checkboxes' default values
-  $("#showWeights")[0].checked = true;
-  $("#stepByStep")[0].checked = false;
 }
 
 
@@ -213,6 +209,7 @@ function handleGraphRequest(filename){
     // Different fetching depending on file's extension
     switch(extension){
         case "json":
+            gD3 = null;
             requestGraph(graphUrl);
             break;
         case "gexf":
@@ -241,6 +238,9 @@ function initialize(filename, directed){
     $("#initialNode").text(null);
     $("#goalNode").text(null);
 
+    // Resets "show weights" checkbox to true to avoid problems
+    $("#showWeights")[0].checked = true;
+
     // Activates the algorithm parameters for the case they were disabled due to a step-by-step execution
     disableParameters(false);
 
@@ -256,4 +256,13 @@ function disableParameters(bol){
     $("#algorithm").prop("disabled", bol);
     $("#initialNodeC").prop("disabled", bol);
     $("#goalNodeC").prop("disabled", bol);
+}
+
+function showFeedback(type, content){
+    $("#feedback").hide();
+    $("#feedback").text(content);
+    $("#feedback").attr("class", "alert alert-" + type);
+    $("#feedback").show();
+    if(!debug)
+      $("#feedback").delay(10000).hide(1000);
 }

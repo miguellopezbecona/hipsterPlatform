@@ -28,7 +28,7 @@ function applyLayout(g, layout){
                 d.px = d.x = data[d.id].x;
                 d.py = d.y = data[d.id].y;
             });
-            tick();
+            centerGraph();
         },
         error: function (response, textStatus, errorThrown) {
             showFeedback("danger", "Error: " + errorThrown);

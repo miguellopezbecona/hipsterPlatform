@@ -136,7 +136,7 @@ this.overwriteLinks = function(incLinks) {
       xExtent = d3.extent(nodes, function(d) {return parseFloat(d.x)})
       yExtent = d3.extent(nodes, function(d) {return parseFloat(d.y)})
       xScale = d3.scale.linear().domain(xExtent).range([0,layoutSize[0]]);
-      yScale = d3.scale.linear().domain(yExtent).range([layoutSize[1],0]);
+      yScale = d3.scale.linear().domain(yExtent).range([layoutSize[0],0]);
       return this;
       }
 

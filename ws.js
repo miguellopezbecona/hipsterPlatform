@@ -66,14 +66,6 @@ $(document).ready(function() {
 
 });
 
-function showFeedback(type, content){
-    $("#feedback").text(content);
-    $("#feedback").attr("class", "alert alert-" + type);
-    $("#feedback").show();
-    if(!debug)
-      $("#feedback").delay(10000).hide(1000);
-}
-
 function showNodeInfo(nodeInfo){
     var info = "<p>Node selected: "+nodeInfo.id+"</p>";
     info += "<p>Node info: "+nodeInfo.info+"</p>";
