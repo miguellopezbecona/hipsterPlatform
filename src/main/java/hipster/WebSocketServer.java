@@ -67,10 +67,24 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
     }
 
     private void handleMessage(String message) {
-        Message m = gson.fromJson(message, Message.class);
+        Message m;
+        try {
+            m = gson.fromJson(message, Message.class);
+        } catch (Exception e) {
+            if(message != null)
+                System.out.println("Message received: " + message);
+            return;
+        }
+
+        if(m == null)
+            return;
+
         String type = m.getType();
         String content = m.getContent();
         String response = null;
+
+        if(type == null || content == null)
+            return;
 
         switch(type){
 	    case BEGIN:
