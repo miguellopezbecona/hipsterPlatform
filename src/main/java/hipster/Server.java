@@ -1,5 +1,7 @@
 package hipster;
 
+import java.net.InetAddress;
+import javax.servlet.MultipartConfigElement;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.ServerConnector;
@@ -9,7 +11,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import javax.servlet.MultipartConfigElement;
 
 /**
  * 
@@ -17,7 +18,7 @@ import javax.servlet.MultipartConfigElement;
  */
 public class Server implements Constants{
     private static int port = 5000; // Default port
-    private static String host = "http://localhost"; // Default hostname
+    private static String host;
 
     public static int getPort(){
         return port;
@@ -46,10 +47,12 @@ public class Server implements Constants{
         if(portStr != null && !portStr.isEmpty())
             port = Integer.valueOf(portStr);
 
-        // Imports Heroku's host if it exists
-        String auxH = System.getenv("BASE_IRI");
-        if(auxH != null && !auxH.isEmpty())
-            host = auxH;
+        // Obtains host value
+        try {
+            host = InetAddress.getLocalHost().getCanonicalHostName();
+        } catch (Exception e) {
+            host = "localhost";
+        }
 
         connector.setPort(port);
         server.addConnector(connector);

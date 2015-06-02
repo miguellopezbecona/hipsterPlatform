@@ -11,7 +11,7 @@ public class ParamServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         // Returns server port
-        response.getWriter().write(Server.getHost().split("http://")[1]  + ":" + Integer.toString(Server.getPort()));
+        response.getWriter().write(Server.getHost()  + ":" + Integer.toString(Server.getPort()));
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
     }
