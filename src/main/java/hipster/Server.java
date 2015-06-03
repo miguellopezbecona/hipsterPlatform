@@ -45,7 +45,7 @@ public class Server implements Constants{
         String portStr = System.getenv("PORT");
         if(portStr != null && !portStr.isEmpty()){
             port = Integer.valueOf(portStr);
-            host = "hipster-plataform.herokuapp.com";
+            host = "hipster-platform.herokuapp.com";
         }
 
         connector.setPort(port);
