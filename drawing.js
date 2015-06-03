@@ -205,6 +205,18 @@ function tick() {
     edgelabels.attr('dx',function(d,i) { return getLinkHalfLength(d.source.id, d.target.id); })
 
     edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y; return path});
+
+    // Prevents weight labels being inverted
+    edgelabels.attr('transform',function(d,i){
+        if (d.target.x<d.source.x){
+            bbox = this.getBBox();
+            rx = bbox.x+bbox.width/2;
+            ry = bbox.y+bbox.height/2;
+            return 'rotate(180 '+rx+' '+ry+')';
+        }
+        else
+            return 'rotate(0)';
+    });
 }
 
 function getLinkHalfLength(source, target){
