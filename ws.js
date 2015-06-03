@@ -25,6 +25,9 @@ function initializeWebsocket(data){
     // Requests the available graphs
     var initialMessage = buildMessage(AVAILABLE_GRAPHS, "''");
     ws.send(initialMessage);
+
+    // Sends pings periodically in order to maintain the conection
+    setInterval(function(){ ws.send(""); }, SECS_BY_PING * 1000);
   };
 
   // What does the client do when it receives a message

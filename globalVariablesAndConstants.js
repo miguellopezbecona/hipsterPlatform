@@ -47,6 +47,7 @@ const defaultTextColor = nodeColors["default"];
 const defaultTextSize = 12;
 
 // Other util constants
+const SECS_BY_PING = 50;
 const HASH_LENGTH = 40;
 const EXT_SUPPORTED = ["gexf", "json"];
 const SAME_NODE_FEEDBACK = "The initial node can't be the same as the goal one. Set them by right-clicking the desired node.";

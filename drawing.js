@@ -210,8 +210,8 @@ function tick() {
     edgelabels.attr('transform',function(d,i){
         if (d.target.x<d.source.x){
             bbox = this.getBBox();
-            rx = bbox.x+bbox.width/2;
-            ry = bbox.y+bbox.height/2;
+            rx = bbox.x + bbox.width*0.5;
+            ry = bbox.y + bbox.height*0.5;
             return 'rotate(180 '+rx+' '+ry+')';
         }
         else
