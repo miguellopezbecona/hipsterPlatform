@@ -19,8 +19,6 @@ const DEFAULT_LAYOUT = "grid";
 // Graphic-related constants and variables
 const WIDTH = screen.width;
 const HEIGHT = screen.height - 200;
-const BASE_W = WIDTH*0.5 - 100;
-const BASE_H = HEIGHT*0.5 - 100;
 const LINK_DISTANCE = 70;
 
 var nodeColors = {};

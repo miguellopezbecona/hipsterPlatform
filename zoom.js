@@ -61,23 +61,21 @@ function centerGraph(){
         else if(d.y > maxY) maxY = d.y;
     });
 
-    // Obtains "free" space where to place the graph
-    var someMargin = 50;
-    var usedWidth = $("#leftPanel").width() + $("#leftPanel").position().left + someMargin;
-    var usedHeight = $("#showLegendPanel").height();
-    var availableWidth = WIDTH - usedWidth;
-
-    // Calculates graph proportion
-    var factor = availableWidth / (maxX - minX);
+    // Calculates graph proportions to obtain the scale factor
+    var factorX = WIDTH / (maxX - minX);
+    var factorY = HEIGHT / (maxY - minY);
+    var factor = Math.min(factorX, factorY); // Keeps the minimum
     if(factor > 1) factor = 1; // No zoomIn if there is enough view
 
-    var translateX = usedWidth - minX;
-    var translateY = usedHeight - minY;
+    // Gets graph's center coordinates
+    var centerX = 0.5*(maxX - minX) + minX;
+    var centerY = 0.5*(maxY - minY) + minY;
+
+    // Obtains translate vector: what we have to add to graph's center to get viewport's center
+    var translateX = Math.abs(0.5*WIDTH - centerX);
+    var translateY = Math.abs(0.5*HEIGHT - centerY);
 
     // Centers the view to the right place with the appropiate scale factor
-    container.attr("transform", "translate(" + translateX + "," + translateY + ")scale(" + factor + ")");
-
-    // Updates zoom object to maintain the view
     zoom.translate([translateX,translateY]);
     zoom.scale(factor);
     zoomed();

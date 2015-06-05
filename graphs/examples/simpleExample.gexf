@@ -4,12 +4,12 @@
     <nodes>
       <node id="0" label="Begin">
         <viz:size value="3.5"></viz:size>
-        <viz:position x="400.0" y="250.0" z="0.0"></viz:position>
+        <viz:position x="400.0" y="200.0" z="0.0"></viz:position>
         <viz:color r="255" g="0" b="0"></viz:color>
       </node>
       <node id="1" label="Middle">
         <viz:size value="2.5"></viz:size>
-        <viz:position x="550.0" y="250.0" z="0.0"></viz:position>
+        <viz:position x="550.0" y="225.0" z="0.0"></viz:position>
         <viz:color r="0" g="255" b="0"></viz:color>
       </node>
       <node id="2" label="End">
