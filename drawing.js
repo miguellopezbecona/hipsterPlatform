@@ -114,7 +114,7 @@ function buildGraph(directed){
     .data(graph.nodes())
     .enter().append("g")
     .attr("class", "node")
-    .attr("nodeId", function(d) { return d.id; })
+    .attr("nodeid", function(d) { return d.id; })
     .on("mouseout", mouseout)
     .on("click", click)
     .call(drag);
@@ -237,7 +237,7 @@ function mouseout() {
 // When a node is clicked, it becomes bigger and it sends a request to the server (by using websockets)
 function click() {
     clicked = true;
-    selected = d3.select(this).attr("nodeId");
+    selected = d3.select(this).attr("nodeid");
     changeNode(selected, null, 2.0);
 
     var message = buildMessage(NODE, selected);
@@ -251,7 +251,7 @@ function resetColorsAndSizes(){
       return d3.select(this).attr("size");}).style("fill", function(d){
       return d3.select(this).attr("color");});
     d3.selectAll(".node").select("text").transition().attr("x", function(d){
-      return 1.5*d3.select("[nodeId='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
+      return 1.5*d3.select("[nodeid='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
 
     d3.selectAll("line").style("stroke", pathColors["default"]);
     d3.selectAll("line").style("stroke-width", defaultLinkWidth);
@@ -260,7 +260,7 @@ function resetColorsAndSizes(){
 function changeNode(id, color, sizeFactor){
     if(id == null) return;
 
-    var nod =  d3.select("[nodeId='" + id + "']");
+    var nod =  d3.select("[nodeid='" + id + "']");
     var c =  nod.select("circle");
     var s = c.attr("size");
     nod.select("text").transition().attr("x", 1.5*sizeFactor*s).style("font", sizeFactor*defaultTextSize);
