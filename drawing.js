@@ -258,6 +258,8 @@ function resetColorsAndSizes(){
 }
 
 function changeNode(id, color, sizeFactor){
+    if(id == null) return;
+
     var nod =  d3.select("[nodeId='" + id + "']");
     var c =  nod.select("circle");
     var s = c.attr("size");

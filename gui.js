@@ -227,6 +227,8 @@ function handleGraphRequest(filename){
 
 
 function initialize(filename, directed){
+    currentNode = null;
+
     // Hides node panel because of possible previous work
     $("#nodePanel").hide();
 

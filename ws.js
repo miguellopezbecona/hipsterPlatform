@@ -84,8 +84,10 @@ function showNodeInfo(nodeInfo){
 }
 
 function showFullPath(data){
-    // Restores the posibility to change the parameters
     startedSbS = false;
+    currentNode = null;
+
+    // Restores the posibility to change the parameters
     disableParameters(false);
 
     /* To avoid duplicated data, instead of receiving every pair of source-target,
@@ -111,7 +113,13 @@ function showPartialPath(data){
     // In every step, the server will send back the next node and the following ones to be expanded
 
     // First, the next node is highlighted and grown
-    changeNode(data[0], nodeColors["processed"], 1.5);
+    changeNode(data[0], nodeColors["current"], 1.5);
+
+    // The previous "next node" value has to be marked as processed
+    changeNode(currentNode, nodeColors["processed"], 1.5);
+
+    // Updates the value
+    currentNode = data[0];
 
     // If the next goal is the goal one, the search is completed, so it forces a full path call
     var goalNode = $("#goalNode").text();
