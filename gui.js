@@ -229,6 +229,9 @@ function handleGraphRequest(filename){
 function initialize(filename, directed){
     currentNode = null;
 
+    // Shows filename in some field
+    $("#filename").text(filename);
+
     // Hides node panel because of possible previous work
     $("#nodePanel").hide();
 
