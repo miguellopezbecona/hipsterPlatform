@@ -100,13 +100,18 @@ function showFullPath(data){
     // Colors and makes grow the involved links and nodes
     changeNode(data[0], nodeColors["finalPath"], 1.5);
     var i;
-    for(i=0;i<data.length-1;i++){
+    for(i=0;i<data.length-3;i++){
       changeNode(data[i+1], nodeColors["finalPath"], 1.5);
       highlightLink(data[i],data[i+1]);
 
       // For undirected graphs
       highlightLink(data[i+1],data[i]);
     }
+
+    // The last two numbers aren't checked in the previous loop because they are reserved to iterations made and path cost, respectively
+    $("#iterations").text(data[data.length-2]);
+    $("#pathCost").text(data[data.length-1]);
+    $("#searchPanel").show();
 }
 
 function showPartialPath(data){

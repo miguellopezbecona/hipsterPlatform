@@ -168,7 +168,6 @@ function buildGraph(directed){
       d.fixed = true;
     });
 
-
     // Applies the default layout when the nodes haven't a position
     if(!hasNodeInfo)
       applyLayout(prepareServiceGraph(), DEFAULT_LAYOUT);

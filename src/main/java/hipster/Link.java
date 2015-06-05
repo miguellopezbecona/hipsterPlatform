@@ -27,6 +27,7 @@ public class Link {
     }
 
     public Link() {
+        weight = 1.0; // Default value
     }
 
 

@@ -5,7 +5,6 @@
     <title>Hipster Platform</title>
     <link href="style.css" rel="stylesheet">
     <link href="bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="bootstrap/bootstrap-theme.css" rel="stylesheet">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
 
     <script src="d3.js"></script>
@@ -26,7 +25,7 @@
 
     <div id="feedback" class="alert alert-info"></div>
 
-    <div id="rightPanel">
+    <div id="rightPanels">
     <div id="legendPanel" class="panel panel-info right">
         <div class="panel-heading">
             <h3 class="panel-title">Color legend <button id="hideLegendPanel" class="btn btn-lg btn-danger smallFont right">x</button></h3>
@@ -51,6 +50,16 @@
              <p>
                  Current goal node: <span id="goalNode"></span>
              </p>
+        </div>
+    </div>
+
+    <div id="searchPanel" class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search info <button id="hideSearchPanel" class="btn btn-lg btn-danger smallFont right">x</button></h3>
+        </div>
+        <div class="panel-body">
+             <p>Number of iterations made: <span id="iterations"></span></p>
+             <p>Path's cost: <span id="pathCost"></span></p>
         </div>
     </div>
     </div>

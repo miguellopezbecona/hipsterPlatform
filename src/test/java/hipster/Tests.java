@@ -89,15 +89,19 @@ public class Tests implements Constants{
         list.add(new Link(1, 2, 1.0));
         HashBasedHipsterDirectedGraph g = Utils.initializeGraph(list);
 
-        List<String> ret = HipsterFacade.dijkstraOS(g, "0", "2");
         List<String> path = Arrays.asList("0", "1", "2");
-        assertEquals("Hipster integration", ret, path);
+
+        List<String> ret = HipsterFacade.dijkstraOS(g, "0", "2");
+        List<String> retP = ret.subList(0, ret.size()-2); // Keeps only the path
+        assertEquals("Hipster integration", retP, path);
 
         ret = HipsterFacade.breadthOS(g, "0", "2");
-        assertEquals("Hipster integration", ret, path);
+        retP = ret.subList(0, ret.size()-2);
+        assertEquals("Hipster integration", retP, path);
 
         ret = HipsterFacade.depthOS(g, "0", "2");
-        assertEquals("Hipster integration", ret, path);
+        retP = ret.subList(0, ret.size()-2);
+        assertEquals("Hipster integration", retP, path);
     }
 
     @Test

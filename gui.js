@@ -3,6 +3,7 @@ function activateComponents(){
   $("#operations").hide();
   $("#nodePanel").hide();
   $("#legendPanel").hide();
+  $("#searchPanel").hide();
   $("#feedback").hide();
   $("#zoomButtons").hide();
 
@@ -27,6 +28,10 @@ function activateComponents(){
 
   $("#hideLegendPanel").click(function () {
     $("#legendPanel").hide();
+  });
+
+  $("#hideSearchPanel").click(function () {
+    $("#searchPanel").hide();
   });
 
   // Uploads a graph to the server
@@ -232,8 +237,9 @@ function initialize(filename, directed){
     // Shows filename in some field
     $("#filename").text(filename);
 
-    // Hides node panel because of possible previous work
+    // Hides node and seach panel because of possible previous work
     $("#nodePanel").hide();
+    $("#searchPanel").hide();
 
     // Sends a message so the server builds its internal model to work with the graph
     var message = buildMessage(BEGIN, "'"+filename+"'");
