@@ -47,6 +47,7 @@ const defaultTextColor = nodeColors["default"];
 const defaultTextSize = 12;
 
 // Other util constants
+const DEFAULT_GRAPH = "grid.json";
 const SECS_BY_PING = 50;
 const HASH_LENGTH = 40;
 const EXT_SUPPORTED = ["gexf", "json"];

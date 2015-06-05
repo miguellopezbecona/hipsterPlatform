@@ -28,6 +28,9 @@ function initializeWebsocket(data){
 
     // Sends pings periodically in order to maintain the conection
     setInterval(function(){ ws.send(""); }, SECS_BY_PING * 1000);
+
+    // Loads the default graph
+    handleGraphRequest(DEFAULT_GRAPH);
   };
 
   // What does the client do when it receives a message
