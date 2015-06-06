@@ -1,4 +1,10 @@
 function publishGraph(formData){
+    // Shows a GIF to make the user be aware of the uploading.
+    // The animation will be replaced by the following "showFeedback" calls in both AJAX possible responses
+    $("#feedback").html("<img src=\"img/loading.gif\" width=\"50\">");
+    $("#feedback").attr("class", null);
+    $("#feedback").show();
+
     $.ajax({
         type: "POST",
         url: BASE_URI,
