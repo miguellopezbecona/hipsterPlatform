@@ -72,8 +72,8 @@ function centerGraph(){
     var centerY = 0.5*(maxY - minY) + minY;
 
     // Obtains translate vector: what we have to add to graph's center to get viewport's center
-    var translateX = Math.abs(0.5*WIDTH - centerX);
-    var translateY = Math.abs(0.5*HEIGHT - centerY);
+    var translateX = 0.5*WIDTH - centerX;
+    var translateY = 0.5*HEIGHT - centerY;
 
     // Centers the view to the right place with the appropiate scale factor
     zoom.translate([translateX,translateY]);

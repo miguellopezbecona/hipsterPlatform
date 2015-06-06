@@ -17,8 +17,8 @@ const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai
 const DEFAULT_LAYOUT = "grid";
 
 // Graphic-related constants and variables
-const WIDTH = screen.width;
-const HEIGHT = screen.height - 200;
+const WIDTH = screen.availWidth;
+const HEIGHT = screen.availHeight;
 const LINK_DISTANCE = 70;
 
 var nodeColors = {};
