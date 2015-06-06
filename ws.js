@@ -74,6 +74,14 @@ function initializeWebsocket(data){
     if(debug)
     	showFeedback("info", evt.data);
   };
+
+  ws.onclose = function(evt){
+    showFeedback("danger", "The connection to the server has been lost. Please, refresh the page.");
+  };
+
+  ws.onerror = function(evt){
+    showFeedback("danger", "There was an error with the connection. Please, refresh the page.");
+  };
 }
 
 function showNodeInfo(nodeInfo){

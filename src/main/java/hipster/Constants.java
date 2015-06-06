@@ -44,4 +44,7 @@ public interface Constants {
     public final String HASH_ALGORITHM = "SHA-1";
     public final short HASH_LENGTH = 40;
     public final short CHUNK_SIZE = 1024;
+    public final short DEFAULT_PORT = 8080;
+    public final String DEFAULT_HOSTNAME = "localhost";
+    public final String HEROKU_APP = "hipster-platform.herokuapp.com";
 }

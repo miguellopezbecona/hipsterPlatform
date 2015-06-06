@@ -15,9 +15,9 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
  * 
  * @author Miguel López
  */
-public class Server implements Constants{
-    private static int port = 5000; // Default port
-    private static String host = "localhost"; // Default hostname
+public class Server implements Constants {
+    private static int port = DEFAULT_PORT; // Default port
+    private static String host = DEFAULT_HOSTNAME; // Default hostname
 
     public static int getPort(){
         return port;
@@ -45,7 +45,7 @@ public class Server implements Constants{
         String portStr = System.getenv("PORT");
         if(portStr != null && !portStr.isEmpty()){
             port = Integer.valueOf(portStr);
-            host = "hipster-platform.herokuapp.com";
+            host = HEROKU_APP;
         }
 
         connector.setPort(port);

@@ -32,6 +32,12 @@ public class DAO implements Constants{
             switch(extension){
                 case "json":
                     MyGraph g = gson.fromJson(new FileReader(path), MyGraph.class);
+
+                    // A graph with no links is corrupted and should not be returned. This should never happen
+                    if(g.getLinks() == null || g.getLinks().isEmpty())
+                        return null;
+
+                    // Duplicates the links if the graph is undirected
                     if(!g.isDirected())
                         g.duplicateLinks();
                     return g;
