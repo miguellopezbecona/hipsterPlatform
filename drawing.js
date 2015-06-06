@@ -196,7 +196,8 @@ function buildGraph(directed){
     if(!hasNodeInfo)
       applyLayout(prepareServiceGraph(), DEFAULT_LAYOUT);
 
-    graph.start();
+    // Draws the graph for the first time
+    tick();
 }
 
 function dragstarted(d) {
