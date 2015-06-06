@@ -116,21 +116,45 @@ function buildGraph(directed){
     .attr("class", "node")
     .attr("nodeid", function(d) { return d.id; })
     .on("mouseout", mouseout)
+    .on('contextmenu', function(d,i) {
+        // Changes "Select" to "Unselect" when necessary
+        // For initial node
+        if($("#initialNode").text() != null && $("#initialNode").text().localeCompare(d.id)==0)
+            $("#initialText").text("Unselect");
+        else
+            $("#initialText").text("Select");
+
+        // For goal node
+        if($("#goalNode").text() != null && $("#goalNode").text().localeCompare(d.id)==0)
+            $("#goalText").text("Unselect");
+        else
+            $("#goalText").text("Select");
+    })
     .on("click", click)
     .call(drag);
 
-    // Customs right-click behaviour
+    // Customizes right-click behaviour
     $('.node').contextMenu('node-context-menu', {
-        'Mark/unmark this node as the <b>initial</b> one': {
+        '<span id="initialText">Select</span> as <b>initial</b>': {
             click: function(e) {
               var nodeId = e[0].__data__.id.toString();
-              setInitialGoal(nodeId, "#initialNode");
+
+              // Prevents modifing this value in the middle of a step-by-step execution
+              if(!doingSbS)
+                  setInitialGoal(nodeId, "#initialNode");
+              else
+                  showFeedback("danger", "You can't change this value in the middle of a step-by-step execution! Please, finish first your search.");
             },
         },
-        'Mark/unmark this node as the <b>goal</b> one': {
+        '<span id="goalText">Select</span> as <b>goal</b>': {
             click: function(e) {
               var nodeId = e[0].__data__.id.toString();
-              setInitialGoal(nodeId, "#goalNode");
+
+              // Prevents modifing this value in the middle of a step-by-step execution
+              if(!doingSbS)
+                  setInitialGoal(nodeId, "#goalNode");
+              else
+                  showFeedback("danger", "You can't change this value in the middle of a step-by-step execution! Please, finish first your search.");
             },
         }
     });
@@ -247,8 +271,15 @@ function click() {
 
 function resetColorsAndSizes(){
     d3.selectAll(".node").select("circle").transition().attr("r", function(d){
-      return d3.select(this).attr("size");}).style("fill", function(d){
-      return d3.select(this).attr("color");});
+      return d3.select(this).attr("size");})
+    .style("fill", function(d){
+      var currentColor = d3.select(this).style("fill");
+
+      // Maintains marked nodes' colour
+      if(currentColor.localeCompare(nodeColors["initialGoal"]) == 0)
+        return currentColor;
+      else
+        return d3.select(this).attr("color");});
     d3.selectAll(".node").select("text").transition().attr("x", function(d){
       return 1.5*d3.select("[nodeid='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
 

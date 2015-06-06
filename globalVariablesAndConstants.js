@@ -22,12 +22,12 @@ const HEIGHT = screen.height - 200;
 const LINK_DISTANCE = 70;
 
 var nodeColors = {};
-nodeColors["default"] = "#3182bd";
-nodeColors["finalPath"] = "green";
-nodeColors["current"] = "aqua";
-nodeColors["processed"] = "red";
-nodeColors["expanded"] = "yellow";
-nodeColors["initialGoal"] = "purple";
+nodeColors["default"] = "rgb(49, 130, 189)"; // "#3182bd"
+nodeColors["finalPath"] = "rgb(0, 128, 0)"; // "green"
+nodeColors["current"] = "rgb(0, 255, 255)"; // "aqua"
+nodeColors["processed"] = "rgb(255, 0, 0)"; // "red"
+nodeColors["expanded"] = "rgb(255, 255, 0)"; // "yellow"
+nodeColors["initialGoal"] = "rgb(128, 0, 128)"; // "purple"
 
 var colorDescriptions = {};
 colorDescriptions["default"] = "the default one";

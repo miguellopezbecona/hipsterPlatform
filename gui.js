@@ -265,8 +265,7 @@ function initialize(filename, directed){
 
 function disableParameters(bol){
     $("#algorithm").prop("disabled", bol);
-    $("#initialNodeC").prop("disabled", bol);
-    $("#goalNodeC").prop("disabled", bol);
+    $("#heuristic").prop("disabled", bol);
 }
 
 function showFeedback(type, content){

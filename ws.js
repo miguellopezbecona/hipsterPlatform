@@ -1,4 +1,4 @@
-var startedSbS;
+var doingSbS;
 
 function buildMessage(type, content){
   return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
@@ -19,7 +19,7 @@ function initializeWebsocket(data){
   // Inserts "host":"port" in websocket url and then initializes it
   wsUrl = wsUrl.replace("$", data);
   ws = new WebSocket(wsUrl);
-  startedSbS = false;
+  doingSbS = false;
 
   ws.onopen = function(){
     // Requests the available graphs
@@ -55,9 +55,9 @@ function initializeWebsocket(data){
         break;
       case P_PATH:
         // If it's the beginning of this phase, resets the stroke of the lines and the color and size of the nodes to discard changes from other painted paths
-        if(!startedSbS){
+        if(!doingSbS){
           resetColorsAndSizes();
-          startedSbS = true;
+          doingSbS = true;
         }
 
         showPartialPath(message.content);
@@ -87,7 +87,7 @@ function showNodeInfo(nodeInfo){
 }
 
 function showFullPath(data){
-    startedSbS = false;
+    doingSbS = false;
     currentNode = null;
 
     // Restores the posibility to change the parameters
@@ -133,7 +133,7 @@ function showPartialPath(data){
     var goalNode = $("#goalNode").text();
     if(data[0].localeCompare(goalNode)==0){
       forceOS = true;
-      startedSbS = false;
+      doingSbS = false;
       return;
     }
 
