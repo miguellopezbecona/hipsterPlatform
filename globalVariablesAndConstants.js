@@ -44,6 +44,7 @@ pathColors["finalPath"] = "green";
 const defaultNodeSize = 8;
 const defaultLinkWidth = 1;
 const defaultTextColor = nodeColors["default"];
+const costTextColor = "green";
 const defaultTextSize = 12;
 
 // Other util constants

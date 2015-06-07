@@ -169,11 +169,20 @@ function buildGraph(directed){
           .attr("color", function(d) {return d.rgbColor;})
           .style("fill", function(d) {return d.rgbColor;});
 
+        // Node's id label
         node.append("text")
           .attr("x", function(d) {return 1.5*sizeScale(d.size);})
           .attr("dy", ".35em")
           .style("fill", defaultTextColor)
           .text(function(d) { return d.id; });
+
+        // Node's cost (used in step-by-step executions)
+        node.append("text")
+          .attr("x",  function(d) {return -0.75*sizeScale(d.size);})
+          .attr("y",  function(d) {return -2.5*sizeScale(d.size);})
+          .attr("class", "nodecost")
+          .style("fill", costTextColor)
+          .text("");
     } else {
         node.append("circle")
           .attr("r", defaultNodeSize)
@@ -181,11 +190,20 @@ function buildGraph(directed){
           .attr("color", nodeColors["default"])
           .style("fill", nodeColors["default"]);
 
+        // Node's id label
         node.append("text")
           .attr("x", 1.5*defaultNodeSize)
           .attr("dy", ".35em")
           .style("fill", defaultTextColor)
           .text(function(d) { return d.id; });
+
+        // Node's cost (used in step-by-step executions)
+        node.append("text")
+          .attr("x", -0.75*defaultNodeSize)
+          .attr("y", -2.5*defaultNodeSize)
+          .attr("class", "nodecost")
+          .style("fill", costTextColor)
+          .text("");
     }
 
     node.each(function(d,i){
@@ -271,7 +289,9 @@ function click() {
 }
 
 function resetColorsAndSizes(){
-    d3.selectAll(".node").select("circle").transition().attr("r", function(d){
+    // Resets nodes' colors and sizes to their original except the initia/goal color
+    d3.selectAll(".node").select("circle").transition()
+    .attr("r", function(d){
       return d3.select(this).attr("size");})
     .style("fill", function(d){
       var currentColor = d3.select(this).style("fill");
@@ -280,10 +300,17 @@ function resetColorsAndSizes(){
       if(currentColor.localeCompare(nodeColors["initialGoal"]) == 0)
         return currentColor;
       else
-        return d3.select(this).attr("color");});
+        return d3.select(this).attr("color");
+    });
+    
+    // Cleans node's costs from step-by-step executions
+    d3.selectAll(".nodecost").text("");
+
+    // Places label to the correct place
     d3.selectAll(".node").select("text").transition().attr("x", function(d){
       return 1.5*d3.select("[nodeid='" + d.id + "']").select("circle").attr("size");}).style("font", defaultTextSize);
 
+    // Resets links' colors and sizes to their original
     d3.selectAll("line").style("stroke", pathColors["default"]);
     d3.selectAll("line").style("stroke-width", defaultLinkWidth);
 }
@@ -304,6 +331,12 @@ function changeNode(id, color, sizeFactor){
     if(color.localeCompare(ORIGINAL)==0)
         color = c.attr("color");
     c.style("fill", color);
+}
+
+function changeNodeCost(id, weight){
+    if(id == null) return;
+
+    d3.select("[nodeid='" + id + "']").select(".nodecost").text( parseFloat(weight).toFixed(1) );
 }
 
 function highlightLink(source, target){

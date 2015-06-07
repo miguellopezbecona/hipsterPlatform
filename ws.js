@@ -58,6 +58,7 @@ function initializeWebsocket(data){
         if(!doingSbS){
           resetColorsAndSizes();
           doingSbS = true;
+          $("#searchPanel").hide();
         }
 
         showPartialPath(message.content);
@@ -123,30 +124,42 @@ function showFullPath(data){
 }
 
 function showPartialPath(data){
-    // Prevents non-sense changes. If you are running an algorithm step by step, you should not change parameters during the proccess
-    disableParameters(true);
-
-    // In every step, the server will send back the next node and the following ones to be expanded
-
-    // First, the next node is highlighted and grown
-    changeNode(data[0], nodeColors["current"], 1.5);
-
-    // The previous "next node" value has to be marked as processed
-    changeNode(currentNode, nodeColors["processed"], 1.5);
-
-    // Updates the value
-    currentNode = data[0];
-
-    // If the next goal is the goal one, the search is completed, so it forces a full path call
-    var goalNode = $("#goalNode").text();
-    if(data[0].localeCompare(goalNode)==0){
-      forceOS = true;
-      doingSbS = false;
+    // Prevents possible null return data
+    if(data == null) {
+      showFeedback("danger", "The server didn't retrieve any data. Please, consider refreshing the page.");
       return;
     }
 
+    // Prevents non-sense changes. If you are running an algorithm step by step, you should not change parameters during the proccess
+    disableParameters(true);
+
+    /** In every step, the server will send back:
+     *  If it reached the end or not (field 0)
+     *  Next node's id (field 1)
+     *  Next node's updated cost (field 2)
+     *  Possible nodes to be expanded (field 3 onwards, if they exist)
+     */
+
+    // If the search is completed, it forces a full path call
+    if(data[0].localeCompare("N") != 0){
+      forceOS = true;
+      doingSbS = false;
+    }
+
+    // First, the next node is highlighted as "current" and grown
+    changeNode(data[1], nodeColors["current"], 1.5);
+
+    // The previous "next node" value has to be marked as "processed", instead of "current"
+    changeNode(currentNode, nodeColors["processed"], 1.5);
+
+    // Updates currentNode value
+    currentNode = data[1];
+
+    // Paints node's cost
+    changeNodeCost(data[1], data[2]);
+
     // If there are known expanding nodes, they will be highlighted and grown as well
     var i;
-    for(i=1;i<data.length;i++)
+    for(i=3;i<data.length;i++)
       changeNode(data[i], nodeColors["expanded"], 1.5);
 }

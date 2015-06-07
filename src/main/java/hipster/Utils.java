@@ -19,7 +19,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
-public class Utils implements Constants{
+public class Utils implements Constants {
+
+    /**
+     * Builds a HashBasedHipsterDirectedGraph object from a list of links
+     * @param list - Data source
+     * @returns The equivalent HashBasedHipsterDirectedGraph object
+     */
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
         HashBasedHipsterDirectedGraph g = new HashBasedHipsterDirectedGraph<>();
         for(Link l : list)
@@ -28,6 +34,10 @@ public class Utils implements Constants{
         return g;
     }
 
+    /**
+     * Obtains the available example graphs in the system
+     * @return A string list containing example graphs' filenames
+     */
     public static List<String> obtainAvailableGraphs(){
         List<String> list = new ArrayList<>();
 
@@ -103,19 +113,39 @@ public class Utils implements Constants{
         return new ByteArrayInputStream(baos.toByteArray()); 
     }
 
-    /** Returns a list containing the next node and the ones to be expanded
-     * depending on the type of iterator
+    /**
+     *  Advances one step in the iterator and returns useful data.
+     *  The handling is different depending on the type of iterator
+     *  @param it - The iterator to be processed
+     *  @param goal - Search's goal
+     *  @return A string list containing:
+     *  If the search ended or not (field 0)
+     *  The next node (field 1) and its updated cost (field 2)
+     *  Possible nodes to be expanded (fields 2 onwards if available)
      */
     public static List<String> handleIterator(Iterator it, String goal){
         List<String> ret = new ArrayList<>();
-        String nextNode;
+        WeightedNode nextNode;
+        String nextState;
+        String cost;
+        String isEndToken = "N";
         
         if(it instanceof AStar.Iterator){
             AStar.Iterator aux = (AStar.Iterator) it;
             
             if(aux.hasNext()){
-                nextNode = aux.next().state().toString();
-                ret.add(nextNode);
+                nextNode = (WeightedNode) aux.next();
+                nextState = nextNode.state().toString();
+                cost = nextNode.getScore().toString();
+
+                // End reached
+                if(nextState.equals(goal)){    
+                    it = null;
+                    isEndToken = "Y";
+                }
+                ret.add(isEndToken);
+                ret.add(nextState);
+                ret.add(cost);
                 ret.addAll(aux.getOpen().keySet());
                 return ret;
             }
@@ -125,13 +155,22 @@ public class Utils implements Constants{
             BreadthFirstSearch.Iterator aux = (BreadthFirstSearch.Iterator) it;
             
             if(aux.hasNext()){
-                nextNode = aux.next().state().toString();
-                ret.add(nextNode);
+                nextNode = (WeightedNode) aux.next();
+                nextState = nextNode.state().toString();
+                cost = nextNode.getCost().toString();
+
+                // End reached
+                if(nextState.equals(goal)){    
+                    it = null;
+                    isEndToken = "Y";
+                }
+                ret.add(isEndToken);
+                ret.add(nextState);
+                ret.add(cost);
                 Queue<WeightedNode> q = aux.getQueue();
                 for(WeightedNode n : q)
                     ret.add(n.state().toString());
-                if(nextNode.equals(goal))      
-                    it = null;
+
                 return ret;
             }
             else
@@ -140,10 +179,18 @@ public class Utils implements Constants{
             DepthFirstSearch.Iterator aux = (DepthFirstSearch.Iterator) it;
             
             if(aux.hasNext()){
-                nextNode = aux.next().state().toString();
-                ret.add(nextNode);
-                if(nextNode.equals(goal))      
+                nextNode = (WeightedNode) aux.next();
+                nextState = nextNode.state().toString();
+                cost = nextNode.getCost().toString();
+
+                // End reached
+                if(nextState.equals(goal)){    
                     it = null;
+                    isEndToken = "Y";
+                }
+                ret.add(isEndToken);
+                ret.add(nextState);
+                ret.add(cost);
                 return ret;
             }
             else
@@ -152,10 +199,18 @@ public class Utils implements Constants{
             BellmanFord.Iterator aux = (BellmanFord.Iterator) it;
             
             if(aux.hasNext()){
-                nextNode = aux.next().state().toString();
-                ret.add(nextNode);
-                if(nextNode.equals(goal))      
+                nextNode = (WeightedNode) aux.next();
+                nextState = nextNode.state().toString();
+                cost = nextNode.getCost().toString();
+
+                // End reached when the iterator is empty after retrieving last element
+                if(!aux.hasNext()){    
                     it = null;
+                    isEndToken = "Y";
+                }
+                ret.add(isEndToken);
+                ret.add(nextState);
+                ret.add(cost);
                 return ret;
             }
             else
