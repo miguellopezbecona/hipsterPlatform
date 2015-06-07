@@ -5,11 +5,11 @@
     <title>Hipster Platform - About</title>
     <link href="style.css" rel="stylesheet">
     <link href="bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="bootstrap/bootstrap-theme.css" rel="stylesheet">
 </head>
 <body class="container">
     <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav navbar-right">
+        <li><a href="gridGenerator.html">Grid generator</a></li>
         <li><a href="index.html">Go back to the app</a></li>
     </ul>
     </div>
@@ -18,12 +18,14 @@
     <p>This application is meant to allow you to visualize graphs and make searches over them. To do that, first you must load a graph. There are 3 ways to do this:</p>
 
     <ul>
-        <li>Loading your own graph on the top option from the left panel. The file must be in JSON or GEXF format. If it's a JSON file, it should include at least an array called "links". Each element from the collection must have a numerical source and target, and an optional weight. Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions.</li>
+        <li>Loading your own graph on the top option from the left panel. The file must be in JSON or GEXF format. If it's a JSON file, it should include at least an array called "links". Each element from this collection must have "source" and "target" fields, and an optional "weight" one. By default, this last value will be 1. Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions. Don't worry if you didn't copy it when the message appears, as it is also shown in the middle of the left panel.</li>
         <li>Selecting an example graph from the server.</li>
         <li>Introducing the hash obtained by the first method.</li>
     </ul>
 
-    <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by clicking on them and then marking the right checkboxes on the right. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, and zooming with the lower lens.</p>
+    <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by right-clicking on them. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, and zooming with the lower lens.</p>
+
+    <p>When doing these search, is used a determined color set that is explained when clicking on the legend in the upper side of the main page. In step-by-step executions, the cost of the expanded node is painter over it. In A*, what is painted over the node is the score function (cost + heuristic estimation).</p>
 
     <p>This project was created by Miguel López Becoña. Its graph-search component is Hipster, which was originally created and is currently maintained by:</p>
 
