@@ -2,7 +2,7 @@ package hipster;
 
 import static org.junit.Assert.*;
 
-import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
+import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

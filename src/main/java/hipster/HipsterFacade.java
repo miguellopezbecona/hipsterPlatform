@@ -5,8 +5,8 @@ import es.usc.citius.hipster.algorithm.Hipster;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
 import es.usc.citius.hipster.model.impl.WeightedNode;
 import es.usc.citius.hipster.model.problem.SearchProblem;
-import es.usc.citius.hipster.util.graph.GraphSearchProblem;
-import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
+import es.usc.citius.hipster.graph.GraphSearchProblem;
+import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
 import java.util.Iterator;
 import java.util.List;
 

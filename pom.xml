@@ -3,14 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>es.usc.citius.hipster</groupId>
-    <artifactId>HipsterPlataform</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <artifactId>HipsterPlatform</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>HipsterPlataform</name>
+    <name>HipsterPlatform</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <websocket.version>9.2.11.v20150529</websocket.version>
     </properties>
 
     <build>
@@ -72,28 +73,36 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-api</artifactId>
-            <version>9.2.2.v20140723</version>
+            <version>${websocket.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
-            <version>9.2.2.v20140723</version>
+            <version>${websocket.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
-            <version>9.2.2.v20140723</version>
+            <version>${websocket.version}</version>
         </dependency>
 
+        <!-- Hipster -->
         <dependency>
             <groupId>es.usc.citius.hipster</groupId>
             <artifactId>hipster-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- Jung -->
         <dependency>
-            <groupId>es.usc.citius.hipster</groupId>
-            <artifactId>hipster-all</artifactId>
-            <version>1.0.0-rc1</version>
+            <groupId>com.tinkerpop.blueprints</groupId>
+            <artifactId>blueprints-graph-jung</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-graph-impl</artifactId>
+            <version>2.0.1</version>
         </dependency>
 
 	<!-- To parse JSON data -->

@@ -2,7 +2,7 @@ package hipster;
 
 import com.google.gson.reflect.TypeToken;
 import es.usc.citius.hipster.model.function.HeuristicFunction;
-import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
+import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

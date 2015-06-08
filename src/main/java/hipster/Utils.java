@@ -1,6 +1,6 @@
 package hipster;
 
-import es.usc.citius.hipster.util.graph.HashBasedHipsterDirectedGraph;
+import es.usc.citius.hipster.graph.HashBasedHipsterDirectedGraph;
 import es.usc.citius.hipster.algorithm.AStar;
 import es.usc.citius.hipster.algorithm.BellmanFord;
 import es.usc.citius.hipster.algorithm.BreadthFirstSearch;
@@ -27,9 +27,15 @@ public class Utils implements Constants {
      * @returns The equivalent HashBasedHipsterDirectedGraph object
      */
     public static HashBasedHipsterDirectedGraph initializeGraph(List<Link> list){
-        HashBasedHipsterDirectedGraph g = new HashBasedHipsterDirectedGraph<>();
-        for(Link l : list)
+        HashBasedHipsterDirectedGraph g = HashBasedHipsterDirectedGraph.create();
+        for(Link l : list){
+            // Adds source and target nodes. It doesn't matter if they already exist
+            g.add(Integer.toString(l.getSource()));
+            g.add(Integer.toString(l.getTarget()));
+
+            // Adds the link
             g.connect(Integer.toString(l.getSource()), Integer.toString(l.getTarget()), l.getWeight());
+        }
         
         return g;
     }
