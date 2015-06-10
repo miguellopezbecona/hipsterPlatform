@@ -30,9 +30,6 @@ function buildGraph(directed){
     graph = d3.layout.force()
     .nodes(nodes)
     .links(links)
-    .size([WIDTH, HEIGHT])
-    .linkDistance(LINK_DISTANCE)
-    .charge(-200)
     .on("tick", tick);
 
     // Defines the zoom behavious
@@ -81,8 +78,7 @@ function buildGraph(directed){
                'xoverflow':'visible'})
         .append('svg:path')
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#000000')
-            .attr('stroke','#000000');
+            .attr('fill', '#000000');
     }
 
     // Necessary to show links' weight
@@ -98,8 +94,7 @@ function buildGraph(directed){
         .enter()
         .append('text')
         .style("pointer-events", "none")
-        .attr({'dx':LINK_DISTANCE*0.5,
-               'font-size':10,
+        .attr({'font-size':10,
                'fill':'#000000'});
 
     edgelabels.append('textPath')
@@ -143,7 +138,7 @@ function buildGraph(directed){
               if(!doingSbS)
                   setInitialGoal(nodeId, "#initialNode");
               else
-                  showFeedback("danger", "You can't change this value in the middle of a step-by-step execution! Please, finish first your search.");
+                  showFeedback("danger", "You can't change this value in the middle of a step-by-step execution! Please, first finish your search.");
             },
         },
         '<span id="goalText">Select</span> as <b>goal</b>': {

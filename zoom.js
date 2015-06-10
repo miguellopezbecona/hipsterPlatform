@@ -71,6 +71,10 @@ function centerGraph(){
     var centerX = 0.5*(maxX - minX) + minX;
     var centerY = 0.5*(maxY - minY) + minY;
 
+    // Center is affected by scale factor
+    centerX *= factor;
+    centerY *= factor;
+
     // Obtains translate vector: what we have to add to graph's center to get viewport's center
     var translateX = 0.5*WIDTH - centerX;
     var translateY = 0.5*HEIGHT - centerY;

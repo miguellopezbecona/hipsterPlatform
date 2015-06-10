@@ -17,9 +17,8 @@ const LAYOUTS = ["Circle", "Fruchterman-Reingold", "Grid", "ISOM", "Kamada-Kawai
 const DEFAULT_LAYOUT = "grid";
 
 // Graphic-related constants and variables
-const WIDTH = screen.availWidth;
-const HEIGHT = screen.availHeight;
-const LINK_DISTANCE = 70;
+var WIDTH;
+var HEIGHT;
 
 var nodeColors = {};
 nodeColors["default"] = "rgb(49, 130, 189)"; // "#3182bd"
@@ -35,7 +34,7 @@ colorDescriptions["finalPath"] = "the node is part of the final shortest path (o
 colorDescriptions["current"] = "the node is the one processed in the last step made (step-by-step executions only)";
 colorDescriptions["processed"] = "the node has been processed (step-by-step executions only)";
 colorDescriptions["expanded"] = "the node can be expanded in the next iteration (step-by-step executions only)";
-colorDescriptions["initialGoal"] = "the node is marked as the initial or goal one";
+colorDescriptions["initialGoal"] = "the node is marked as the initial or goal one. The previous described colors can overwrite this one";
 
 var pathColors = {};
 pathColors["default"] = "black";

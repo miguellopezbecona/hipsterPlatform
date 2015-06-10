@@ -7,9 +7,7 @@ function activateComponents(){
   $("#feedback").hide();
   $("#zoomButtons").hide();
 
-  // Sets canvas dimensions in order to move the footer to the right place
-  $("#canvas").css("width", WIDTH);
-  $("#canvas").css("height", HEIGHT);
+  calculateView();
 
   // Builds color legend dynamically
   var colorList = "";
@@ -124,6 +122,11 @@ function activateComponents(){
     tick();
   });
 
+   d3.select(window).on('resize', function () {
+     calculateView();
+     centerGraph();
+   });
+
   // Builds the algorithm menu dynamically
   var select = $("#algorithm")[0];
   for(i=0;i<ALGORITHMS.length;i++)
@@ -140,6 +143,17 @@ function activateComponents(){
     heuristic.options[i] = new Option(HEURISTICS[i], HEURISTICS[i].split(" ")[0], false);
 }
 
+function calculateView(){
+     // Adapts width and height from main elements to new screen size
+     WIDTH = window.innerWidth;
+     HEIGHT = window.innerHeight - $("#showLegendPanel").height() - $("footer").height() - 10;
+     $("#canvas").css("width", WIDTH);
+     $("#canvas").css("height", HEIGHT);
+     $("rect").attr("width", WIDTH);
+     $("rect").attr("height", HEIGHT);
+     $("svg").attr("width", WIDTH);
+     $("svg").attr("height", HEIGHT);
+}
 
 function checkExtension(extension){
     return EXT_SUPPORTED.indexOf(extension) > -1;
