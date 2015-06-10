@@ -18,14 +18,16 @@ function generateGrid(side){
       if(c != (side -1) )
         links.push({
           source: nodeId,
-          target: nodeId+1
+          target: nodeId+1,
+          weight: 1
         });
  
       // Adds link to the next vertical node, except for the last row
       if(r != (side -1) )
         links.push({
           source: nodeId,
-          target: nodeId + side
+          target: nodeId + side,
+          weight: 1
         });
 
       // Adds diagonal links to lower nodes if possible (not in final row)
@@ -33,14 +35,16 @@ function generateGrid(side){
       if(c != (side -1) && r != (side - 1) )
         links.push({
           source: nodeId,
-          target: nodeId + side + 1
+          target: nodeId + side + 1,
+          weight: parseFloat(Math.SQRT2).toFixed(2)
         });
 
       // Link to southwest node (not in first column)
       if(c != 0 && r != (side - 1))
         links.push({
           source: nodeId,
-          target: nodeId + side - 1
+          target: nodeId + side - 1,
+          weight: parseFloat(Math.SQRT2).toFixed(2)
         });
 
       }

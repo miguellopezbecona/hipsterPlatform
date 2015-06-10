@@ -36,6 +36,8 @@ public interface Constants {
     public final String SPRING = "spring";
 
     /*** OTHERS CONSTANTS AND UTILS ***/
+    public final int GRID_DISTANCE = 100; // Distance to consecutive nodes in Grid layout
+    public final double INVERSE_GRID_DISTANCE = Math.pow(GRID_DISTANCE, -1); // Precalculated value
     public final Random random = new Random(System.currentTimeMillis());
     public final Gson gson = new Gson();
     public final String API_BASE = "/api";

@@ -119,25 +119,24 @@ public class Tests implements Constants{
         g.setLinks(new ArrayList<Link>());
         g.setWidth(800); // baseW = 400
         g.setHeight(600); // baseH = 300
-        // nodeDistance = 100
 
         LayoutServices service = new LayoutServices();
         service.applyLayout("grid", g);
 
-        // pos(X|Y) = base(W|H) + (column|row)Index*nodeDistance
-        /* 0--nD--1
+        // pos(X|Y) = base(W|H) + (column|row)Index*GRID_DISTANCE
+        /* 0--GD--1
          * |      |
-         * nD    nD
+         * GD    GD
          * |      |
-         * 2--nD--3
+         * 2--GD--3
          */
-        assertEquals("Grid test", nodes.get(0).getX(), 400.0 + 0*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(0).getY(), 300.0 + 0*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(1).getX(), 400.0 + 1*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(1).getY(), 300.0 + 0*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(2).getX(), 400.0 + 0*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(2).getY(), 300.0 + 1*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(3).getX(), 400.0 + 1*100.0, 1e-6);
-        assertEquals("Grid test", nodes.get(3).getY(), 300.0 + 1*100.0, 1e-6);
+        assertEquals("Grid test 0X", nodes.get(0).getX(), 400.0 + 0*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 0Y", nodes.get(0).getY(), 300.0 + 0*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 1X", nodes.get(1).getX(), 400.0 + 1*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 1Y", nodes.get(1).getY(), 300.0 + 0*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 2X", nodes.get(2).getX(), 400.0 + 0*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 2Y", nodes.get(2).getY(), 300.0 + 1*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 3X", nodes.get(3).getX(), 400.0 + 1*GRID_DISTANCE, 1e-6);
+        assertEquals("Grid test 3Y", nodes.get(3).getY(), 300.0 + 1*GRID_DISTANCE, 1e-6);
     }
 }

@@ -333,10 +333,10 @@ function changeNode(id, color, sizeFactor){
     c.style("fill", color);
 }
 
-function changeNodeCost(id, weight){
+function changeNodeCost(id, cost){
     if(id == null) return;
 
-    d3.select("[nodeid='" + id + "']").select(".nodecost").text( parseFloat(weight).toFixed(1) );
+    d3.select("[nodeid='" + id + "']").select(".nodecost").text( parseFloat(cost).toFixed(1) );
 }
 
 function highlightLink(source, target){

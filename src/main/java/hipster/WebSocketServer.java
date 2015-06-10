@@ -34,7 +34,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
             double xPart = Math.pow( goalNode.getX() - processingNode.getX(), 2);
             double yPart = Math.pow( goalNode.getY() - processingNode.getY(), 2);
 
-            return Math.sqrt(xPart + yPart);
+            return INVERSE_GRID_DISTANCE*Math.sqrt(xPart + yPart);
         }
     };
 
@@ -47,7 +47,7 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
             double xPart = Math.abs( goalNode.getX() - processingNode.getX() );
             double yPart = Math.abs( goalNode.getY() - processingNode.getY() );
 
-            return xPart + yPart;
+            return INVERSE_GRID_DISTANCE*(xPart + yPart);
         }
     };
 
