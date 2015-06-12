@@ -16,6 +16,7 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
@@ -88,6 +89,16 @@ public class LayoutServices implements Constants {
     // Same work to every non-random or grid layout
     private void applyLayout(Layout<MyNode, Point2D> layout, List<MyNode> nodes, int width, int height){
         layout.setSize(new Dimension(width, height));
+        layout.initialize();
+
+        // Necessary to converge iterative layouts
+        if (layout instanceof IterativeContext) {
+           IterativeContext it = (IterativeContext) layout;
+           for(int i=0;i<MAX_LAYOUT_ITERATIONS && !it.done();i++)
+              it.step();
+        }
+
+        // Changes nodes' coordinates
         for (MyNode n : nodes) {
             Point2D coord = layout.transform(n);
             n.setX(coord.getX());

@@ -34,6 +34,7 @@ public interface Constants {
     public final String ISOM = "isom";
     public final String KK = "kamada-kawai";
     public final String SPRING = "spring";
+    public final int MAX_LAYOUT_ITERATIONS = 20;
 
     /*** OTHERS CONSTANTS AND UTILS ***/
     public final int GRID_DISTANCE = 100; // Distance to consecutive nodes in Grid layout
