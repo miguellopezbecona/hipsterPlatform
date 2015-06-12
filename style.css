@@ -47,6 +47,10 @@ i, img {
    margin-right: 25px;
 }
 
+#filename {
+   font-size: 80%;
+}
+
 #feedback{
    position: fixed;
    top: 10px;
