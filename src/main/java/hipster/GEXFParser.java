@@ -3,6 +3,7 @@ package hipster;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +13,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 public class GEXFParser {
+    private static final List<String> necessaryTags = Arrays.asList("gexf","edges","nodes");
+
     public static MyGraph getGraph(String filePath) {
         MyGraph g = new MyGraph();
         try {
@@ -93,11 +96,15 @@ public class GEXFParser {
             InputStream copy = Utils.copyInputStream(is);
             Document doc = builder.parse(copy);
 
-            // All GEXF valid graphs must have an "gexf" tag
-            NodeList someNode = doc.getElementsByTagName("gexf");
-            Element el = (Element) someNode.item(0);
-            
-            return el != null;
+            // All GEXF valid graphs must have one "gexf", "edges" and "nodes" tag
+            for(String tag : necessaryTags){
+                NodeList someNode = doc.getElementsByTagName(tag);
+                Element el = (Element) someNode.item(0);
+                if(el == null)
+                    return false;
+            }
+
+            return true;
         } catch (Exception e) {
             return false;
         }

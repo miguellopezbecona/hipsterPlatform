@@ -47,8 +47,22 @@ public class Tests implements Constants{
         MyGraph gexfG = GEXFParser.getGraph(gexfFileUrl);
         assertNotNull("Not null GEXF graph", gexfG);
 
-        // Checks it has the correct number of links
+        // Checks it has imported the data correctly: first links and then nodes
         assertEquals("Check of number of links", gexfG.getLinks().size(), 2);
+        assertSame("Link 0 Source", gexfG.getLinks().get(0).getSource(), 0);
+        assertSame("Link 0 Target", gexfG.getLinks().get(0).getTarget(), 1);
+        assertEquals("Link 0 Weight", gexfG.getLinks().get(0).getWeight(), 2.0, 1e-6);
+        assertSame("Link 1 Source", gexfG.getLinks().get(1).getSource(), 1);
+        assertSame("Link 1 Target", gexfG.getLinks().get(1).getTarget(), 2);
+        assertEquals("Link 1 Weight", gexfG.getLinks().get(1).getWeight(), 3.0, 1e-6);
+
+        assertEquals("Check of number of nodes", gexfG.getNodes().size(), 3);
+        assertSame("Node 0 Id", gexfG.getNodes().get(0).getId(), 0);
+        assertEquals("Node 0 Info", gexfG.getNodes().get(0).getInfo(), "Begin");
+        assertSame("Node 1 Id", gexfG.getNodes().get(1).getId(), 1);
+        assertEquals("Node 1 Info", gexfG.getNodes().get(1).getInfo(), "Middle");
+        assertSame("Node 2 Id", gexfG.getNodes().get(2).getId(), 2);
+        assertEquals("Node 2 Info", gexfG.getNodes().get(2).getInfo(), "End");
     }
 
     @Test
