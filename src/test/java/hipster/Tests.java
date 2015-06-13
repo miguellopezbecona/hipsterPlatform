@@ -107,15 +107,19 @@ public class Tests implements Constants{
 
         List<String> ret = HipsterFacade.dijkstraOS(g, "0", "2");
         List<String> retP = ret.subList(0, ret.size()-2); // Keeps only the path
-        assertEquals("Hipster integration", retP, path);
+        assertEquals("Hipster integration - Dijkstra", retP, path);
 
         ret = HipsterFacade.breadthOS(g, "0", "2");
         retP = ret.subList(0, ret.size()-2);
-        assertEquals("Hipster integration", retP, path);
+        assertEquals("Hipster integration - Breadth", retP, path);
 
         ret = HipsterFacade.depthOS(g, "0", "2");
         retP = ret.subList(0, ret.size()-2);
-        assertEquals("Hipster integration", retP, path);
+        assertEquals("Hipster integration - Depth", retP, path);
+
+        ret = HipsterFacade.bellmanFordOS(g, "0", "2");
+        retP = ret.subList(0, ret.size()-2);
+        assertEquals("Hipster integration - Bellman Ford", retP, path);
     }
 
     @Test
