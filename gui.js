@@ -168,7 +168,7 @@ function isHeuristicAlgorithm(algorithm){
 }
 
 
-// Prepares a graph object, with a determinated structure, to send to the service
+// Prepares a graph object, with a determined structure, to send to the service
 function prepareServiceGraph(){
     var g = {};
 

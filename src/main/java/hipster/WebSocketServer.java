@@ -91,8 +91,11 @@ public class WebSocketServer extends WebSocketAdapter implements Constants{
 		initializeGraph(content);
                 break;
             case NODE:
-                int id = Integer.valueOf(content);
-                String nodeInfo = gson.toJson(graph.getNodes().get(id));
+                MyNode n = graph.getNode(content);
+                if(n == null)
+                    return;
+
+                String nodeInfo = gson.toJson(n);
                 response = buildMessage(NODE, nodeInfo);
                 sendMessage(response);
                 break;

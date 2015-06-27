@@ -284,16 +284,17 @@ function click() {
 }
 
 function resetColorsAndSizes(){
-    // Resets nodes' colors and sizes to their original except the initia/goal color
+    // Resets nodes' colors and sizes to their original except the initial/goal color
     d3.selectAll(".node").select("circle").transition()
     .attr("r", function(d){
       return d3.select(this).attr("size");})
     .style("fill", function(d){
-      var currentColor = d3.select(this).style("fill");
+      var goalNode = $("#goalNode").text();
+      var nodeId = d3.select(this.parentNode).attr("nodeid");
 
-      // Maintains marked nodes' colour
-      if(currentColor.localeCompare(nodeColors["initialGoal"]) == 0)
-        return currentColor;
+      // Maintains goal node' color
+      if(goalNode.localeCompare(nodeId) == 0)
+        return nodeColors["initialGoal"];
       else
         return d3.select(this).attr("color");
     });
@@ -313,7 +314,7 @@ function resetColorsAndSizes(){
 function changeNode(id, color, sizeFactor){
     if(id == null) return;
 
-    var nod =  d3.select("[nodeid='" + id + "']");
+    var nod = d3.select("[nodeid='" + id + "']");
     var c =  nod.select("circle");
     var s = c.attr("size");
     nod.select("text").transition().attr("x", 1.5*sizeFactor*s).style("font", sizeFactor*defaultTextSize);
@@ -359,8 +360,8 @@ function setInitialGoal(nodeId, type){
         if(nodeId.localeCompare(other)==0)
             showFeedback("danger", SAME_NODE_FEEDBACK);
         else {
-            // Restores previous initial/goal node (if exists) to its original color
-            if($(type).text() != null && $(type).text().length > 0)
+            // Restores previous initial/goal node (if exists) to its original color and size if it has initial/goal color
+            if($(type).text() != null && $(type).text().length > 0 && d3.select("[nodeid='" + $(type).text() + "']").select("circle").attr("color").localeCompare(nodeColors["initialGoal"]) == 0)
                 changeNode($(type).text(), ORIGINAL, 1.0);
 
             // Updates the value and highlights the node
