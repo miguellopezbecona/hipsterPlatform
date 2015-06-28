@@ -360,8 +360,8 @@ function setInitialGoal(nodeId, type){
         if(nodeId.localeCompare(other)==0)
             showFeedback("danger", SAME_NODE_FEEDBACK);
         else {
-            // Restores previous initial/goal node (if exists) to its original color and size if it has initial/goal color
-            if($(type).text() != null && $(type).text().length > 0 && d3.select("[nodeid='" + $(type).text() + "']").select("circle").attr("color").localeCompare(nodeColors["initialGoal"]) == 0)
+            // Restores previous initial/goal node (if exists) to its original color and size if its current color is the initial/goal one
+            if($(type).text() != null && $(type).text().length > 0 && d3.select("[nodeid='" + $(type).text() + "']").select("circle").style("fill").localeCompare(nodeColors["initialGoal"]) == 0)
                 changeNode($(type).text(), ORIGINAL, 1.0);
 
             // Updates the value and highlights the node
