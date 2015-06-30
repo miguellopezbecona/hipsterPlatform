@@ -1,0 +1,17 @@
+{
+	"links":[
+		{"source":0,"target":1,"weight":1},
+		{"source":1,"target":2,"weight":1.5},
+		{"source":0,"target":2,"weight":3},
+		{"source":1,"target":3,"weight":2},
+		{"source":3,"target":4,"weight":2},
+		{"source":2,"target":4,"weight":2}
+	],
+	"nodes":[
+		{"id":0,"x":700,"y":150,"size":20},
+		{"id":1,"x":650,"y":250,"color":"#00ff00"},
+		{"id":2,"x":750,"y":250,"size":5,"color":"rgb(255,255,0)"},
+		{"id":3,"x":650,"y":350,"color":"rgb(127,127,20)"},
+		{"id":4,"x":750,"y":350,"color":"rgb(255,127,0)"}
+	]
+}

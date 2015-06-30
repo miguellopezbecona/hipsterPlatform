@@ -18,14 +18,30 @@
     <p>This application is meant to allow you to visualize graphs and make searches over them. To do that, first you must load a graph. There are 3 ways to do this:</p>
 
     <ul>
-        <li>Loading your own graph on the top option from the left panel. The file must be in JSON or GEXF format. If it's a JSON file, it should include at least an array called "links". Each element from this collection must have "source" and "target" fields, and an optional "weight" one. By default, this last value will be 1. Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions. Don't worry if you didn't copy it when the message appears, as it is also shown in the middle of the left panel.</li>
+        <li>Loading your own graph on the top option from the left panel. The file must have <em>.json</em> or <em>.gexf</em> extension with a valid format. The following is the structure of a correct JSON graph:
+        <ul>
+            <li>Array field "links" (mandatory). Each of its elements have:</li>
+            <ul>
+                <li>"source" field (mandatory), which is the node whose id is "source" where the link comes from.</li>
+                <li>"target" field (mandatory), which is the node whose id is "target" where the link's arrow points to.</li>
+                <li>"weight" field (optional), which is link's cost. By default, this value will be 1 (but not shown in the graph).</li>
+            </ul>
+            <li>Array field "nodes" (optional). Each of its elements can have:</li>
+            <ul>
+                <li>"x" field (mandatory if node array used), which is node's <em>x</em> coordinate.</li>
+                <li>"y" field (mandatory if node array used), which is node's <em>y</em> coordinate.</li>
+                <li>"size" field (optional), which node's graphic size.</li>
+                <li>"color" field (optional), which node's color. You can specify it with <a href="http://www.w3schools.com/cssref/css_colors.asp">any of CSS's color notations.</a></li>
+            </ul>
+        </ul>
+        Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions. Don't worry if you didn't copy it when the message appears, as it is also shown in the middle of the left panel.</li>
         <li>Selecting an example graph from the server.</li>
         <li>Introducing the hash obtained by the first method.</li>
     </ul>
 
-    <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by right-clicking on them. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, and zooming with the lower lens.</p>
+    <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by right-clicking on them. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, zooming with the two first lower lens and centering the graph with the third one.</p>
 
-    <p>When doing these search, is used a determined color set that is explained when clicking on the legend in the upper side of the main page. In step-by-step executions, the cost of the expanded node is painter over it. In A*, what is painted over the node is the score function (cost + heuristic estimation).</p>
+    <p>While doing these searchs, nodes are filled with a determined color set that is explained when clicking on the legend in the upper side of the main page. In step-by-step executions, the cost of the expanded node is painter over it. In A*, what is painted over the node is the score function (cost + heuristic estimation), though both euclidean and Manhattan distances are normalized to the default distance of a grid layout (100 pixels)</p>
 
     <p>This project was created by Miguel López Becoña. Its graph-search component is Hipster, which was originally created and is currently maintained by:</p>
 

@@ -15,6 +15,7 @@ function buildGraph(directed){
 
     // This is crucial when setting colors, sizes and positions to the nodes
     var hasNodeInfo = (nodes != null);
+    var isGEXFGraph = (gD3 != null);
 
     if(!hasNodeInfo){
       // Obtain the nodes with info from the links
@@ -22,8 +23,12 @@ function buildGraph(directed){
         link.source = nodeCollection[link.source] || (nodeCollection[link.source] = {id: link.source});
         link.target = nodeCollection[link.target] || (nodeCollection[link.target] = {id: link.target});
       });
-
       nodes = d3.values(nodeCollection);
+    } else if(!isGEXFGraph){
+      links.forEach(function(link) {
+        link.source = nodes[link.source];
+        link.target = nodes[link.target];
+      });
     }
 
     // Defines the graph
@@ -154,8 +159,9 @@ function buildGraph(directed){
         }
     });
 
-    // Uses imported data or generates it
-    if(hasNodeInfo){
+    // Initializes node data
+    if(isGEXFGraph){
+        // Uses GEXF special parameters
         var sizeScale = gD3.nodeScale();
         node.append("circle")
           // Radius and color are duplicated in order to ease transformations
@@ -179,23 +185,24 @@ function buildGraph(directed){
           .style("fill", costTextColor)
           .text("");
     } else {
-        node.append("circle")
-          .attr("r", defaultNodeSize)
-          .attr("size", defaultNodeSize)
-          .attr("color", nodeColors["default"])
-          .style("fill", nodeColors["default"]);
+        // If not a GEXF graph, uses fields or they will be generated
+        node.append("circle")    
+          .attr("r", function(d) { if(d.size != null) return d.size; else return defaultNodeSize;})
+          .attr("size", function(d) {if(d.size != null) return d.size; else return defaultNodeSize;})
+          .attr("color", function(d) {if(d.color != null) return d.color; else return nodeColors["default"];})
+          .style("fill", function(d) {if(d.color != null) return d.color; else return nodeColors["default"]});
 
         // Node's id label
         node.append("text")
-          .attr("x", 1.5*defaultNodeSize)
+          .attr("x", function(d) {if(d.size != null) return 1.5*d.size; else return 1.5*defaultNodeSize;})
           .attr("dy", ".35em")
           .style("fill", defaultTextColor)
           .text(function(d) { return d.id; });
 
         // Node's cost (used in step-by-step executions)
         node.append("text")
-          .attr("x", -0.75*defaultNodeSize)
-          .attr("y", -2.5*defaultNodeSize)
+          .attr("x",  function(d) {if(d.size != null) return -0.75*d.size; else return -0.75*defaultNodeSize;})
+          .attr("y",  function(d) {if(d.size != null) return -2.5*d.size; else return -2.5*defaultNodeSize;})
           .attr("class", "nodecost")
           .style("fill", costTextColor)
           .text("");

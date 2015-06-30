@@ -19,8 +19,15 @@ public class UploadServlet extends HttpServlet implements Constants{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        Part filePart = null;
+
         // Obtains data from the form
-        Part filePart = request.getPart("graphToUpload");
+        try {
+            filePart = request.getPart("graphToUpload");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         String extension = getExtension(filePart);
 
         String hash = null;
