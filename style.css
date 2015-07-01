@@ -38,7 +38,7 @@ select, input#hash {
    width: 210px;
 }
 
-footer, ul {
+footer {
    text-align: center;
    opacity: 0.8;
 }
