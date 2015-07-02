@@ -32,6 +32,7 @@
 .btn.btn-danger.smallFont {
    font-size: 10px;
    padding: 3px 3px;
+   float: right;
 }
 
 select, input#hash {
