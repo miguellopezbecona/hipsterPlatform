@@ -30,18 +30,18 @@
             <ul>
                 <li>"x" field (mandatory if node array used), which is node's <em>x</em> coordinate.</li>
                 <li>"y" field (mandatory if node array used), which is node's <em>y</em> coordinate.</li>
-                <li>"size" field (optional), which node's graphic size.</li>
-                <li>"color" field (optional), which node's color. You can specify it with <a href="http://www.w3schools.com/cssref/css_colors.asp">any of CSS's color notations.</a></li>
+                <li>"size" field (optional), which is node's graphic size.</li>
+                <li>"color" field (optional), which is node's color. You can specify it with <a href="http://www.w3schools.com/cssref/css_colors.asp">any of CSS's color notations.</a></li>
             </ul>
         </ul>
-        Once you load a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions. Don't worry if you didn't copy it when the message appears, as it is also shown in the middle of the left panel.</li>
+        Once you have loaded a valid graph, it will be saved in the server and it will send you back a hash to load the graph in future executions. Don't worry if you didn't copy it when the message appears, as it is also shown in left panel's title.</li>
         <li>Selecting an example graph from the server.</li>
         <li>Introducing the hash obtained by the first method.</li>
     </ul>
 
     <p>Once your graph was loaded, you should be able to visualize it if everything went okay. After this, you can do graph-searches after selecting the initial and goal nodes by right-clicking on them. You can select the algorithm to do the search and the way to do it (directly or step by step). You can also change the distribution of the nodes by selecting and applying a layout. You can also change the visualization manually by dragging the nodes or the whole graphic, zooming with the two first lower lens and centering the graph with the third one.</p>
 
-    <p>While doing these searchs, nodes are filled with a determined color set that is explained when clicking on the legend in the upper side of the main page. In step-by-step executions, the cost of the expanded node is painter over it. In A*, what is painted over the node is the score function (cost + heuristic estimation), though both euclidean and Manhattan distances are normalized to the default distance of a grid layout (100 pixels)</p>
+    <p>While doing these searchs, nodes are filled with a determined color set that is explained when clicking on the legend in the upper side of the main page. In step-by-step executions, the cost of the expanded node is painter over it. In A*, what is painted over the node is the score function (cost + heuristic estimation), though both euclidean and Manhattan distances are normalized to the default distance of a grid layout (100 pixels).</p>
 
     <p>This project was created by Miguel López Becoña. Its graph-search component is Hipster, which was originally created and is currently maintained by:</p>
 
