@@ -28,13 +28,13 @@ The aim of Hipster is to provide an easy to use yet powerful and flexible type-s
 
 ## Getting started
 
-This app is [deployed in Heroku](http://hipster-platform.herokuapp.com/). If you want to execute it locally, you need to have installed Maven and Java. After this, open a command-line interpreter (such as bash), go to the source code folder, and execute this:
+This app is [deployed in Heroku](http://hipster-platform.herokuapp.com/). If you want to execute it locally, you need to have installed Maven and Java. After this, open a command-line interpreter (such as bash), go to the source code folder, and execute this:  
 	mvn package && mvn exec:java
 
-The app will be ready when there isn't new output and the last thing printed looks like:
+The app will be ready when there isn't new output and the last thing printed looks like:  
 	+- sun.misc.Launcher$ExtClassLoader@3449a8
 
-So, after this, you can access to the app in:
+So, after this, you can access to the app in:  
 <http://localhost:8080>
 
 ## License
