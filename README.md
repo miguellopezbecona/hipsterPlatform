@@ -20,7 +20,7 @@ I made this project for my Bachelor's Thesis. I have already finished it, so you
     * Provides a REST web service which applies a layout algorithm (done mostly with JUNG) to the graph which you are working with
 
 #### Hipster project
-![Hipster logo](https://raw.githubusercontent.com/citiususc/hipster/development/src/main/doclava/custom/assets/hipster-template/assets/images/header-logo.png)
+![Hipster logo](https://raw.githubusercontent.com/miguellopezbecona/hipsterPlatform/master/img/hipsterLogo.png)
 
 The graph-search component of this application is [Hipster](https://github.com/citiususc/hipster), which gives part of the name of this project. It was created and maintained by [Pablo Rodríguez Mier](https://github.com/pablormier) and [Adrián González Sieira](https://github.com/gonzalezsieira).
 
