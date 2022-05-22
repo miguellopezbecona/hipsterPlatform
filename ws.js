@@ -4,7 +4,7 @@ function buildMessage(type, content){
   return "{\"type\": \"" + type + "\", \"content\": " + content + "}";
 }
 
-// When the document ready, gui components are initialized and the websocket port is requested
+// When the document is ready, gui components are initialized and the websocket port is requested
 $(document).ready(function() {
   $.getScript('gui.js', function(){
     activateComponents();

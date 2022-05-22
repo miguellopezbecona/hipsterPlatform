@@ -35,8 +35,17 @@
    float: right;
 }
 
+.btn.btn-warning.smallFont {
+   font-size: 12px;
+   padding: 3px 3px;
+   float: right;
+}
+
+/**/
+
 select, input#hash {
    width: 210px;
+   font-size: 40;
 }
 
 footer {

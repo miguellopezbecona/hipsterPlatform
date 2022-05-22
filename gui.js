@@ -15,7 +15,7 @@ function activateComponents(){
       colorList += "<p><span style=\"background-color: " + nodeColors[field] + "\">&nbsp;&nbsp;&nbsp;</span>: " + colorDescriptions[field] + ".</p>";
   $("#colorList").html(colorList);
 
-  /*** Gives functionality to the buttons ***/
+  /*** Gives functionality to the buttons, mainly for hiding elements ***/
   $("#hideNodePanel").click(function () {
     $("#nodePanel").hide();
   });
@@ -30,6 +30,17 @@ function activateComponents(){
 
   $("#hideSearchPanel").click(function () {
     $("#searchPanel").hide();
+  });
+
+  $("#hideLeftPanel").click(function () {
+    $("#leftPanelBody").toggle();
+
+    // Changes button text to - or □ depending on current content
+    var curr_char = $("#hideLeftPanel").text();
+    if(curr_char == "-")
+      $("#hideLeftPanel").text("□");
+    else if(curr_char == "□")
+      $("#hideLeftPanel").text("-");
   });
 
   // Uploads a graph to the server
